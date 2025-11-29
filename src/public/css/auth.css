@@ -1,0 +1,87 @@
+.auth {
+    width: 680px;
+    margin: 20px auto;
+    padding: 30px;
+    background: #fff;
+    border-radius: 8px;
+    text-align: center;
+}
+
+.auth--register .auth__submit {
+    margin-top: 30px;
+}
+
+.auth--login .auth__submit {
+    margin-top: 20px;
+}
+
+.auth-wrapper {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.auth__title {
+    font-size: 28px;
+    font-weight: 700;
+    margin-bottom: 10px;
+}
+
+.auth__link {
+    text-decoration: none;
+    display: inline-block;
+    font-size: 14px;
+    color: #298BEF;
+    margin-top: 10px;
+}
+
+.auth__link:hover {
+    opacity: 0.7;
+}
+
+.form-group {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 4px;
+    margin-bottom: 30px;
+}
+
+.form-label {
+    font-size: 18px;
+    color: #444;
+    font-weight: 600;
+    margin-bottom: 0;
+}
+
+.form-input {
+    width: 100%;
+    padding: 12px 14px;
+    border: 1px solid #C4C4C4;
+    border-radius: 4px;
+    font-size: 14px;
+}
+
+.auth__submit {
+    width: 100%;
+    background: #FF4F5E;
+    border: none;
+    color: #fff;
+    padding: 12px;
+    border-radius: 4px;
+    font-weight: 600;
+    margin: 14px 0;
+}
+
+/* ------- ログイン画面だけ中央寄せ調整 ------- */
+.auth-wrapper--login {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    min-height: 70vh;
+}
+
+/* ログイン画面のボタン上余白 */
+.auth--login .auth__submit {
+    margin-top: 30px;
+}
