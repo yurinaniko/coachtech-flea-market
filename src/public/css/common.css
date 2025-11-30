@@ -82,6 +82,15 @@ body {
     font-weight: bold;
 }
 
+.header__logout-button {
+    background: none;
+    border: none;
+    font: inherit;
+    color: inherit;
+    cursor: pointer;
+    padding: 0;
+}
+
 /* ===============================
     レスポンシブ：PC幅調整
 =============================== */

@@ -12,7 +12,7 @@
 
         {{-- 左カラム：商品画像 --}}
         <div class="item-detail__image-area">
-            <img src="{{ asset('storage/' . $item->image) }}" alt="{{ $item->name }}" class="item-detail__image">
+            <img src="{{ asset($item->image) }}" alt="{{ $item->name }}" class="item-detail__image">
         </div>
 
         {{-- 右カラム：商品情報 --}}
@@ -26,12 +26,31 @@
                 <span class="item-detail__tax">(税込)</span>
             </p>
 
-            {{-- お気に入りボタン（飾りでOK） --}}
+            {{-- お気に入りボタン--}}
             <div class="item-detail__actions">
                 <div class="action-item">
-                    <img src="{{ asset('images/heart.png') }}" alt="お気に入り" class="favorite-icon">
-                    <span class="favorite-count">1</span>
+                    {{-- ハートアイコン常に表示 --}}
+                    <img src="{{ Auth::check() && Auth::user()->favorites->contains($item->id) ? asset('images/pink-heart.png') : asset('images/heart.png') }}" class="favorite-icon" alt="favorite">
+                    {{-- カウントは常に表示 --}}
+                    <span class="favorite-count">{{ $item->users->count() }}</span>
+
+                    {{-- ログイン時のみボタン有効 --}}
+                    @if (Auth::check())
+                        @if (Auth::user()->favorites->contains($item->id))
+                            <form action="{{ route('unfavorite', $item->id) }}" method="POST">
+                                @csrf
+                                @method('DELETE')
+                                <button type="submit" class="favorite-btn"></button>
+                            </form>
+                        @else
+                            <form action="{{ route('favorite', $item->id) }}" method="POST">
+                                @csrf
+                                <button type="submit" class="favorite-btn"></button>
+                            </form>
+                        @endif
+                    @endif
                 </div>
+                {{-- コメント --}}
                 <div class="action-item">
                     <img src="{{ asset('images/comment.png') }}" alt="コメント" class="comment-icon">
                     <span class="comment-count">1</span>

@@ -2,7 +2,9 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\User;
 use Illuminate\Http\Request;
+use App\Http\Requests\RegisterRequest;
 
 class AuthController extends Controller
 {
@@ -16,9 +18,21 @@ class AuthController extends Controller
         return view('auth.login');
     }
 
-    public function register()
+    public function register(RegisterRequest $request)
     {
-    // このあと実装予定
+        $validated = $request->validated();
+
+        $user = User::create([
+            'name' => $validated['name'],
+            'email' => $validated['email'],
+            'password' => bcrypt($validated['password']),
+        ]);
+
+        auth()->login($user);
+
+        // ★ マイページへリダイレクト
+        return redirect()->route('mypage.index');
+
     }
 
     public function login()

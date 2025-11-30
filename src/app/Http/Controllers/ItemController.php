@@ -14,6 +14,18 @@ class ItemController extends Controller
         return view('items.index', compact('items'));
     }
 
+    public function favorite(Item $item)
+    {
+    Auth::user()->favorites()->attach($item->id);
+    return back();
+    }
+
+    public function unfavorite(Item $item)
+    {
+    Auth::user()->favorites()->detach($item->id);
+    return back();
+    }
+
     public function create()
     {
         //

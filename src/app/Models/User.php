@@ -23,6 +23,11 @@ class User extends Authenticatable
         'password',
     ];
 
+    public function favorites()
+    {
+        return $this->belongsToMany(Item::class, 'favorites')->withTimestamps();
+    }
+
     /**
      * The attributes that should be hidden for serialization.
      *

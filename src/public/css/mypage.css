@@ -1,0 +1,34 @@
+.mypage {
+    max-width: 1000px;
+    margin: 40px auto;
+}
+
+.mypage__title {
+    font-size: 24px;
+    font-weight: bold;
+    margin-bottom: 20px;
+}
+
+.mypage__profile {
+    text-align: center;
+    margin-bottom: 30px;
+}
+
+.mypage__icon {
+    width: 80px;
+    border-radius: 50%;
+    margin-bottom: 6px;
+}
+
+.mypage__tab-menu {
+    display: flex;
+    justify-content: center;
+    gap: 40px;
+    margin: 30px 0;
+    border-bottom: 1px solid #E0DFDE;
+}
+
+.mypage__tab-menu .active a {
+    border-bottom: 3px solid #E60033;
+    font-weight: bold;
+}
