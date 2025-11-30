@@ -32,3 +32,52 @@
     border-bottom: 3px solid #E60033;
     font-weight: bold;
 }
+
+/* ===== マイページ ===== */
+.mypage {
+    max-width: 1000px;
+    margin: 40px auto;
+}
+
+/* ---- タブ ---- */
+.mypage__tabs {
+    display: flex;
+    justify-content: center;
+    gap: 40px;
+    margin-bottom: 30px;
+    border-bottom: 1px solid #E0DFDE;
+    padding-bottom: 10px;
+}
+
+.mypage__tab {
+    font-size: 16px;
+    color: #333;
+    padding-bottom: 8px;
+}
+
+/* タブ選択中 */
+.mypage__tab.is-active {
+    color: #E60033;
+    border-bottom: 2px solid #E60033;
+    font-weight: bold;
+}
+
+/* ---- 商品カード一覧 ---- */
+.mypage__items {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 30px;
+}
+
+.item-card__image img {
+    width: 100%;
+    height: 200px;
+    object-fit: cover;
+    border-radius: 6px;
+    background: #F4F4F4;
+}
+
+.item-card__name {
+    margin-top: 6px;
+    font-size: 14px;
+}

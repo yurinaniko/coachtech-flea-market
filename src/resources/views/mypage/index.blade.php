@@ -1,36 +1,41 @@
 @extends('layouts.app')
 
 @section('css')
-<link rel="stylesheet" href="{{ asset('css/mypage.css') }}">
+<link rel="stylesheet" href="{{ asset('css/sanitize.css') }}">
+<link rel="stylesheet" href="{{ asset('css/common.css') }}">
+<link rel="stylesheet" href="{{ asset('css/item-list.css') }}">
 @endsection
 
 @section('content')
-<div class="mypage">
 
-    {{-- タブ --}}
-    <div class="mypage__tabs">
+{{-- カテゴリータブ --}}
+<div class="item-list__tabs-wrapper">
+    <div class="item-list__tabs">
         <a href="{{ route('mypage.index', ['page' => 'recommend']) }}"
-            class="mypage__tab {{ request('page') === 'recommend' ? 'is-active' : '' }}">
+            class="tab {{ request('page') === 'recommend' ? 'active' : '' }}">
             おすすめ
         </a>
 
         <a href="{{ route('mypage.index', ['page' => 'favorite']) }}"
-            class="mypage__tab {{ request('page') === 'favorite' ? 'is-active' : '' }}">
+            class="tab {{ request('page') === 'favorite' ? 'active' : '' }}">
             マイリスト
         </a>
     </div>
+</div>
 
-    {{-- 商品一覧 --}}
-    <div class="mypage__items">
+{{-- 商品カード一覧 --}}
+<div class="item-list">
+    <div class="item-list__grid">
         @foreach ($items as $item)
-            <a href="{{ route('items.show', $item->id) }}" class="item-card">
-                <div class="item-card__image">
-                    <img src="{{ asset('storage/' . $item->image) }}" alt="">
+            <a href="{{ route('items.show', $item->id) }}" class="item-card__link">
+                <div class="item-card">
+                    <div class="item-card__image">
+                        <img src="{{ asset($item->image) }}" alt="{{ $item->name }}" class="img-content">
+                    </div>
+                    <p class="item-card__name">{{ $item->name }}</p>
                 </div>
-                <p class="item-card__name">{{ $item->name }}</p>
             </a>
         @endforeach
     </div>
-
 </div>
 @endsection

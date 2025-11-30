@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Models\Item;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
 
 class ItemController extends Controller
 {
@@ -16,14 +17,18 @@ class ItemController extends Controller
 
     public function favorite(Item $item)
     {
-    Auth::user()->favorites()->attach($item->id);
-    return back();
+        Auth::user()->favorites()->attach($item->id);
+        return back();
     }
 
     public function unfavorite(Item $item)
     {
-    Auth::user()->favorites()->detach($item->id);
-    return back();
+        Auth::user()->favorites()->detach($item->id);
+        return back();
+    }
+
+    public function sell() {
+        return view('items.sell');
     }
 
     public function create()

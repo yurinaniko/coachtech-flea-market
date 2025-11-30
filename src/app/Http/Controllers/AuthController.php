@@ -35,8 +35,20 @@ class AuthController extends Controller
 
     }
 
-    public function login()
+    public function login(Request $request)
     {
-    // このあと実装予定
+    $credentials = $request->validate([
+        'email' => ['required', 'email'],
+        'password' => ['required'],
+    ]);
+
+    if (auth()->attempt($credentials)) {
+        $request->session()->regenerate();
+        return redirect()->route('mypage.index');
+    }
+
+    return back()->withErrors([
+        'email' => '認証情報が登録されていません。',
+    ]);
     }
 }
