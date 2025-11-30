@@ -2,6 +2,10 @@
 
 namespace App\Http\Controllers;
 
+use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
+use App\Models\Item;
+
 class MypageController extends Controller
 {
     // マイページTOP（商品一覧）
@@ -15,7 +19,7 @@ class MypageController extends Controller
             $items = Item::inRandomOrder()->take(10)->get();
         }
 
-        return view('mypage.index', compact('products', 'page'));
+        return view('mypage.index', compact('items', 'page'));
     }
 
     // プロフィールページ

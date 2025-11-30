@@ -14,6 +14,7 @@ Route::get('/', [ItemController::class, 'index'])->name('items.index');
 
 Route::resource('items', ItemController::class);
 Route::get('/items/{id}', [ItemController::class, 'show'])->name('items.show');
+Route::get('/items/sell', [ItemController::class, 'sell'])->name('items.sell')->middleware('auth');
 
 // 会員登録画面
 Route::get('/register', [AuthController::class, 'showRegisterForm'])->name('register');

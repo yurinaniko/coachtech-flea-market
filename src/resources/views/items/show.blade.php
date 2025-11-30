@@ -28,9 +28,10 @@
 
             {{-- お気に入りボタン--}}
             <div class="item-detail__actions">
-                <div class="action-item">
+                <div class="favorite-wrapper">
                     {{-- ハートアイコン常に表示 --}}
                     <img src="{{ Auth::check() && Auth::user()->favorites->contains($item->id) ? asset('images/pink-heart.png') : asset('images/heart.png') }}" class="favorite-icon" alt="favorite">
+
                     {{-- カウントは常に表示 --}}
                     <span class="favorite-count">{{ $item->users->count() }}</span>
 
@@ -51,12 +52,11 @@
                     @endif
                 </div>
                 {{-- コメント --}}
-                <div class="action-item">
+                <div class="comment-wrapper">
                     <img src="{{ asset('images/comment.png') }}" alt="コメント" class="comment-icon">
                     <span class="comment-count">1</span>
                 </div>
             </div>
-
             <a href="#" class="item-detail__buy-button">購入手続きへ</a>
 
             <label class="item-detail__section-title">商品説明</label>
@@ -88,4 +88,22 @@
         </div>
     </div>
 </div>
+<script>
+document.addEventListener('DOMContentLoaded', () => {
+    const icon = document.querySelector('.favorite-icon');
+    const count = document.querySelector('.favorite-count');
+
+    if(icon) {
+        icon.addEventListener('click', () => {
+            icon.classList.add('active');
+            count.classList.add('active');
+
+            setTimeout(() => {
+                icon.classList.remove('active');
+                count.classList.remove('active');
+            }, 400);
+        });
+    }
+});
+</script>
 @endsection
