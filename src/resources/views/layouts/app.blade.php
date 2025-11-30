@@ -13,8 +13,6 @@
 </head>
 <body>
     <div class="wrapper">
-        {{-- 共通ヘッダー読み込み --}}
-        @include('layouts.header')
 
         {{-- ページごとの内容 --}}
         <main>
