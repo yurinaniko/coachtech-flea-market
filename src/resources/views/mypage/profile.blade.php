@@ -1,49 +1,52 @@
 @extends('layouts.app')
 
 @section('css')
-<link rel="stylesheet" href="{{ asset('css/mypage.css') }}">
+<link rel="stylesheet" href="{{ asset('css/sanitize.css') }}">
+<link rel="stylesheet" href="{{ asset('css/common.css') }}">
+<link rel="stylesheet" href="{{ asset('css/item-list.css') }}">
+<link rel="stylesheet" href="{{ asset('css/mypage.css') }}">   {{-- ここでタブとカードのCSSもまとめる --}}
 @endsection
 
 @section('content')
-<div class="mypage">
-
-    {{-- タイトル --}}
-    <h2 class="mypage__title">マイページ</h2>
-
-    {{-- ユーザー情報 --}}
-    <div class="mypage__profile">
-        <img src="{{ asset('images/user-icon.png') }}" class="mypage__icon" alt="ユーザーアイコン">
-        <p class="mypage__name">{{ Auth::user()->name ?? 'ゲスト' }}</p>
-        <p class="mypage__email">{{ Auth::user()->email ?? '' }}</p>
-
-        <a href="#" class="mypage__edit">プロフィールを編集</a>
+    {{-- ① プロフィール情報 --}}
+<div class="user-info-wrapper">
+    <div class="user-info">
+        <div class="user-info__center">
+            <img src="{{ asset($user->image ?? 'images/user-icon.png') }}" class="mypage__icon">
+            <p class="mypage__username">{{ $user->name }}</p>
+        </div>
+        <a href="{{ route('mypage.profile.edit') }}" class="mypage__edit-btn">プロフィールを編集</a>
     </div>
-
-    {{-- タブメニュー --}}
-    <ul class="mypage__tab-menu">
-        <li class="tab {{ request('page') === 'sell' ? 'active' : '' }}">
-            <a href="{{ route('mypage.index', ['page' => 'sell']) }}">出品した商品</a>
+</div>
+{{-- ② タブ --}}
+<div class="mypage-tabs-wrapper">
+    <ul class="mypage__tabs">
+        <li class="mypage__tab {{ $page === 'sell' ? 'is-active' : '' }}">
+            <a href="{{ route('mypage.profile', ['page' => 'sell']) }}">出品した商品</a>
         </li>
-        <li class="tab {{ request('page') === 'buy' ? 'active' : '' }}">
-            <a href="{{ route('mypage.index', ['page' => 'buy']) }}">購入した商品</a>
-        </li>
-        <li class="tab {{ request('page') === 'like' ? 'active' : '' }}">
-            <a href="{{ route('mypage.index', ['page' => 'like']) }}">マイリスト</a>
+        <li class="mypage__tab {{ $page === 'buy' ? 'is-active' : '' }}">
+            <a href="{{ route('mypage.profile', ['page' => 'buy']) }}">購入した商品</a>
         </li>
     </ul>
-
-    {{-- タブ内容 --}}
-    <div class="mypage__tab-content">
-        @if(request('page') === 'sell')
-            @include('mypage.tabs.sell')
-        @elseif(request('page') === 'buy')
-            @include('mypage.tabs.buy')
-        @elseif(request('page') === 'like')
-            @include('mypage.tabs.like')
-        @else
-            <p>表示する項目を選択してください。</p>
-        @endif
-    </div>
-
 </div>
+{{-- 商品カード一覧 --}}
+<div class="item-list">
+    <div class="item-list__grid">
+        @foreach ($items as $item)
+            <a href="{{ $item->purchase ? 'javascript:void(0);' : route('items.show', $item->id) }}"
+                class="item-card__link {{ $item->purchase ? 'disabled' : '' }}">
+                <div class="item-card">
+                    <div class="item-card__image">
+                        @if($item->purchase)
+                                <span class="sold-badge">sold</span>
+                            @endif
+                                <img src="{{ asset($item->image) }}" alt="{{ $item->name }}" class="img-content">
+                    </div>
+                    <p class="item-card__name">{{ $item->name }}</p>
+                </div>
+            </a>
+        @endforeach
+    </div>
+</div>
+
 @endsection

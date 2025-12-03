@@ -13,6 +13,7 @@
 
 .item-detail__image-area {
     width: 40%;
+    position: relative;
 }
 
 .item-detail__image {
@@ -56,13 +57,14 @@
     color: #fff;
     padding: 10px 20px;
     border-radius: 4px;
+    border: none;
     font-weight: bold;
     margin-bottom: 20px;
     text-decoration: none;
 }
 
 .item-detail__section-title {
-    font-size: 24px;
+    font-size: 22px;
     font-weight: 600;
     margin: 18px 0 8px;
 }
@@ -93,28 +95,39 @@
     border-radius: 4px;
 }
 
-/* コメント1件 */
 .item-detail__comment-item {
     display: flex;
     align-items: center;
     gap: 10px;
-    margin-top: 6px;
+    margin: 8px;
 }
 
-/* 丸型ユーザーアイコン */
 .comment-user-icon {
     width: 38px;
     height: 38px;
-    background-color: #C4C4C4;
+    background-color: #E6E6E6;
     border-radius: 50%;
     object-fit: cover;
 }
 
-/* コメントテキスト */
 .comment-body {
     display: flex;
     flex-direction: column;
     gap: 4px;
+}
+
+.comment-text {
+    background: #C4C4C4;
+    ;
+    padding: 12px 14px;
+    border-radius: 4px;
+    margin-top: 0;
+    margin-bottom: 6px;
+    font-size: 14px;
+    color: #333;
+    white-space: pre-wrap;
+    word-break: break-word;
+    line-height: 1.6;
 }
 
 .comment-user-name {
@@ -123,13 +136,8 @@
     color: #444;
 }
 
-.comment-text {
-    background: #C4C4C4;;
-    padding: 12px 14px;
-    border-radius: 4px;
-    margin-bottom: 18px;
-    font-size: 14px;
-    color: #333;
+.comment-user {
+    margin: 0;
 }
 
 /* フォーム */
@@ -139,6 +147,9 @@
     margin-bottom: 6px;
 }
 
+.item-detail__comment-form {
+    margin-top: 12px;
+}
 .item-detail__comment-form textarea {
     width: 100%;
     height: 180px;
@@ -192,8 +203,8 @@
 }
 
 .comment-icon {
-    width: 32px;
-    height: 32px;
+    width: 24px;
+    height: 24px;
     cursor: pointer;
 }
 
@@ -205,10 +216,11 @@
 
 /* ===== ハートアニメーション ===== */
 .favorite-icon {
-    width: 32px;
-    height: 32px;
+    width: 24px;
+    height: 24px;
     cursor: pointer;
     transition: transform 0.3s ease;
+    pointer-events: none;
 }
 
 .favorite-icon.active {
@@ -248,4 +260,68 @@
     100% {
         transform: scale(1);
     }
+}
+
+.comment-item {
+    width: 100%;
+}
+
+.comment-hidden {
+    display: none;
+}
+
+/* 商品詳細画面専用 SOLDバッジ */
+.item-detail__image-area .sold-badge {
+    position: absolute;
+    top: 20px;
+    left: 20px;
+    background-color: #ff4d4d;
+    color: #fff;
+    font-size: 18px;
+    padding: 8px 18px;
+    border-radius: 8px;
+    font-weight: bold;
+    z-index: 10;
+    pointer-events: none;
+}
+
+.comment-placeholder__text {
+    color: #333;
+    font-size: 14px;
+    margin: 0;
+}
+
+.comment-placeholder {
+    background-color: #E6E6E6;
+    padding: 12px 14px;
+    border-radius: 4px;
+    margin-bottom: 12px;
+}
+
+.comment-placeholder-box {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 8px;
+    background-color: #E6E6E6;
+    padding: 12px 14px;
+    border-radius: 4px;
+    margin-bottom: 12px;
+    width: 100%;
+}
+
+.item-detail__category-tags {
+    display: inline-flex;
+    flex-wrap: wrap;
+    gap: 6px;
+}
+
+.category-tag {
+    display: inline-block;
+    padding: 2px 10px;
+    background-color: #E6E6E6;
+    border-radius: 14px;
+    font-size: 14px;
+    color: #333;
+    white-space: nowrap;
 }
