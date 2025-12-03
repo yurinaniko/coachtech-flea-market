@@ -18,9 +18,13 @@
     {{-- 商品カード一覧（ダミーデータ8個） --}}
     <div class="item-list__grid">
         @foreach ($items as $item)
-            <a href="{{ route('items.show', $item->id) }}" class="item-card__link">
+            <a href="{{ $item->purchase ? 'javascript:void(0);' : route('items.show', $item->id) }}"
+            class="item-card__link {{ $item->purchase ? 'disabled' : '' }}">
                 <div class="item-card">
                     <div class="item-card__image">
+                        @if($item->purchase)
+                            <span class="sold-badge">sold</span>
+                        @endif
                         <img src="{{ asset($item->image) }}" alt="{{ $item->name }}" class="img-content">
                     </div>
                     <p class="item-card__name">{{ $item->name }}</p>

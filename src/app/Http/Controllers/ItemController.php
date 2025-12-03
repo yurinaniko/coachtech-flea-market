@@ -38,13 +38,19 @@ class ItemController extends Controller
 
     public function store(Request $request)
     {
-        //
+        $item = Item::create($request->all());
+
+        // categories[] に選択されたIDが入っている
+        $item->categories()->sync($request->categories);
+
+        return redirect()->route('items.index');
     }
 
     public function show($id)
     {
         $item = Item::findOrFail($id);
-        return view('items.show', compact('item'));
+        $comments = $item->comments()->orderBy('created_at', 'desc')->get();
+        return view('items.item-detail', compact('item', 'comments'));
     }
 
     public function edit($id)
@@ -52,9 +58,13 @@ class ItemController extends Controller
         //
     }
 
-    public function update(Request $request, $id)
+    public function update(Request $request, Item $item)
     {
-        //
+        $item->update($request->all());
+
+        $item->categories()->sync($request->categories);
+
+        return redirect()->route('items.index');
     }
 
     public function destroy($id)

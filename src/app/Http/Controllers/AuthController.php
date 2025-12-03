@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Models\User;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
 use App\Http\Requests\RegisterRequest;
 
 class AuthController extends Controller
@@ -28,27 +29,40 @@ class AuthController extends Controller
             'password' => bcrypt($validated['password']),
         ]);
 
-        auth()->login($user);
+        Auth::login($user);
 
-        // ★ マイページへリダイレクト
-        return redirect()->route('mypage.index');
+        // 【初回かどうか判定】プロフィール未設定 → create
+        if (empty($user->postal_code) || empty($user->address)) {
+            return redirect()->route('mypage.profile.create');
+        }
 
+        // 設定済み → edit（通常の編集画面）
+        return redirect()->route('mypage.profile.edit');
     }
 
     public function login(Request $request)
     {
-    $credentials = $request->validate([
-        'email' => ['required', 'email'],
-        'password' => ['required'],
-    ]);
+        $credentials = $request->validate([
+            'email' => ['required', 'email'],
+            'password' => ['required'],
+        ]);
 
-    if (auth()->attempt($credentials)) {
-        $request->session()->regenerate();
-        return redirect()->route('mypage.index');
-    }
+        if (Auth::attempt($credentials)) {
+            $request->session()->regenerate();
 
-    return back()->withErrors([
-        'email' => '認証情報が登録されていません。',
-    ]);
+            $user = Auth::user();
+
+            // 【ログイン時も判定】未設定 → create
+            if (empty($user->postal_code) || empty($user->address)) {
+                return redirect()->route('mypage.profile.create');
+            }
+
+            // 設定済み → 商品一覧（あなたの希望どおり）
+            return redirect()->route('mypage.index');
+        }
+
+        return back()->withErrors([
+            'email' => '認証情報が登録されていません。',
+        ]);
     }
 }

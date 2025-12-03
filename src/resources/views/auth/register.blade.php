@@ -11,7 +11,7 @@
     <div class="auth auth--register">
         <h2 class="auth__title">会員登録</h2>
 
-        <form action="#" method="POST" class="auth__form">
+        <form action="{{ route('register') }}" method="POST" class="auth__form">
             @csrf
 
             <div class="form-group">

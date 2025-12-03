@@ -121,3 +121,23 @@ body {
         flex-shrink: 0;
     }
 }
+
+.sold-badge {
+    position: absolute;
+    top: 12px;
+    left: 12px;
+    background-color: #ff4d4d;
+    color: #fff;
+    font-size: 14px;
+    padding: 6px 14px;
+    border-radius: 6px;
+    font-weight: bold;
+    z-index: 20;
+}
+
+.item-card__link.disabled {
+    pointer-events: none;
+    opacity: 0.5;
+    cursor: default;
+}
+
