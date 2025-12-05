@@ -14,8 +14,8 @@ class CategorySeeder extends Seeder
             '本', 'ゲーム', 'スポーツ', 'キッチン', 'ハンドメイド', 'アクセサリー', 'おもちゃ', 'ベビー・キッズ',
         ];
 
-        foreach ($categories as $category) {
-            Category::create(['name' => $category]);
+        foreach ($categories as $name) {
+        Category::firstOrCreate(['name' => $name]);
         }
     }
 }

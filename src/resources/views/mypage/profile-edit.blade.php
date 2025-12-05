@@ -22,8 +22,8 @@
             </div>
             <label class="mypage-edit__image-label">
                 画像を選択する
-            </label>
                 <input type="file" name="image" accept="image/*" class="mypage-edit__image-input" onchange="previewImage(event)">
+            </label>
                 @error('image')
                 <p class="form__error">{{ $message }}</p>
                 @enderror
@@ -39,7 +39,7 @@
         {{-- 郵便番号 --}}
         <div class="mypage-edit__group">
             <label class="mypage-edit__label">郵便番号</label>
-            <input type="text" name="postal_code" value="{{ old('postal_code', $user->postal_code) }}" class="mypage-edit__input">
+            <input type="text" name="postal_code" value="{{ old('postal_code', $user->address->postal_code ?? '') }}"  class="mypage-edit__input">
             @error('postal_code')
             <p class="form__error">{{ $message }}</p>
             @enderror
@@ -48,7 +48,7 @@
         {{-- 住所 --}}
         <div class="mypage-edit__group">
             <label class="mypage-edit__label">住所</label>
-            <input type="text" name="address" value="{{ old('address', $user->address) }}" class="mypage-edit__input">
+            <input type="text" name="address" value="{{ old('address', $user->address->address ?? '') }}"  class="mypage-edit__input">
             @error('address')
             <p class="form__error">{{ $message }}</p>
             @enderror
@@ -56,8 +56,8 @@
 
         {{-- 建物名 --}}
         <div class="mypage-edit__group">
-            <label class="mypage-edit__label">建物名（任意）</label>
-            <input type="text" name="building" value="{{ old('building', $user->building) }}" class="mypage-edit__input">
+            <label class="mypage-edit__label">建物名</label>
+            <input type="text" name="building" value="{{ old('building', $user->address->building ?? '') }}"  class="mypage-edit__input">
             @error('building')
             <p class="form__error">{{ $message }}</p>
             @enderror
