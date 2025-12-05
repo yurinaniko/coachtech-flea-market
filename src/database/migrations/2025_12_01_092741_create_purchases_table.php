@@ -14,21 +14,18 @@ class CreatePurchasesTable extends Migration
             $table->unsignedBigInteger('item_id');
             $table->integer('price');
             $table->string('status', 50)->default('purchased');
+            $table->string('payment_method', 50)->nullable();// 支払い方法一旦null可能に
+            $table->unsignedBigInteger('address_id'); // 配送先
             $table->timestamps();
 
-            // ★ ここ追加（重複購入禁止）
             $table->unique(['user_id', 'item_id']);
 
             $table->foreign('user_id')->references('id')->on('users')->onDelete('cascade');
             $table->foreign('item_id')->references('id')->on('items')->onDelete('cascade');
+            $table->foreign('address_id')->references('id')->on('addresses')->onDelete('cascade');
         });
     }
 
-    /**
-     * Reverse the migrations.
-     *
-     * @return void
-     */
     public function down()
     {
         Schema::dropIfExists('purchases');

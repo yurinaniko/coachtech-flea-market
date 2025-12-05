@@ -27,7 +27,7 @@ class ItemSeeder extends Seeder
                 'description' => '高速で信頼性の高いハードディスク',
                 'image' => 'images/hdd.jpeg',
                 'condition' => '目立った傷や汚れなし',
-                'category_id' => 2,
+                'category_id' => [2],
                 'user_id' => 1,
             ],
             [
@@ -37,7 +37,7 @@ class ItemSeeder extends Seeder
                 'description' => '新鮮な玉ねぎ3束のセット',
                 'image' => 'images/onion.jpeg',
                 'condition' => 'やや傷や汚れあり',
-                'category_id' => 11,
+                'category_id' => [11],
                 'user_id' => 1,
             ],
             [
@@ -57,7 +57,7 @@ class ItemSeeder extends Seeder
                 'description' => '高性能なノートパソコン',
                 'image' => 'images/laptop.jpeg',
                 'condition' => '良好',
-                'category_id' => 2,
+                'category_id' => [2],
                 'user_id' => 1,
             ],
             [
@@ -67,7 +67,7 @@ class ItemSeeder extends Seeder
                 'description' => '高音質のレコーディング用マイク',
                 'image' => 'images/mike.jpeg',
                 'condition' => '目立った傷や汚れなし',
-                'category_id' => 2,
+                'category_id' => [2],
                 'user_id' => 1,
             ],
             [
@@ -87,7 +87,7 @@ class ItemSeeder extends Seeder
                 'description' => '使いやすいタンブラー',
                 'image' => 'images/tumbler.jpeg',
                 'condition' => '状態が悪い',
-                'category_id' => 10,
+                'category_id' => [10],
                 'user_id' => 1,
             ],
             [
@@ -97,7 +97,7 @@ class ItemSeeder extends Seeder
                 'description' => '手動のコーヒーミル',
                 'image' => 'images/coffee-mill.jpeg',
                 'condition' => '良好',
-                'category_id' => 10,
+                'category_id' => [10],
                 'user_id' => 1,
             ],
             [
@@ -107,7 +107,7 @@ class ItemSeeder extends Seeder
                 'description' => '便利なメイクアップセット',
                 'image' => 'images/makeup.jpeg',
                 'condition' => '目立った傷や汚れなし',
-                'category_id' => 6,
+                'category_id' => [6],
                 'user_id' => 1,
             ],
         ];

@@ -6,6 +6,7 @@ use App\Http\Controllers\AuthController;
 use App\Http\Controllers\MypageController;
 use App\Http\Controllers\CommentController;
 use App\Http\Controllers\PurchaseController;
+use App\Http\Controllers\AddressController;
 
 Route::get('/', function () {
     return view('welcome');
@@ -59,3 +60,14 @@ Route::post('/favorite/{item}', [ItemController::class, 'favorite'])->name('favo
 Route::delete('/favorite/{item}', [ItemController::class, 'unfavorite'])->name('unfavorite');
 
 Route::post('/purchase/{item}', [PurchaseController::class, 'store'])->name('purchase.store');
+
+Route::middleware('auth')->group(function () {
+    Route::get('/mypage/address/edit', [AddressController::class, 'edit'])->name('address.edit');
+    Route::post('/mypage/address/update', [AddressController::class, 'update'])->name('address.update');
+
+    Route::get('/purchase/{item}', [PurchaseController::class, 'index'])
+    ->name('purchase.index')->middleware('auth');
+
+    Route::post('/purchase/{item}', [PurchaseController::class, 'store'])
+    ->name('purchase.store');
+});

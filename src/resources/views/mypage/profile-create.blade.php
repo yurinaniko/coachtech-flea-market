@@ -32,25 +32,25 @@
         {{-- 名前 --}}
         <div class="mypage-edit__group">
             <label class="mypage-edit__label">ユーザー名</label>
-            <input type="text" name="name" value="{{ old('name') }}" class="mypage-edit__input">
+            <input type="text" name="name" value="{{ old('name', $user->name) }}" class="mypage-edit__input">
         </div>
 
         {{-- 郵便番号 --}}
         <div class="mypage-edit__group">
             <label class="mypage-edit__label">郵便番号</label>
-            <input type="text" name="postal_code" value="{{ old('postal_code') }}" class="mypage-edit__input">
+            <input type="text" name="postal_code" value="{{ old('postal_code', $user->postal_code) }}" class="mypage-edit__input">
         </div>
 
         {{-- 住所 --}}
         <div class="mypage-edit__group">
             <label class="mypage-edit__label">住所</label>
-            <input type="text" name="address" value="{{ old('address') }}" class="mypage-edit__input">
+            <input type="text" name="address" value="{{ old('address', $user->address) }}" class="mypage-edit__input">
         </div>
 
         {{-- 建物名 --}}
         <div class="mypage-edit__group">
             <label class="mypage-edit__label">建物名</label>
-            <input type="text" name="building" value="{{ old('building') }}" class="mypage-edit__input">
+            <input type="text" name="building" value="{{ old('building', $user->building) }}"class="mypage-edit__input">
         </div>
 
         <button class="mypage-edit__button">更新する</button>

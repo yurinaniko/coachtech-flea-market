@@ -15,7 +15,7 @@ class CreateItemsTable extends Migration
             $table->string('brand')->nullable();
             $table->string('image');        // 画像パス
             $table->text('description');    // 商品説明
-            $table->string('condition')->nullable();
+            $table->string('condition');
             $table->unsignedBigInteger('user_id'); // 出品者ID
             $table->timestamps();
 

@@ -24,7 +24,7 @@ class MypageController extends Controller
     }
 
     public function profile(Request $request)
-{
+    {
     $user = Auth::user();
     $page = $request->query('page', 'sell');  // 初期タブは「出品した商品」
 
@@ -38,7 +38,7 @@ class MypageController extends Controller
     }
 
     return view('mypage.profile', compact('user', 'items', 'page'));
-}
+    }
 
     // 初回プロフィール作成画面
     public function create()
@@ -50,17 +50,31 @@ class MypageController extends Controller
     // 初回プロフィール登録処理
     public function store(ProfileRequest $request)
     {
+        $validated = $request->validated();
         $user = Auth::user();
-        $validated = $request->validated();   // ← validateはProfileRequestに任せる
 
-        // -----画像アップロード-----
+        // --- プロフィール画像アップロード ---
         if ($request->hasFile('image')) {
-            $imageName = time() . '_' . $request->image->getClientOriginalName();
+            $imageName = time() . '.' . $request->image->extension();
             $request->image->storeAs('public/profile', $imageName);
             $validated['image'] = 'profile/' . $imageName;
         }
 
-        $user->update($validated);
+        // --- users テーブル保存 ---
+        $user->update([
+            'name' => $validated['name'],
+            'image' => $validated['image'] ?? $user->image,
+        ]);
+
+       // --- addresses テーブル保存（初回は create）---
+        $user->address()->updateOrCreate(
+            ['user_id' => $user->id],
+            [
+                'postal_code' => $validated['postal_code'],
+                'address' => $validated['address'],
+                'building' => $validated['building'],
+            ]
+        );
 
         return redirect()->route('mypage.index');
     }
@@ -69,29 +83,38 @@ class MypageController extends Controller
     public function edit()
     {
         $user = Auth::user();
-        return view('mypage.profile-edit', compact('user'));
+        $address = $user->address;
+        return view('mypage.profile-edit', compact('user','address'));
     }
 
     // プロフィール更新処理
     public function update(ProfileRequest $request)
     {
-        $user = Auth::user();
         $validated = $request->validated();
+        $user = Auth::user();
 
-        // -----画像アップロード-----
-        if ($request->hasFile('image')) {
-            // 古い画像削除（必要なら）
-            if ($user->image && \Storage::exists('public/' . $user->image)) {
-            \Storage::delete('public/' . $user->image);
-            }
+        // --- 画像処理 ---
+    if ($request->hasFile('image')) {
+        $imageName = time() . '.' . $request->image->extension();
+        $request->image->storeAs('public/profile', $imageName);
+        $validated['image'] = 'profile/' . $imageName;
+    }
 
-            // 新しい画像保存
-            $imageName = time() . '_' . $request->image->getClientOriginalName();
-            $request->image->storeAs('public/profile', $imageName);
-            $validated['image'] = 'profile/' . $imageName;
-        }
+    // --- users テーブル更新 ---
+    $user->update([
+        'name' => $validated['name'],
+        'image' => $validated['image'] ?? $user->image,
+    ]);
 
-        $user->update($validated);
+    // --- addresses テーブル更新 or 作成 ---
+    $user->address()->updateOrCreate(
+        ['user_id' => $user->id],
+        [
+            'postal_code' => $validated['postal_code'],
+            'address' => $validated['address'],
+            'building' => $validated['building'],
+        ]
+    );
 
         return redirect()->route('mypage.index');
     }

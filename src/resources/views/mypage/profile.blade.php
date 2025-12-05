@@ -4,7 +4,7 @@
 <link rel="stylesheet" href="{{ asset('css/sanitize.css') }}">
 <link rel="stylesheet" href="{{ asset('css/common.css') }}">
 <link rel="stylesheet" href="{{ asset('css/item-list.css') }}">
-<link rel="stylesheet" href="{{ asset('css/mypage.css') }}">   {{-- ここでタブとカードのCSSもまとめる --}}
+<link rel="stylesheet" href="{{ asset('css/mypage.css') }}">
 @endsection
 
 @section('content')
@@ -12,7 +12,8 @@
 <div class="user-info-wrapper">
     <div class="user-info">
         <div class="user-info__center">
-            <img src="{{ asset($user->image ?? 'images/user-icon.png') }}" class="mypage__icon">
+            <img src="{{ $user->image ? asset('storage/' . $user->image) : asset('images/user-icon.png') }}"
+            class="mypage__icon" alt="ユーザーアイコン">
             <p class="mypage__username">{{ $user->name }}</p>
         </div>
         <a href="{{ route('mypage.profile.edit') }}" class="mypage__edit-btn">プロフィールを編集</a>

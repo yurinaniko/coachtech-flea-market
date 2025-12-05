@@ -13,13 +13,13 @@ class ProfileRequest extends FormRequest
 
     public function rules()
     {
-        return [
-        'name' => 'required|string|max:20',
-        'postal_code' => 'required|regex:/^\d{3}-\d{4}$/',
-        'address' => 'required|string|max:255',
-        'building' => 'nullable|string|max:255',
-        'image' => 'nullable|image|mimes:jpeg,png|max:5120',
-        ];
+            return [
+                'name' => 'required|string|max:20',
+                'postal_code' => 'required|regex:/^\d{3}-\d{4}$/',
+                'address' => 'required|string|max:255',
+                'building' => 'nullable|string|max:255',
+                'image' => 'nullable|image|mimes:jpeg,png|max:5120',
+            ];
     }
 
     public function attributes(): array
