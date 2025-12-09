@@ -3,53 +3,77 @@
 namespace App\Http\Controllers;
 
 use App\Models\Item;
+use App\Models\Category;
+use App\Models\Condition;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
+use App\Http\Requests\ItemRequest;
+use App\Http\Requests\ExhibitionRequest;
 
 class ItemController extends Controller
 {
 
     public function index()
     {
-        $items = Item::all();
+        $items = Item::with('condition')->get();
         return view('items.index', compact('items'));
     }
 
-    public function favorite(Item $item)
-    {
-        Auth::user()->favorites()->attach($item->id);
-        return back();
-    }
-
-    public function unfavorite(Item $item)
-    {
-        Auth::user()->favorites()->detach($item->id);
-        return back();
-    }
-
     public function sell() {
-        return view('items.sell');
+        $categories = Category::all();
+        $conditions = Condition::all();
+
+        return view('items.item-sell', compact('categories', 'conditions'));
     }
 
     public function create()
     {
-        //
+        $conditions = \App\Models\Condition::all();
+        $categories = \App\Models\Category::all();
+
+        return view('items.item-sell', compact('conditions', 'categories'));
     }
 
-    public function store(Request $request)
+    public function store(ExhibitionRequest $request)
     {
-        $item = Item::create($request->all());
+        $validated = $request->validated();
 
-        // categories[] に選択されたIDが入っている
-        $item->categories()->sync($request->categories);
+        // 画像保存
+        if ($request->hasFile('img_url')) {
+        $path = $request->file('img_url')->store('images', 'public');
+        $validated['img_url'] = $path;
+        }
 
-        return redirect()->route('items.index');
+       // 商品作成
+        $item = Item::create([
+            'user_id' => auth()->id(),
+            'name' => $validated['name'],
+            'brand' => $validated['brand'] ?? null,
+            'condition_id' => $validated['condition_id'],
+            'description' => $validated['description'],
+            'price' => $validated['price'],
+            'img_url' => $validated['img_url'],
+        ]);
+
+        // 中間テーブル（カテゴリ）
+        $item->categories()->sync($validated['categories']);
+
+        return redirect()->route('items.index')
+            ->with('success', '商品を出品しました！');
     }
 
     public function show($id)
     {
-        $item = Item::findOrFail($id);
-        $comments = $item->comments()->orderBy('created_at', 'desc')->get();
+        $item = Item::with([
+            'categories',
+            'comments.user',
+            'users',
+            'condition',
+            'purchase'
+        ])->findOrFail($id);
+
+        $comments = $item->comments;
+
         return view('items.item-detail', compact('item', 'comments'));
     }
 

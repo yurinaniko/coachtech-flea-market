@@ -1,0 +1,171 @@
+.sell {
+    max-width: 680px;
+    margin: 0 auto;
+    padding: 20px 0;
+}
+
+.sell__title {
+    text-align: center;
+    font-size: 22px;
+    font-weight: bold;
+    margin: 20px auto;
+}
+
+.image-upload {
+    width: 680px;
+    height: 160px;
+    background-color: #fff;
+    border: 2px dashed #C4C4C4;
+    border-radius: 4px;
+    margin-top: 12px;
+    margin-bottom: 24px;
+    overflow: hidden;
+    padding: 0;
+}
+
+.image-preview {
+    width: 100%;
+    height: 100%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    position: relative;
+    font-size: 14px;
+    background-size: contain;
+    background-position: center;
+    background-repeat: no-repeat;
+    overflow: hidden;
+}
+
+#previewImg {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    display: none;
+}
+
+.image-input {
+    display: none;
+}
+
+.image-select-btn {
+    display: inline-block;
+    width: 120px;
+    padding: 10px 0;
+    background-color: #fff;
+    border: 1px solid #FF6F61;
+    color: #FF6F61;
+    border-radius: 4px;
+    cursor: pointer;
+    text-align: center;
+    font-size: 14px;
+    margin-top: 16px;
+}
+
+.image-preview.has-image .image-select-btn {
+    display: none;
+    /* ← 画像選択後は消える */
+}
+
+.image-select-btn:hover {
+    background-color: #FF6F61;
+    color: white;
+}
+
+.detail-box {
+    width: 680px;
+    margin: 0 auto 40px;
+}
+
+.detail-title {
+    color: #C4C4C4;
+    font-size: 20px;
+    font-weight: 600;
+    margin-bottom: 8px;
+}
+
+.detail-border {
+    width: 100%;
+    height: 2px;
+    background-color: #C4C4C4;
+    margin-bottom: 20px;
+}
+
+.form-group {
+    margin-bottom: 24px;
+}
+
+.form-label {
+    display: block;
+    font-weight: bold;
+    margin-bottom: 10px;
+}
+
+.category-tag {
+    border: 1px solid #FF6F61;
+    background-color: #fff;
+    border-radius: 18px;
+    padding: 4px 20px;
+    font-size: 12px;
+    cursor: pointer;
+    display: inline-flex;
+    align-items: center;
+    transition: all 0.2s ease;
+    color: #FF6F61;
+}
+
+.category-tags {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 14px;
+    margin: 0 auto 20px;
+    padding-left: 40px;
+    justify-content: flex-start;
+    max-width: 680px;
+}
+
+.category-tag input {
+    display: none;
+}
+
+.category-tag span {
+    pointer-events: none;
+}
+
+.category-tag:has(input:checked) {
+    background-color: #FF6F61;
+    color: #fff;
+    border-radius: 18px;
+    padding: 4px 18px;
+}
+
+.form-input {
+    width: 100%;
+    padding: 12px 14px;
+    border: 1px solid #ccc;
+    border-radius: 6px;
+    font-size: 14px;
+}
+
+textarea {
+    height: 120px;
+    resize: none;
+}
+
+/* --- 出品ボタン --- */
+.sell__button {
+    width: 100%;
+    background-color: #FF6F6F;
+    color: #fff;
+    padding: 14px 0;
+    border: none;
+    border-radius: 6px;
+    font-size: 16px;
+    font-weight: bold;
+    cursor: pointer;
+    margin-top: 20px;
+}
+
+.sell__submit:hover {
+    opacity: 0.85;
+}

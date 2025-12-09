@@ -7,6 +7,7 @@ use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
 use Laravel\Sanctum\HasApiTokens;
+use App\Models\Profile;
 
 class User extends Authenticatable
 {
@@ -16,15 +17,16 @@ class User extends Authenticatable
         'name',
         'email',
         'password',
-        'postal_code',
-        'address',
-        'building',
-        'image',
     ];
+
+    public function profile()
+    {
+        return $this->hasOne(Profile::class);
+    }
 
     public function favorites()
     {
-        return $this->belongsToMany(Item::class, 'favorites')->withTimestamps();
+        return $this->belongsToMany(Item::class, 'favorites','user_id', 'item_id')->withTimestamps();
     }
 
     public function items()
@@ -51,9 +53,4 @@ class User extends Authenticatable
     protected $casts = [
         'email_verified_at' => 'datetime',
     ];
-
-    public function address()
-    {
-        return $this->hasOne(Address::class);
-    }
 }

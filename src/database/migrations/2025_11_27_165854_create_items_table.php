@@ -10,16 +10,17 @@ class CreateItemsTable extends Migration
     {
         Schema::create('items', function (Blueprint $table) {
             $table->id();
-            $table->string('name');         // 商品名
-            $table->integer('price');       // 価格
+            $table->unsignedBigInteger('user_id');
+            $table->unsignedBigInteger('condition_id');
+            $table->string('name');
+            $table->integer('price');
             $table->string('brand')->nullable();
-            $table->string('image');        // 画像パス
-            $table->text('description');    // 商品説明
-            $table->string('condition');
-            $table->unsignedBigInteger('user_id'); // 出品者ID
+            $table->string('img_url');
+            $table->text('description');
             $table->timestamps();
 
             $table->foreign('user_id')->references('id')->on('users')->onDelete('cascade');
+            $table->foreign('condition_id')->references('id')->on('conditions')->onDelete('cascade');
         });
     }
 

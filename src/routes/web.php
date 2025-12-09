@@ -6,20 +6,17 @@ use App\Http\Controllers\AuthController;
 use App\Http\Controllers\MypageController;
 use App\Http\Controllers\CommentController;
 use App\Http\Controllers\PurchaseController;
+use App\Http\Controllers\ProfileController;
+use App\Http\Controllers\ConditionController;
+use App\Http\Controllers\FavoriteController;
 use App\Http\Controllers\AddressController;
 
+// トップページ：ログインしていたらマイページ / していなければ商品一覧
 Route::get('/', function () {
-    return view('welcome');
+    return auth()->check()
+        ? redirect()->route('mypage.index')
+        : redirect()->route('items.index');
 });
-
-Route::get('/', [ItemController::class, 'index'])->name('items.index');
-
-Route::resource('items', ItemController::class);
-Route::get('/items/{id}', [ItemController::class, 'show'])->name('items.show');
-Route::get('/items/sell', [ItemController::class, 'sell'])->name('items.sell')->middleware('auth');
-Route::post('/items/{item}/comment', [CommentController::class, 'store'])
-    ->name('comment.store')
-    ->middleware('auth');
 
 // 会員登録画面
 Route::get('/register', [AuthController::class, 'showRegisterForm'])->name('register');
@@ -28,6 +25,14 @@ Route::post('/register', [AuthController::class, 'register']);
 // ログイン画面
 Route::get('/login', [AuthController::class, 'showLoginForm'])->name('login');
 Route::post('/login', [AuthController::class, 'login']);
+
+// プロフィール登録
+Route::get('/profile/create', [ProfileController::class, 'create'])->name('profile.create');
+Route::post('/profile/store', [ProfileController::class, 'store'])->name('profile.store');
+
+// プロフィール編集
+Route::get('/profile/edit', [ProfileController::class, 'edit'])->name('profile.edit');
+Route::put('/profile/update', [ProfileController::class, 'update'])->name('profile.update');
 
 // マイページトップ（商品一覧）
 Route::get('/mypage', [MypageController::class, 'index'])
@@ -39,34 +44,42 @@ Route::get('/mypage/profile', [MypageController::class, 'profile'])
     ->name('mypage.profile')
     ->middleware('auth');
 
-// 初回プロフィール設定（ログイン直後に表示）
+// 商品一覧
+Route::get('/items', [ItemController::class, 'index'])->name('items.index');
+
+// 出品ページ（静的にしないと危険）
+Route::get('/items/sell', [ItemController::class, 'sell'])
+    ->name('items.item-sell')
+    ->middleware('auth');
+
+Route::post('/items/store', [ItemController::class, 'store'])->name('items.store');
+
+Route::get('mypage/address/edit', [AddressController::class, 'edit'])
+    ->name('mypage.address.edit')
+    ->middleware('auth');
+
+Route::put('mypage/address/update', [AddressController::class, 'update'])
+    ->name('mypage.address.update')
+    ->middleware('auth');
+
+// お気に入り
+Route::post('/items/{item}/favorite', [FavoriteController::class, 'toggle'])
+    ->name('favorite.toggle')
+    ->middleware('auth');
+
+// コメント
+Route::post('/items/{item}/comment', [CommentController::class, 'store'])
+    ->name('comment.store')
+    ->middleware('auth');
+
+// 商品詳細（最後に置く）
+Route::get('/items/{id}', [ItemController::class, 'show'])
+    ->name('items.show');
+
+// 購入
 Route::middleware('auth')->group(function () {
-
-    Route::get('/mypage/profile/create', [MypageController::class, 'create'])
-        ->name('mypage.profile.create');
-
-    Route::post('/mypage/profile/store', [MypageController::class, 'store'])
-        ->name('mypage.profile.store');
-
-    // 編集
-    Route::get('/mypage/profile/edit', [MypageController::class, 'edit'])
-        ->name('mypage.profile.edit');
-
-    Route::put('/mypage/profile/update', [MypageController::class, 'update'])
-        ->name('mypage.profile.update');
-});
-
-Route::post('/favorite/{item}', [ItemController::class, 'favorite'])->name('favorite');
-Route::delete('/favorite/{item}', [ItemController::class, 'unfavorite'])->name('unfavorite');
-
-Route::post('/purchase/{item}', [PurchaseController::class, 'store'])->name('purchase.store');
-
-Route::middleware('auth')->group(function () {
-    Route::get('/mypage/address/edit', [AddressController::class, 'edit'])->name('address.edit');
-    Route::post('/mypage/address/update', [AddressController::class, 'update'])->name('address.update');
-
     Route::get('/purchase/{item}', [PurchaseController::class, 'index'])
-    ->name('purchase.index')->middleware('auth');
+    ->name('purchase.index');
 
     Route::post('/purchase/{item}', [PurchaseController::class, 'store'])
     ->name('purchase.store');

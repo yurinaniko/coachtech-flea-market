@@ -6,36 +6,47 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use App\Models\Purchase;
 use App\Models\Item;
+use App\Http\Requests\PurchaseRequest;
 
 class PurchaseController extends Controller
 {
-    public function index($itemId)
+    public function index(Item $item, Request $request)
     {
-    $item = Item::findOrFail($itemId);
-    $user = Auth::user();
-    $address = $user->address;
+        $user = Auth::user()->fresh();
+        $selectedMethod = $request->payment_method ?? '';
+        session(['current_item_id' => $item->id]);
 
-    return view('purchase.index', compact('item', 'user','address'));
+        $placeholder = [
+            'postal_code' => 'XXX-YYYY',
+            'address'     => 'ここには住所と建物が入ります',
+            'building'    => '',
+        ];
+
+        return view('purchase.index', [
+            'item' => $item,
+            'user' => $user,
+            'selectedMethod' => $selectedMethod,
+            'placeholder' => $placeholder,
+        ]);
     }
 
-    public function store(Request $request, $itemId)
-    {
-        $address = Auth::user()->address;
 
-        if (!$address) {
-        return redirect()->route('address.edit')
-                        ->with('error', '先に住所を登録してください。');
-        }
+    public function store(PurchaseRequest $request, $itemId)
+    {
+        $validated = $request->validated();
+        $item = Item::findOrFail($itemId);
+
         Purchase::create([
-            'user_id' => Auth::id(),
-            'item_id' => $itemId,
-            'price'   => Item::findOrFail($itemId)->price,
-            'status'  => 'paid',
-            'payment_method' => $request->payment_method,
-            'address_id' => Auth::user()->address_id,
+            'user_id'          => Auth::id(),
+            'item_id'          => $item->id,
+            'price'            => $item->price,
+            'status'           => 'purchased',
+            'payment_method'   => $validated['payment_method'],
+            'sending_postcode' => $validated['postal_code'],
+            'sending_address'  => $validated['address'],
+            'sending_building' => $validated['building'],
         ]);
 
-        return redirect()->route('items.show', $itemId)
-        ->with('success', '購入が完了しました。');
+        return redirect()->route('mypage.index');
     }
 }

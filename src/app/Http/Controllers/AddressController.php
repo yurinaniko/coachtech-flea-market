@@ -4,29 +4,39 @@ namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
-use App\Models\Address;
-use App\Http\Requests\AddressRequest;
 
 class AddressController extends Controller
 {
-    // 住所編集画面表示
     public function edit()
     {
-        $address = Auth::user()->address;   // 1対1リレーション
-
-        return view('mypage.address.edit', compact('address'));
+        $user = Auth::user();
+        return view('mypage.address.edit', compact('user'));
     }
 
-    // 更新処理
-    public function update(AddressRequest $request)
+    public function update(Request $request)
     {
+        $request->validate([
+            'postal_code' => 'required',
+            'address' => 'required',
+            'building' => 'nullable',
+        ]);
+
         $user = Auth::user();
 
-        $user->address()->updateOrCreate(
-        ['user_id' => $user->id],
-        $request->validated()
+        // --- profiles テーブルを更新 ---
+        $user->profile()->updateOrCreate(
+            ['user_id' => $user->id],
+            [
+                'postal_code' => $request->postal_code,
+                'address'     => $request->address,
+                'building'    => $request->building,
+            ]
         );
 
-        return back()->with('success', '住所を更新しました');
+        // ユーザー情報をリフレッシュ
+        Auth::user()->fresh();
+
+        return redirect()->route('purchase.index', ['item' => session('current_item_id')])
+                    ->with('success', '住所を更新しました！');
     }
 }

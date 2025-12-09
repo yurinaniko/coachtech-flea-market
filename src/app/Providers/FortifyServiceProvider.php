@@ -6,6 +6,8 @@ use Illuminate\Support\ServiceProvider;
 use Laravel\Fortify\Fortify;
 use App\Actions\Fortify\CreateNewUser;
 use Laravel\Fortify\Contracts\RegisterResponse;
+use Laravel\Fortify\Contracts\LoginResponse;
+use App\Actions\Fortify\LoginResponse as CustomLoginResponse;
 
 class FortifyServiceProvider extends ServiceProvider
 {
@@ -16,6 +18,7 @@ class FortifyServiceProvider extends ServiceProvider
 
     public function boot()
     {
+        $this->app->singleton(LoginResponse::class, CustomLoginResponse::class);
         app()->singleton(RegisterResponse::class, function () {
             return new class implements RegisterResponse {
                 public function toResponse($request)

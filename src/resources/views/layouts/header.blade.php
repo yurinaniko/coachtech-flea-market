@@ -19,7 +19,7 @@
                 @if (!Request::is('login') && !Request::is('register'))
                     <a href="{{ route('login') }}">ログイン</a>
                     <a href="{{ route('mypage.profile') }}">マイページ</a>
-                    {{-- <a href="{{ route('items.sell') }}" class="header__sell-button">出品</a> --}}
+                    <a href="{{ route('items.item-sell') }}" class="header__sell-button">出品</a>
                 @endif
             @else
                 <form action="{{ route('logout') }}" method="POST" style="display:inline;">
@@ -27,7 +27,7 @@
                     <button type="submit" class="header__logout-button">ログアウト</button>
                 </form>
                 <a href="{{ route('mypage.profile') }}">マイページ</a>
-                {{-- <a href="{{ route('items.sell') }}" class="header__sell-button">出品</a> --}}
+                <a href="{{ route('items.item-sell') }}" class="header__sell-button">出品</a>
             @endguest
         </div>
     </div>

@@ -15,7 +15,7 @@
             @if($item->purchase)
                 <span class="sold-badge">sold</span>
             @endif
-            <img src="{{ asset($item->image) }}" alt="{{ $item->name }}" class="item-detail__image">
+            <img src="{{ asset('storage/' . $item->img_url) }}" alt="" class=item-detail__image>
         </div>
 
         {{-- 右カラム：商品情報 --}}
@@ -32,29 +32,16 @@
             {{-- お気に入りボタン--}}
             <div class="item-detail__actions">
                 <div class="favorite-wrapper">
-                    {{-- ハートアイコン常に表示 --}}
-                    <img src="{{ Auth::check() && Auth::user()->favorites->contains($item->id) ? asset('images/pink-heart.png') : asset('images/heart.png') }}" class="favorite-icon" alt="favorite">
-
-                    {{-- カウントは常に表示 --}}
-                    <span class="favorite-count">{{ $item->users->count() }}</span>
-
-                    {{-- ログイン時のみボタン有効 --}}
                     @if (Auth::check())
-                        @if (Auth::user()->favorites->contains($item->id))
-                            <form action="{{ route('unfavorite', $item->id) }}" method="POST">
-                                @csrf
-                                @method('DELETE')
-                                <button type="submit" class="favorite-btn"></button>
-                            </form>
-                        @else
-                            <form action="{{ route('favorite', $item->id) }}" method="POST">
-                                @csrf
-                                <button type="submit" class="favorite-btn"></button>
-                            </form>
-                        @endif
+                        <form action="{{ route('favorite.toggle', $item->id) }}" method="POST">
+                            @csrf
+                            <button type="submit" class="favorite-btn">
+                                <img src="{{ Auth::user()->favorites->contains('id', $item->id) ? asset('images/pink-heart.png') : asset('images/heart.png') }}" class="favorite-icon" alt="favorite">
+                                <span class="favorite-count">{{ $item->users->count() }}</span>
+                            </button>
+                        </form>
                     @endif
                 </div>
-                {{-- コメント --}}
                 <div class="comment-wrapper">
                     <img src="{{ asset('images/comment.png') }}" alt="コメント" class="comment-icon">
                     <span class="comment-count">{{ $item->comments->count() }}</span>
@@ -64,7 +51,7 @@
             @if ($item->purchase && $item->purchase->status === 'sold')
                 <p class="sold-message">※この商品は売り切れました</p>
             @else
-                <form action="{{ route('purchase.store', $item->id) }}" method="POST">
+                <form action="{{ route('purchase.index', $item->id) }}" method="GET">
                     @csrf
                     <button type="submit" class="item-detail__buy-button">購入手続きへ</button>
                 </form>
@@ -83,7 +70,10 @@
                         @endforeach
                     </span>
                 </p>
-                <p><strong>商品の状態：</strong> {{ $item->condition }}</p>
+                <div class="product-detail__condition">
+                    <strong>商品の状態：</strong>
+                    {{ $item->condition->condition }}
+                </div>
             </div>
 
             {{-- コメント --}}
