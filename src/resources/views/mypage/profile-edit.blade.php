@@ -10,15 +10,13 @@
 @section('content')
 <div class="mypage-edit">
     <h2 class="mypage-edit__title">プロフィール設定</h2>
-    <form action="{{ route('mypage.profile.update') }}" method="POST" enctype="multipart/form-data" class="mypage-edit__form">
+    <form action="{{ route('profile.update') }}" method="POST" enctype="multipart/form-data" class="mypage-edit__form">
         @csrf
         @method('PUT')
         {{-- プロフィール画像 --}}
         <div class="mypage-edit__image-area">
             <div class="mypage-edit__image-left">
-                <img id="preview"
-                src="{{ $user->image ? asset('storage/' . $user->image) : asset('images/user-icon.png') }}"
-                class="mypage_icon">
+                <img id="preview" src="{{ $profile && $profile->img_url ? asset('storage/' . $profile->img_url) : asset('images/user-icon.png') }}" alt="プロフィール画像">
             </div>
             <label class="mypage-edit__image-label">
                 画像を選択する
@@ -39,7 +37,7 @@
         {{-- 郵便番号 --}}
         <div class="mypage-edit__group">
             <label class="mypage-edit__label">郵便番号</label>
-            <input type="text" name="postal_code" value="{{ old('postal_code', $user->address->postal_code ?? '') }}"  class="mypage-edit__input">
+            <input type="text" name="postal_code" value="{{ old('postal_code', $profile->postal_code ?? '') }}"  class="mypage-edit__input">
             @error('postal_code')
             <p class="form__error">{{ $message }}</p>
             @enderror
@@ -48,7 +46,7 @@
         {{-- 住所 --}}
         <div class="mypage-edit__group">
             <label class="mypage-edit__label">住所</label>
-            <input type="text" name="address" value="{{ old('address', $user->address->address ?? '') }}"  class="mypage-edit__input">
+            <input type="text" name="address" value="{{ old('address', $profile->address ?? '') }}" class="mypage-edit__input">
             @error('address')
             <p class="form__error">{{ $message }}</p>
             @enderror
@@ -57,7 +55,7 @@
         {{-- 建物名 --}}
         <div class="mypage-edit__group">
             <label class="mypage-edit__label">建物名</label>
-            <input type="text" name="building" value="{{ old('building', $user->address->building ?? '') }}"  class="mypage-edit__input">
+            <input type="text" name="building" value="{{ old('building', $profile->building ?? '') }}" class="mypage-edit__input">
             @error('building')
             <p class="form__error">{{ $message }}</p>
             @enderror

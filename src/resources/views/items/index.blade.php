@@ -25,7 +25,7 @@
                         @if($item->purchase)
                             <span class="sold-badge">sold</span>
                         @endif
-                        <img src="{{ asset($item->image) }}" alt="{{ $item->name }}" class="img-content">
+                        <img src="{{ asset('storage/' . $item->img_url) }}" alt="">
                     </div>
                     <p class="item-card__name">{{ $item->name }}</p>
                 </div>

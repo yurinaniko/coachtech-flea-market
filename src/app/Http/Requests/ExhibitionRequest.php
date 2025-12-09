@@ -16,10 +16,10 @@ class ExhibitionRequest extends FormRequest
         return [
             'name' => 'required|string|max:20',
             'brand' => 'nullable|string|max:255',
-            'condition' => 'required|string',
+            'condition_id' => 'required|integer',
             'description' => 'required|string|max:255',
             'price' => 'required|integer|min:0',
-            'image' => 'required|image|mimes:jpeg,jpg,png|max:2048',
+            'img_url' => 'required|image|mimes:jpeg,jpg,png|max:5120',
             'categories' => 'required|array', // 中間テーブル用
         ];
     }
@@ -29,10 +29,10 @@ class ExhibitionRequest extends FormRequest
         return [
             'name' => '商品名',
             'brand' => 'ブランド名',
-            'condition' => '商品の状態',
+            'condition_id' => '商品の状態',
             'description' => '商品説明',
             'price' => '価格',
-            'image' => '商品画像',
+            'img_url' => '商品画像',
             'categories' => 'カテゴリー',
         ];
     }

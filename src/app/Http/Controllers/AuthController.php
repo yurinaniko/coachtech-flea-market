@@ -33,11 +33,11 @@ class AuthController extends Controller
 
         // 【初回かどうか判定】プロフィール未設定 → create
         if (empty($user->postal_code) || empty($user->address)) {
-            return redirect()->route('mypage.profile.create');
+            return redirect()->route('profile.create');
         }
 
         // 設定済み → edit（通常の編集画面）
-        return redirect()->route('mypage.profile.edit');
+        return redirect()->route('profile.edit');
     }
 
     public function login(Request $request)
@@ -54,7 +54,7 @@ class AuthController extends Controller
 
             // 【ログイン時も判定】未設定 → create
             if (empty($user->postal_code) || empty($user->address)) {
-                return redirect()->route('mypage.profile.create');
+                return redirect()->route('profile.create');
             }
 
             // 設定済み → 商品一覧（あなたの希望どおり）

@@ -14,7 +14,6 @@ class ProfileRequest extends FormRequest
     public function rules()
     {
             return [
-                'name' => 'required|string|max:20',
                 'postal_code' => 'required|regex:/^\d{3}-\d{4}$/',
                 'address' => 'required|string|max:255',
                 'building' => 'nullable|string|max:255',
@@ -25,7 +24,6 @@ class ProfileRequest extends FormRequest
     public function attributes(): array
     {
         return [
-            'name' => 'ユーザー名',
             'postal_code' => '郵便番号',
             'address' => '住所',
             'building' => '建物名',

@@ -8,15 +8,14 @@
 @endsection
 
 @section('content')
-    {{-- ① プロフィール情報 --}}
+{{-- ① プロフィール情報 --}}
 <div class="user-info-wrapper">
     <div class="user-info">
         <div class="user-info__center">
-            <img src="{{ $user->image ? asset('storage/' . $user->image) : asset('images/user-icon.png') }}"
-            class="mypage__icon" alt="ユーザーアイコン">
+            <img src="{{ asset($profile->img_url ? 'storage/' . $profile->img_url : 'images/user-icon.png') }}" alt="プロフィール画像" class="profile-image">
             <p class="mypage__username">{{ $user->name }}</p>
         </div>
-        <a href="{{ route('mypage.profile.edit') }}" class="mypage__edit-btn">プロフィールを編集</a>
+        <a href="{{ route('profile.edit') }}" class="mypage__edit-btn">プロフィールを編集</a>
     </div>
 </div>
 {{-- ② タブ --}}
@@ -41,7 +40,7 @@
                         @if($item->purchase)
                                 <span class="sold-badge">sold</span>
                             @endif
-                                <img src="{{ asset($item->image) }}" alt="{{ $item->name }}" class="img-content">
+                                <img src="{{ asset('storage/' . $item->img_url) }}" alt="">
                     </div>
                     <p class="item-card__name">{{ $item->name }}</p>
                 </div>
