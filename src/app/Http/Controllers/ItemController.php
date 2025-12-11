@@ -13,10 +13,19 @@ use App\Http\Requests\ExhibitionRequest;
 class ItemController extends Controller
 {
 
-    public function index()
+    public function index(Request $request)
     {
-        $items = Item::with('condition')->get();
-        return view('items.index', compact('items'));
+        $keyword = $request->input('keyword');
+
+        $query = Item::with('condition');
+
+        if (!empty($keyword)) {
+            $query->where('name', 'LIKE', '%' . $keyword . '%');
+        }
+
+        $items = $query->get();
+
+        return view('items.index', compact('items', 'keyword'));
     }
 
     public function sell() {
@@ -58,7 +67,7 @@ class ItemController extends Controller
         // 中間テーブル（カテゴリ）
         $item->categories()->sync($validated['categories']);
 
-        return redirect()->route('items.index')
+        return redirect()->route('mypage.index')
             ->with('success', '商品を出品しました！');
     }
 

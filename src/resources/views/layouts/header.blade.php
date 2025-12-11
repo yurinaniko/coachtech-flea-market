@@ -8,9 +8,10 @@
 
         {{-- 中央：検索フォーム：ログイン画面&登録画面以外 --}}
         @if (!Request::is('login') && !Request::is('register'))
-        <form action="/items" method="GET" class="header__search">
-            <input type="text" name="keyword" placeholder="なにをお探しですか？" class="header__search-input">
-        </form>
+            <form action="{{ Auth()->check() ? route('mypage.index') : route('items.index') }}" method="GET" class="header__search">
+                <input type="hidden" name="page" value="{{ request('page', 'recommend') }}">
+                <input type="text" name="keyword" placeholder="なにをお探しですか？" class="header__search-input" value="{{ request('keyword') }}" class="header__search-input">
+            </form>
         @endif
 
         {{-- 右：メニュー --}}

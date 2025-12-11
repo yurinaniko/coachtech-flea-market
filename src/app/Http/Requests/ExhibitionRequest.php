@@ -19,7 +19,7 @@ class ExhibitionRequest extends FormRequest
             'condition_id' => 'required|integer',
             'description' => 'required|string|max:255',
             'price' => 'required|integer|min:0',
-            'img_url' => 'required|image|mimes:jpeg,jpg,png|max:5120',
+            'img_url' => 'required|image|mimes:jpeg,png|max:10240',
             'categories' => 'required|array', // 中間テーブル用
         ];
     }

@@ -12,14 +12,38 @@ class MypageController extends Controller
     public function index(Request $request)
     {
         $page = $request->query('page', 'recommend');
+        $keyword = $request->query('keyword');
 
-        if ($page === 'favorite') {
-            $items = Auth::user()->favorites;
-        } else {
-            $items = Item::inRandomOrder()->take(10)->get();
+        if (!Auth::check()) {
+            return redirect()->route('items.index');
         }
 
-        return view('mypage.index', compact('items', 'page'));
+            // ★ マイリスト
+        if ($page === 'favorite') {
+            $items = Auth::user()->favorites;
+
+            // マイリストの中で検索したい場合
+            if ($keyword) {
+                $items = $items->filter(function($item) use ($keyword) {
+                    return mb_stripos($item->name, $keyword) !== false;
+                })->values();
+            }
+
+        } else {
+            // ★ おすすめ（全商品 or 検索結果）
+            $items = Item::query();
+
+            if ($keyword) {
+                $items->where('name', 'like', '%' . $keyword . '%');
+            } else {
+                // キーワードがないときはランダム10件
+                $items->inRandomOrder()->take(10);
+            }
+
+            $items = $items->get();
+        }
+
+        return view('mypage.index', compact('items', 'page', 'keyword'));
     }
 
     public function profile(Request $request)
