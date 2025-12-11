@@ -77,7 +77,6 @@
     margin: 4px 0;
 }
 
-/* コメント全体 */
 .item-detail__comments-area {
     width: 100%;
     max-width: 570px;
@@ -108,6 +107,13 @@
     background-color: #E6E6E6;
     border-radius: 50%;
     object-fit: cover;
+}
+
+.guest-icon {
+    width: 40px;
+    height: 40px;
+    border-radius: 50%;
+    background-color: #ccc;
 }
 
 .comment-body {
@@ -144,13 +150,18 @@
 .comment-label {
     font-size: 16px;
     font-weight: 600;
-    margin-bottom: 6px;
+    margin: 6px 0;
 }
 
-.item-detail__comment-form {
-    margin-top: 12px;
+.comment-more-btn,
+.comment-close-btn,
+.comment-label {
+    display: block;
+    width: fit-content;
+    margin-bottom: 10px;
 }
-.item-detail__comment-form textarea {
+
+.comment-textarea {
     width: 100%;
     height: 180px;
     margin-bottom: 14px;
@@ -190,8 +201,6 @@
 }
 
 .favorite-btn {
-    top: 0;
-    left: 0;
     width: 24px;
     height: 24px;
     background: none;
@@ -199,13 +208,28 @@
     padding: 0;
     cursor: pointer;
     position: static;
+}
 
+.favorite-btn--gest {
+    width: 24px;
+    height: 24px;
+    background: none;
+    border: none;
+    padding: 0;
+    cursor: pointer;
+    position: static;
+}
+
+.favorite-btn.favorite-btn--guest {
+    margin-bottom: 20px;
+    cursor: not-allowed;
 }
 
 .comment-icon {
     width: 24px;
     height: 24px;
     cursor: pointer;
+    padding: 0;
 }
 
 .favorite-count,
@@ -219,6 +243,7 @@
     width: 24px;
     height: 24px;
     cursor: pointer;
+    padding: 0;
     transition: transform 0.3s ease;
     pointer-events: none;
 }

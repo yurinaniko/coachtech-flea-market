@@ -32,15 +32,27 @@
             {{-- お気に入りボタン--}}
             <div class="item-detail__actions">
                 <div class="favorite-wrapper">
-                    @if (Auth::check())
+                    @php
+                        $isFavorite = Auth::check() && Auth::user()->favorites->contains('id', $item->id);
+                    @endphp
+                    @auth
+                        {{-- ▼ ログインしている人：押せるハート --}}
                         <form action="{{ route('favorite.toggle', $item->id) }}" method="POST">
                             @csrf
                             <button type="submit" class="favorite-btn">
-                                <img src="{{ Auth::user()->favorites->contains('id', $item->id) ? asset('images/pink-heart.png') : asset('images/heart.png') }}" class="favorite-icon" alt="favorite">
+                                <img src="{{ $isFavorite ? asset('images/pink-heart.png') : asset('images/heart.png') }}"
+                                class="favorite-icon" alt="favorite">
                                 <span class="favorite-count">{{ $item->users->count() }}</span>
                             </button>
                         </form>
-                    @endif
+                    @endauth
+                    @guest
+                        {{-- ▼ ログインしていない人：押せないハート --}}
+                        <button class="favorite-btn favorite-btn--guest" disabled>
+                            <img src="{{ asset('images/heart.png') }}" class="favorite-icon" alt="favorite">
+                            <span class="favorite-count">{{ $item->users->count() }}</span>
+                        </button>
+                    @endguest
                 </div>
                 <div class="comment-wrapper">
                     <img src="{{ asset('images/comment.png') }}" alt="コメント" class="comment-icon">
@@ -59,67 +71,112 @@
 
             <label class="item-detail__section-title">商品説明</label>
             <p class="item-detail__description">{{ $item->description }}</p>
-        <div class="item-detail__attributes">
-            <label class="item-detail__section-title">商品の情報</label>
-                {{-- ここは後でDB接続予定 --}}
-                <p class="item-detail__category">
-                    <strong>カテゴリ：</strong>
-                    <span class="item-detail__category-tags">
-                        @foreach ($item->categories as $category)
-                            <span class="category-tag">{{ $category->name }}</span>
-                        @endforeach
-                    </span>
-                </p>
-                <div class="product-detail__condition">
-                    <strong>商品の状態：</strong>
-                    {{ $item->condition->condition }}
+                <div class="item-detail__attributes">
+                    <label class="item-detail__section-title">商品の情報</label>
+                        {{-- ここは後でDB接続予定 --}}
+                        <p class="item-detail__category">
+                            <strong>カテゴリ：</strong>
+                            <span class="item-detail__category-tags">
+                                @foreach ($item->categories as $category)
+                                    <span class="category-tag">{{ $category->name }}</span>
+                                @endforeach
+                            </span>
+                        </p>
+                        <div class="product-detail__condition">
+                            <strong>商品の状態：</strong>
+                            {{ $item->condition->condition }}
+                        </div>
                 </div>
-            </div>
-
-            {{-- コメント --}}
-            <div class="item-detail__comment-wrapper">
-                <label class="item-detail__section-title">コメント({{ $item->comments->count() }})</label>
-                @if($comments->count() === 0)
-                    <div class="item-detail__comment-item">
-                {{-- コメントが0件のときのプレースホルダー --}}
-                        <img src="{{ asset('images/user-icon.png') }}" class="comment-user-icon" alt="user">
-                        <span class="comment-user-name">admin</span>
-                    </div>
-                    <div class="comment-placeholder-box">
-                        <p class="comment-placeholder__text">こちらにコメントが入ります。</p>
-                    </div>
-                @else
-                    <div class="item-detail__comment-item">
-                        <img src="{{ asset('images/user-icon.png') }}" class="comment-user-icon" alt="user">
-                        <span class="comment-user-name">admin</span>
-                    </div>
-                    <div class="comment-body">
-                            <p class="comment-text">{{ $comments->first()->comment }}</p>
-                    </div>
-
-                    {{-- コメント一覧 --}}
-                    <div id="comment-list">
-                        @foreach ($comments->skip(1) as $index => $comment)
-                            <div class="comment-item comment-hidden" @if ($index < 5) style="display:block" @endif>
-                                <p class="comment-user">{{ $comment->user->name }}</p>
-                                <p class="comment-text">{{ $comment->comment }}</p>
+                {{-- コメント --}}
+                <div class="item-detail__comment-wrapper">
+                    <label class="item-detail__section-title">
+                        コメント({{ $item->comments->count() }})
+                    </label>
+                    @if ($comments->count() === 0)
+                        {{-- ▼ ログイン中：自分のアイコン --}}
+                        @auth
+                            @php
+                                $myProfile = auth()->user()->profile;
+                                $myIcon = ($myProfile && $myProfile->img_url)
+                                ? asset('storage/' . $myProfile->img_url)
+                                : asset('images/user-icon.png');
+                            @endphp
+                            <div class="item-detail__comment-item">
+                                <img src="{{ $myIcon }}" class="comment-user-icon" alt="{{ auth()->user()->name }}">
+                                <span class="comment-user-name">{{ auth()->user()->name }}</span>
                             </div>
-                        @endforeach
-                    </div>
-
-                    {{-- もっと見るボタン --}}
-                    @if ($comments->count() > 6)
-                        <button id="show-more" class="comment-more-btn">もっと見る</button>
+                        @endauth
+                        {{-- ▼ 未ログイン：admin --}}
+                            @guest
+                                <div class="item-detail__comment-item">
+                                    <div class="comment-user-icon guest-icon"></div>
+                                    <span class="comment-user-name">admin</span>
+                                </div>
+                            @endguest
+                            {{-- ▼ コメントが無いときのグレー枠（共通） --}}
+                                <div class="comment-placeholder-box">
+                                    <p class="comment-placeholder__text">こちらにコメントが入ります。</p>
+                                </div>
+                                {{-- ▼ コメント1件以上 --}}
+                                @else
+                                    {{-- 最初の5件だけ表示 --}}
+                                    @foreach ($comments->take(5) as $comment)
+                                        @php
+                                            $profile = $comment->user->profile;
+                                            $iconPath = $profile && $profile->img_url
+                                            ? asset('storage/' . $profile->img_url)
+                                            : asset('images/user-icon.png');
+                                        @endphp
+                                            <div class="item-detail__comment-item">
+                                                <img src="{{ $iconPath }}" class="comment-user-icon">
+                                                <span class="comment-user-name">{{ $comment->user->name }}</span>
+                                            </div>
+                                            <div class="comment-placeholder-box">
+                                                <p class="comment-placeholder__text">{{ $comment->comment }}</p>
+                                            </div>
+                                    @endforeach
+                                    {{-- ▼ 6件目以降は隠しておく --}}
+                                    @foreach ($comments->slice(5) as $comment)
+                                        <div class="comment-hidden" style="display:none;">
+                                            @php
+                                                $profile = $comment->user->profile;
+                                                $iconPath = $profile && $profile->img_url
+                                                ? asset('storage/' . $profile->img_url)
+                                                : asset('images/user-icon.png');
+                                            @endphp
+                                                <div class="item-detail__comment-item">
+                                                    <img src="{{ $iconPath }}" class="comment-user-icon">
+                                                    <span class="comment-user-name">{{ $comment->user->name }}</span>
+                                                </div>
+                                                <div class="comment-placeholder-box">
+                                                    <p class="comment-placeholder__text">{{ $comment->comment }}</p>
+                                                </div>
+                                        </div>
+                                    @endforeach
+                                    {{-- ▼ もっと見る（6件以上のとき） --}}
+                                    @if ($comments->count() > 5)
+                                        <button id="show-more" class="comment-more-btn">もっと見る</button>
+                                    @endif
+                                    <button id="close-comments" class="comment-close-btn" style="display:none;">閉じる</button>
                     @endif
-                @endif
+                    <label class="comment-label">商品へのコメント</label>
+                        <form action="{{ route('comment.store', $item->id) }}" method="POST" class="item-detail__comment-form">
+                            @csrf
+                            <textarea class="comment-textarea" name="comment"></textarea>
+                                @auth
+                                    <button type="submit" class="item-detail__comment-submit">
+                                        コメントを追加する
+                                    </button>
+                                @endauth
+                        </form>
+                        {{-- ▼ 未ログイン --}}
+                        @guest
+                            <button class="item-detail__comment-submit disabled" disabled>
+                                コメントを追加する
+                            </button>
+                        @endguest
+                    </div>
             </div>
-            {{-- コメント入力フォーム --}}
-            <form action="{{ route('comment.store', $item->id) }}" method="POST" class="item-detail__comment-form">
-                @csrf
-                <label class="comment-label">商品へのコメント</label>
-                <textarea name="comment" required></textarea>
-                <button class="item-detail__comment-submit">コメントを追加する</button>
-            </form>
         </div>
     </div>
 </div>
@@ -144,23 +201,30 @@ document.addEventListener('DOMContentLoaded', () => {
 });
 </script>
 <script>
+document.addEventListener("DOMContentLoaded", function () {
+
     const showMoreBtn = document.getElementById('show-more');
+    const closeBtn = document.getElementById('close-comments');
     const hiddenComments = document.querySelectorAll('.comment-hidden');
 
-    let isOpen = false;
-
-    showMoreBtn.addEventListener('click', () => {
-        isOpen = !isOpen;
-
-        hiddenComments.forEach((comment, index) => {
-            if (index >= 5 && !isOpen) {
-                comment.style.display = 'none';
-            } else {
-                comment.style.display = 'block';
-            }
+    // ▼ もっと見るボタン
+    if (showMoreBtn) {
+        showMoreBtn.addEventListener('click', function () {
+            hiddenComments.forEach(el => el.style.display = 'block');
+            showMoreBtn.style.display = 'none';
+            closeBtn.style.display = 'block';
         });
+    }
 
-        showMoreBtn.textContent = isOpen ? '閉じる' : 'もっと見る';
-    });
+    // ▼ 閉じるボタン
+    if (closeBtn) {
+        closeBtn.addEventListener('click', function () {
+            hiddenComments.forEach(el => el.style.display = 'none');
+            closeBtn.style.display = 'none';
+            if (showMoreBtn) showMoreBtn.style.display = 'block';
+        });
+    }
+
+});
 </script>
 @endsection
