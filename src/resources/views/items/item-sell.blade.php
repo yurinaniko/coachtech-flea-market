@@ -102,8 +102,16 @@ document.getElementById('image').addEventListener('change', function (e) {
     const reader = new FileReader();
     reader.onload = function(event) {
         const previewBox = document.getElementById('imagePreview');
+        const uploadBox = document.querySelector('.image-upload');
+
         previewBox.style.backgroundImage = `url(${event.target.result})`;
-        previewBox.classList.add('has-image');  // ボタンを非表示にする
+        previewBox.classList.add('has-image');
+
+        uploadBox.style.border = 'none';
+        uploadBox.style.background = 'none';
+
+        const btn = previewBox.querySelector('.image-select-btn');
+        if (btn) btn.style.display = 'none';
     };
     reader.readAsDataURL(file);
 });

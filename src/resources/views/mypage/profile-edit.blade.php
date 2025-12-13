@@ -15,16 +15,20 @@
         @method('PUT')
         {{-- プロフィール画像 --}}
         <div class="mypage-edit__image-area">
-            <div class="mypage-edit__image-left">
-                <img id="preview" src="{{ $profile && $profile->img_url ? asset('storage/' . $profile->img_url) : asset('images/user-icon.png') }}" alt="プロフィール画像">
-            </div>
+            @if(optional($profile)->img_url)
+                {{-- 画像あり：丸いプロフィール画像 --}}
+                <img id="preview" src="{{ asset('storage/' . $profile->img_url) }}" class="profile-image" alt="プロフィール画像">
+            @else
+                {{-- 画像なし：グレー丸（Figma の見た目） --}}
+                <div id="preview" class="profile-placeholder"></div>
+            @endif
             <label class="mypage-edit__image-label">
-                画像を選択する
-                <input type="file" name="image" accept="image/*" class="mypage-edit__image-input" onchange="previewImage(event)">
+            画像を選択する
+            <input type="file" name="image" accept="image/*" class="mypage-edit__image-input" onchange="previewImage(event)">
             </label>
-                @error('image')
+            @error('image')
                 <p class="form__error">{{ $message }}</p>
-                @enderror
+            @enderror
         </div>
         {{-- 名前 --}}
         <div class="mypage-edit__group">

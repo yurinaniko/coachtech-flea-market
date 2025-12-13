@@ -5,6 +5,7 @@
 <link rel="stylesheet" href="{{ asset('css/common.css') }}">
 <link rel="stylesheet" href="{{ asset('css/item-list.css') }}">
 <link rel="stylesheet" href="{{ asset('css/mypage.css') }}">
+<link rel="stylesheet" href="{{ asset('css/form.css') }}">
 @endsection
 
 @section('content')
@@ -12,7 +13,14 @@
 <div class="user-info-wrapper">
     <div class="user-info">
         <div class="user-info__center">
-            <img src="{{ asset($profile->img_url ? 'storage/' . $profile->img_url : 'images/user-icon.png') }}" alt="プロフィール画像" class="profile-image">
+            @php
+                $hasImage = optional($profile)->img_url;
+            @endphp
+            @if ($hasImage)
+                <img src="{{ asset('storage/' . $hasImage) }}" class="profile-edit__image">
+            @else
+                <div class="profile-placeholder"></div>
+            @endif
             <p class="mypage__username">{{ $user->name }}</p>
         </div>
         <a href="{{ route('profile.edit') }}" class="mypage__edit-btn">プロフィールを編集</a>

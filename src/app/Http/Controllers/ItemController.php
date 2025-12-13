@@ -19,6 +19,11 @@ class ItemController extends Controller
 
         $query = Item::with('condition');
 
+        // ★ 自分が出品した商品を除外
+        if (Auth::check()) {
+        $query->where('user_id', '!=', Auth::id());
+        }
+
         if (!empty($keyword)) {
             $query->where('name', 'LIKE', '%' . $keyword . '%');
         }

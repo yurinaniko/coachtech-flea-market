@@ -30,17 +30,21 @@ class MypageController extends Controller
             }
 
         } else {
-            // ★ おすすめ（全商品 or 検索結果）
-            $items = Item::query();
+
+            $query = Item::where('user_id', '!=', Auth::id());
 
             if ($keyword) {
-                $items->where('name', 'like', '%' . $keyword . '%');
+            // キーワードあり → 通常検索
+            $items = $query
+                ->where('name', 'like', '%' . $keyword . '%')
+                ->get();
             } else {
-                // キーワードがないときはランダム10件
-                $items->inRandomOrder()->take(10);
+            // キーワードなし → ランダム10件
+            $items = $query
+                ->inRandomOrder()
+                ->take(10)
+                ->get();
             }
-
-            $items = $items->get();
         }
 
         return view('mypage.index', compact('items', 'page', 'keyword'));

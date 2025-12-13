@@ -4,13 +4,18 @@ namespace Database\Seeders;
 
 use Illuminate\Database\Seeder;
 use App\Models\Item;
+use App\Models\User;
 
 class ItemSeeder extends Seeder
 {
     public function run(): void
     {
+        User::factory()->count(3)->create();
+        $userIds = User::pluck('id')->toArray();
+
         $items = [
             [
+                'user_id' => 1,
                 'name' => '腕時計',
                 'price' => 15000,
                 'brand' => 'Rolax',
@@ -18,9 +23,9 @@ class ItemSeeder extends Seeder
                 'img_url' => 'images/watch.jpeg',
                 'condition_id' => 1,
                 'category_id' => [1,5],
-                'user_id' => 1,
             ],
             [
+                'user_id' => 1,
                 'name' => 'HDD',
                 'price' => 5000,
                 'brand' => '西芝',
@@ -28,9 +33,9 @@ class ItemSeeder extends Seeder
                 'img_url' => 'images/hdd.jpeg',
                 'condition_id' => 2,
                 'category_id' => [2],
-                'user_id' => 1,
             ],
             [
+                'user_id' => 1,
                 'name' => '玉ねぎ3束',
                 'price' => 300,
                 'brand' => 'なし',
@@ -38,9 +43,9 @@ class ItemSeeder extends Seeder
                 'img_url' => 'images/onion.jpeg',
                 'condition_id' => 3,
                 'category_id' => [11],
-                'user_id' => 1,
             ],
             [
+                'user_id' => 1,
                 'name' => '革靴',
                 'price' => 4000,
                 'brand' => '',
@@ -48,9 +53,9 @@ class ItemSeeder extends Seeder
                 'img_url' => 'images/shoes.jpeg',
                 'condition_id' => 4,
                 'category_id' => [1,5],
-                'user_id' => 1,
             ],
             [
+                'user_id' => 1,
                 'name' => 'ノートPC',
                 'price' => 45000,
                 'brand' => 'レノボ',
@@ -58,7 +63,6 @@ class ItemSeeder extends Seeder
                 'img_url' => 'images/laptop.jpeg',
                 'condition_id' => 1,
                 'category_id' => [2],
-                'user_id' => 1,
             ],
             [
                 'name' => 'マイク',
@@ -68,7 +72,6 @@ class ItemSeeder extends Seeder
                 'img_url' => 'images/mike.jpeg',
                 'condition_id' => 2,
                 'category_id' => [2],
-                'user_id' => 1,
             ],
             [
                 'name' => 'ショルダーバッグ',
@@ -78,7 +81,6 @@ class ItemSeeder extends Seeder
                 'img_url' => 'images/bag.jpeg',
                 'condition_id' => 3,
                 'category_id' => [1,4],
-                'user_id' => 1,
             ],
             [
                 'name' => 'タンブラー',
@@ -88,7 +90,6 @@ class ItemSeeder extends Seeder
                 'img_url' => 'images/tumbler.jpeg',
                 'condition_id' => 4,
                 'category_id' => [10],
-                'user_id' => 1,
             ],
             [
                 'name' => 'コーヒーミル',
@@ -98,7 +99,6 @@ class ItemSeeder extends Seeder
                 'img_url' => 'images/coffee-mill.jpeg',
                 'condition_id' => 1,
                 'category_id' => [10],
-                'user_id' => 1,
             ],
             [
                 'name' => 'メイクセット',
@@ -108,11 +108,12 @@ class ItemSeeder extends Seeder
                 'img_url' => 'images/makeup.jpeg',
                 'condition_id' => 2,
                 'category_id' => [6],
-                'user_id' => 1,
             ],
         ];
             foreach ($items as $itemData) {
-            // category_idは一旦取り出す
+
+            $itemData['user_id'] = $userIds[array_rand($userIds)];
+
             $categoryIds = $itemData['category_id'];
             unset($itemData['category_id']);
 

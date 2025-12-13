@@ -13,19 +13,19 @@
 
     <form action="{{ route('profile.store') }}" method="POST" enctype="multipart/form-data" class="mypage-edit__form">
         @csrf
-
         {{-- プロフィール画像 --}}
         <div class="mypage-edit__image-area">
 
-            <div class="mypage-edit__image-left">
-                <img id="preview"
-                    src="{{ asset('storage/' . (optional($profile)->img_url ?? 'images/user-icon.png')) }}"
-                    alt="プロフィール画像">
-            </div>
-
+            {{-- プロフィール画像 or プレースホルダー --}}
+            @if(!empty($profile?->img_url))
+                <img id="preview" src="{{ asset('storage/' . $profile->img_url) }}" class="profile-edit__image" alt="プロフィール画像">
+            @else
+                <div id="preview" class="profile-placeholder"></div>
+            @endif
+            {{-- 画像選択ボタン --}}
             <label class="mypage-edit__image-label">
-                画像を選択する
-                <input type="file" name="image" accept="image/*" class="mypage-edit__image-input" onchange="previewImage(event)">
+            画像を選択する
+            <input type="file" name="image" accept="image/*" class="mypage-edit__image-input" onchange="previewImage(event)">
             </label>
             @error('image')
             <p class="form__error">{{ $message }}</p>
@@ -79,6 +79,24 @@ function previewImage(event) {
         document.getElementById('preview').setAttribute('src', e.target.result);
     }
     reader.readAsDataURL(event.target.files[0]);
+}
+</script>
+<script>
+function previewImage(event) {
+    const file = event.target.files[0];
+    if (!file) return;
+
+    const reader = new FileReader();
+    reader.onload = function(e) {
+        const preview = document.getElementById('preview');
+
+        if (preview.tagName === 'DIV') {
+            preview.outerHTML = `<img id="preview" class="profile-edit__image" src="${e.target.result}">`;
+        } else {
+            preview.src = e.target.result;
+        }
+    };
+    reader.readAsDataURL(file);
 }
 </script>
 @endsection
