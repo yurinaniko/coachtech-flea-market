@@ -59,23 +59,25 @@
                     <span class="comment-count">{{ $item->comments->count() }}</span>
                 </div>
             </div>
-            {{-- 購入ボタン or SOLD --}}
-            @if ($item->purchase && $item->purchase->status === 'sold')
+            {{-- ★ 自分の商品なら購入ボタンは表示しない --}}
+            @if ($item->user_id === Auth::id())
+                <p class="sold-message">※これはあなたが出品した商品です</p>
+            {{-- ★ 売り切れ商品の場合 --}}
+            @elseif ($item->purchase && $item->purchase->status === 'sold')
                 <p class="sold-message">※この商品は売り切れました</p>
+            {{-- ★ それ以外 → 購入できる --}}
             @else
                 <form action="{{ route('purchase.index', $item->id) }}" method="GET">
                     @csrf
                     <button type="submit" class="item-detail__buy-button">購入手続きへ</button>
                 </form>
             @endif
-
             <label class="item-detail__section-title">商品説明</label>
             <p class="item-detail__description">{{ $item->description }}</p>
                 <div class="item-detail__attributes">
                     <label class="item-detail__section-title">商品の情報</label>
-                        {{-- ここは後でDB接続予定 --}}
                         <p class="item-detail__category">
-                            <strong>カテゴリ：</strong>
+                            <strong>カテゴリ</strong>
                             <span class="item-detail__category-tags">
                                 @foreach ($item->categories as $category)
                                     <span class="category-tag">{{ $category->name }}</span>
@@ -83,7 +85,7 @@
                             </span>
                         </p>
                         <div class="product-detail__condition">
-                            <strong>商品の状態：</strong>
+                            <strong>商品の状態</strong>
                             {{ $item->condition->condition }}
                         </div>
                 </div>
@@ -97,84 +99,87 @@
                         @auth
                             @php
                                 $myProfile = auth()->user()->profile;
-                                $myIcon = ($myProfile && $myProfile->img_url)
-                                ? asset('storage/' . $myProfile->img_url)
-                                : asset('images/user-icon.png');
                             @endphp
                             <div class="item-detail__comment-item">
-                                <img src="{{ $myIcon }}" class="comment-user-icon" alt="{{ auth()->user()->name }}">
-                                <span class="comment-user-name">{{ auth()->user()->name }}</span>
+                                @if ($myProfile && $myProfile->img_url)
+                                    <img src="{{ asset('storage/' . $myProfile->img_url) }}" class="comment-user-icon" alt="{{ auth()->user()->name }}">
+                                @else    {{-- ← 画像なし時はこちらへ --}}
+                                    <div class="comment-user-icon profile-placeholder"></div>
+                                @endif
+                                    <span class="comment-user-name">{{ auth()->user()->name }}</span>
                             </div>
                         @endauth
                         {{-- ▼ 未ログイン：admin --}}
                             @guest
                                 <div class="item-detail__comment-item">
                                     <div class="comment-user-icon guest-icon"></div>
-                                    <span class="comment-user-name">admin</span>
-                                </div>
+                                        <span class="comment-user-name">admin</span>
+                                    </div>
                             @endguest
-                            {{-- ▼ コメントが無いときのグレー枠（共通） --}}
+                            {{-- ▼ コメントが無い時のメッセージ --}}
                                 <div class="comment-placeholder-box">
                                     <p class="comment-placeholder__text">こちらにコメントが入ります。</p>
                                 </div>
-                                {{-- ▼ コメント1件以上 --}}
-                                @else
-                                    {{-- 最初の5件だけ表示 --}}
-                                    @foreach ($comments->take(5) as $comment)
-                                        @php
-                                            $profile = $comment->user->profile;
-                                            $iconPath = $profile && $profile->img_url
-                                            ? asset('storage/' . $profile->img_url)
-                                            : asset('images/user-icon.png');
-                                        @endphp
-                                            <div class="item-detail__comment-item">
-                                                <img src="{{ $iconPath }}" class="comment-user-icon">
-                                                <span class="comment-user-name">{{ $comment->user->name }}</span>
-                                            </div>
-                                            <div class="comment-placeholder-box">
-                                                <p class="comment-placeholder__text">{{ $comment->comment }}</p>
-                                            </div>
-                                    @endforeach
-                                    {{-- ▼ 6件目以降は隠しておく --}}
-                                    @foreach ($comments->slice(5) as $comment)
-                                        <div class="comment-hidden" style="display:none;">
-                                            @php
-                                                $profile = $comment->user->profile;
-                                                $iconPath = $profile && $profile->img_url
-                                                ? asset('storage/' . $profile->img_url)
-                                                : asset('images/user-icon.png');
-                                            @endphp
-                                                <div class="item-detail__comment-item">
-                                                    <img src="{{ $iconPath }}" class="comment-user-icon">
-                                                    <span class="comment-user-name">{{ $comment->user->name }}</span>
-                                                </div>
-                                                <div class="comment-placeholder-box">
-                                                    <p class="comment-placeholder__text">{{ $comment->comment }}</p>
-                                                </div>
-                                        </div>
-                                    @endforeach
-                                    {{-- ▼ もっと見る（6件以上のとき） --}}
-                                    @if ($comments->count() > 5)
-                                        <button id="show-more" class="comment-more-btn">もっと見る</button>
+                    {{-- ▼ コメント1件以上 --}}
+                    @else
+                    {{-- ▼ 最初の5件だけ表示 --}}
+                        @foreach ($comments->take(5) as $comment)
+                            @php
+                                $profile = $comment->user->profile;
+                            @endphp
+                                <div class="item-detail__comment-item">
+                                    @if ($profile && $profile->img_url)
+                                        <img src="{{ asset('storage/' . $profile->img_url) }}" class="comment-user-icon">
+                                    @else
+                                        <div class="comment-user-icon profile-placeholder"></div>
                                     @endif
+                                        <span class="comment-user-name">{{ $comment->user->name }}</span>
+                                </div>
+                                <div class="comment-placeholder-box">
+                                    <p class="comment-placeholder__text">{{ $comment->comment }}</p>
+                                </div>
+                        @endforeach
+                        {{-- ▼ 6件目以降は非表示 --}}
+                            @foreach ($comments->slice(5) as $comment)
+                                @php
+                                    $profile = $comment->user->profile;
+                                @endphp
+                                    <div class="comment-hidden" style="display:none;">
+                                        <div class="item-detail__comment-item">
+                                            @if ($profile && $profile->img_url)   {{-- ← ここ修正！ --}}
+                                                <img src="{{ asset('storage/' . $profile->img_url) }}" class="comment-user-icon">
+                                            @else
+                                                <div class="comment-user-icon profile-placeholder"></div> {{-- ← グレー丸 --}}
+                                            @endif
+                                                <span class="comment-user-name">{{ $comment->user->name }}</span>
+                                        </div>
+                                        <div class="comment-placeholder-box">
+                                            <p class="comment-placeholder__text">{{ $comment->comment }}</p>
+                                        </div>
+                                    </div>
+                            @endforeach
+                            {{-- ▼ もっと見る --}}
+                                @if ($comments->count() > 5)
+                                    <button id="show-more" class="comment-more-btn">もっと見る</button>
+                                @endif
                                     <button id="close-comments" class="comment-close-btn" style="display:none;">閉じる</button>
                     @endif
                     <label class="comment-label">商品へのコメント</label>
-                        <form action="{{ route('comment.store', $item->id) }}" method="POST" class="item-detail__comment-form">
-                            @csrf
-                            <textarea class="comment-textarea" name="comment"></textarea>
-                                @auth
-                                    <button type="submit" class="item-detail__comment-submit">
-                                        コメントを追加する
-                                    </button>
-                                @endauth
-                        </form>
-                        {{-- ▼ 未ログイン --}}
-                        @guest
-                            <button class="item-detail__comment-submit disabled" disabled>
-                                コメントを追加する
-                            </button>
-                        @endguest
+                            <form action="{{ route('comment.store', $item->id) }}" method="POST" class="item-detail__comment-form">
+                                @csrf
+                                <textarea class="comment-textarea" name="comment"></textarea>
+                                    @auth
+                                        <button type="submit" class="item-detail__comment-submit">
+                                            コメントを追加する
+                                        </button>
+                                    @endauth
+                            </form>
+                            {{-- ▼ 未ログイン --}}
+                            @guest
+                                <button class="item-detail__comment-submit disabled" disabled>
+                                    コメントを追加する
+                                </button>
+                            @endguest
                     </div>
             </div>
         </div>

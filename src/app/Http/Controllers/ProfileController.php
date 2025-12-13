@@ -39,7 +39,7 @@ class ProfileController extends Controller
         $user = auth()->user();
 
         if ($request->hasFile('image')) {
-            $imageName = time() . '.' . $request->image->getClientOriginalExtension();
+            $imageName = time() . '.' . $request->image->extension();
             $request->image->storeAs('public/profile', $imageName);
             $validated['img_url'] = 'profile/' . $imageName;
         }
@@ -61,8 +61,17 @@ class ProfileController extends Controller
     public function edit()
     {
         $user = auth()->user();
-        $profile = $user->profile;
 
+        // プロフィールが無ければ作成して返す
+        $profile = $user->profile()->firstOrCreate(
+            ['user_id' => $user->id],
+            [
+                'img_url' => null,
+                'postal_code' => '',
+                'address' => '',
+                'building' => '',
+        ]
+        );
         return view('mypage.profile-edit', compact('user', 'profile'));
     }
 
@@ -91,7 +100,7 @@ class ProfileController extends Controller
         );
 
         return redirect()
-            ->route('mypage.profile', ['page' => 'profile'])
+            ->route('mypage.profile', ['page' => 'sell'])
             ->with('success', 'プロフィールを更新しました！');
     }
 }
