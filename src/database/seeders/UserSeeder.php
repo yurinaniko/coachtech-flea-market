@@ -11,12 +11,22 @@ class UserSeeder extends Seeder
     public function run()
     {
         User::updateOrCreate(
-        ['email' => 'test@test.com'],
-        [
-        'name' => 'テストユーザー',
-        'password' => Hash::make('password'),
-        ]
-);
+            ['email' => 'test@test.com'],
+            [
+            'name' => 'テストユーザー',
+            'password' => Hash::make('password'),
+            ]
+        );
+       // ② 10人の固定ユーザーを追加
+        for ($i = 1; $i <= 10; $i++) {
+            User::updateOrCreate(
+                ['email' => "user{$i}@example.com"],
+                [
+                    'name' => "ユーザー{$i}",
+                    'password' => Hash::make('password'),
+                ]
+            );
+        }
 
         User::factory()->count(5)->create();
     }

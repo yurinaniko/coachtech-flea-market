@@ -91,11 +91,6 @@ class ItemController extends Controller
         return view('items.item-detail', compact('item', 'comments'));
     }
 
-    public function edit($id)
-    {
-        //
-    }
-
     public function update(Request $request, Item $item)
     {
         $item->update($request->all());
@@ -105,8 +100,4 @@ class ItemController extends Controller
         return redirect()->route('items.index');
     }
 
-    public function destroy($id)
-    {
-        //
-    }
 }

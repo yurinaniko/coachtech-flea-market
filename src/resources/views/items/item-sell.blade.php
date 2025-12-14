@@ -21,7 +21,7 @@
                     <input type="file" name="img_url" id="image" class="image-input" accept="image/*">
                 </div>
                 @error('img_url')
-                    <p class="form-error">{{ $message }}</p>
+                    <p class="form__error">{{ $message }}</p>
                 @enderror
                 </div>
                 <div class="detail-box">
@@ -31,15 +31,18 @@
                         <div class="form-group">
                             <label class="form-label">カテゴリー</label>
                             <div class="category-tags">
+                                @php
+                                    $oldCategories = old('categories', []);
+                                @endphp
                                 @foreach ($categories as $category)
                                     <label class="category-tag">
-                                    <input type="checkbox" name="categories[]" value="{{ $category->id }}">
+                                    <input type="checkbox" name="categories[]" value="{{ $category->id }}" {{ in_array($category->id, $oldCategories) ? 'checked' : '' }} >
                                     <span>{{ $category->name }}</span>
                                     </label>
                                 @endforeach
                             </div>
                             @error('categories')
-                                <p class="form-error">{{ $message }}</p>
+                                <p class="form__error">{{ $message }}</p>
                             @enderror
                         </div>
                         {{-- 状態 --}}
@@ -48,11 +51,13 @@
                             <select name="condition_id" class="form-input">
                                 <option value="">選択してください</option>
                                 @foreach ($conditions as $condition)
-                                <option value="{{ $condition->id }}">{{ $condition->condition }}</option>
+                                <option value="{{ $condition->id }}" {{ old('condition_id') == $condition->id ? 'selected' : '' }}>
+                                {{ $condition->condition }}
+                                </option>
                                 @endforeach
                             </select>
                             @error('condition_id')
-                                <p class="form-error">{{ $message }}</p>
+                                <p class="form__error">{{ $message }}</p>
                             @enderror
                         </div>
                         <div class="detail-box">
@@ -62,9 +67,9 @@
                                     {{-- 商品名 --}}
                                     <div class="form-group">
                                         <label class="form-label">商品名</label>
-                                        <input type="text" name="name" class="form-input">
+                                        <input type="text" name="name" class="form-input" value="{{ old('name') }}">
                                         @error('name')
-                                            <p class="form-error">{{ $message }}</p>
+                                            <p class="form__error">{{ $message }}</p>
                                         @enderror
                                     </div>
                                     {{-- ブランド名 --}}
@@ -76,18 +81,18 @@
                                     {{-- 商品説明 --}}
                                     <div class="form-group">
                                         <label class="form-label">商品説明</label>
-                                        <textarea name="description" class="form-input"></textarea>
+                                        <textarea name="description" class="form-input" value="{{ old('description') }}"></textarea>
                                         @error('description')
-                                            <p class="form-error">{{ $message }}</p>
+                                            <p class="form__error">{{ $message }}</p>
                                         @enderror
                                     </div>
 
                                     {{-- 販売価格 --}}
                                     <div class="form-group">
                                         <label class="form-label">販売価格</label>
-                                        <input type="text" name="price" class="form-input" placeholder="¥">
+                                        <input type="text" name="price" class="form-input" placeholder="¥" value="{{ old('price') }}">
                                         @error('price')
-                                            <p class="form-error">{{ $message }}</p>
+                                            <p class="form__error">{{ $message }}</p>
                                         @enderror
                                     </div>
                         </div>

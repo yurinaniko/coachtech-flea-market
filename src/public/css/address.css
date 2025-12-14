@@ -39,13 +39,6 @@
     font-size: 14px;
 }
 
-/* ====== エラーメッセージ ====== */
-.form-error {
-    color: #ff4d4d;
-    font-size: 13px;
-    margin-top: 5px;
-}
-
 /* ========== 更新ボタン ========== */
 .address-edit__button {
     width: 100%;
