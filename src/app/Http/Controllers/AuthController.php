@@ -6,6 +6,7 @@ use App\Models\User;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use App\Http\Requests\RegisterRequest;
+use App\Http\Requests\LoginRequest;
 
 class AuthController extends Controller
 {
@@ -34,12 +35,13 @@ class AuthController extends Controller
         return redirect()->route('profile.create');
     }
 
-    public function login(Request $request)
+    public function login(LoginRequest $request)
     {
-        $credentials = $request->validate([
-            'email' => ['required', 'email'],
-            'password' => ['required'],
-        ]);
+        $validated = $request->validated();
+        $credentials = [
+        'email' => $validated['email'],
+        'password' => $validated['password'],
+        ];
 
         if (Auth::attempt($credentials)) {
             $request->session()->regenerate();
@@ -57,7 +59,7 @@ class AuthController extends Controller
         }
 
         return back()->withErrors([
-            'email' => '認証情報が登録されていません。',
+            'email' => 'ログイン情報が登録されていません。',
         ]);
     }
 }

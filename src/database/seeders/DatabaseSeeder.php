@@ -14,6 +14,7 @@ class DatabaseSeeder extends Seeder
         ConditionSeeder::class,
         ItemSeeder::class,
         ProfileSeeder::class,
+        CommentSeeder::class,
         ]);
     }
 }

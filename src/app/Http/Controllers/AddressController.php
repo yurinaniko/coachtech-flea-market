@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
+use App\Http\Requests\AddressRequest;
 
 class AddressController extends Controller
 {
@@ -13,24 +14,18 @@ class AddressController extends Controller
         return view('mypage.address.edit', compact('user'));
     }
 
-    public function update(Request $request)
+    public function update(AddressRequest $request)
     {
-        $request->validate([
-            'postal_code' => 'required',
-            'address' => 'required',
-            'building' => 'nullable',
-        ]);
-
+        $validated = $request->validated();
         $user = Auth::user();
 
-        // --- profiles テーブルを更新 ---
         $user->profile()->updateOrCreate(
             ['user_id' => $user->id],
             [
-                'postal_code' => $request->postal_code,
-                'address'     => $request->address,
-                'building'    => $request->building,
-            ]
+                'postal_code' => $validated['postal_code'],
+                'address'     => $validated['address'],
+                'building'    => $validated['building'] ?? null,
+                ]
         );
 
         // ユーザー情報をリフレッシュ

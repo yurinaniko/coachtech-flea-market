@@ -10,12 +10,10 @@ class ItemSeeder extends Seeder
 {
     public function run(): void
     {
-        User::factory()->count(3)->create();
         $userIds = User::pluck('id')->toArray();
 
         $items = [
             [
-                'user_id' => 1,
                 'name' => '腕時計',
                 'price' => 15000,
                 'brand' => 'Rolax',
@@ -25,7 +23,6 @@ class ItemSeeder extends Seeder
                 'category_id' => [1,5],
             ],
             [
-                'user_id' => 1,
                 'name' => 'HDD',
                 'price' => 5000,
                 'brand' => '西芝',
@@ -35,7 +32,6 @@ class ItemSeeder extends Seeder
                 'category_id' => [2],
             ],
             [
-                'user_id' => 1,
                 'name' => '玉ねぎ3束',
                 'price' => 300,
                 'brand' => 'なし',
@@ -45,7 +41,6 @@ class ItemSeeder extends Seeder
                 'category_id' => [11],
             ],
             [
-                'user_id' => 1,
                 'name' => '革靴',
                 'price' => 4000,
                 'brand' => '',
@@ -55,7 +50,6 @@ class ItemSeeder extends Seeder
                 'category_id' => [1,5],
             ],
             [
-                'user_id' => 1,
                 'name' => 'ノートPC',
                 'price' => 45000,
                 'brand' => 'レノボ',

@@ -95,92 +95,75 @@
                         コメント({{ $item->comments->count() }})
                     </label>
                     @if ($comments->count() === 0)
-                        {{-- ▼ ログイン中：自分のアイコン --}}
-                        @auth
-                            @php
-                                $myProfile = auth()->user()->profile;
-                            @endphp
-                            <div class="item-detail__comment-item">
-                                @if ($myProfile && $myProfile->img_url)
-                                    <img src="{{ asset('storage/' . $myProfile->img_url) }}" class="comment-user-icon" alt="{{ auth()->user()->name }}">
-                                @else    {{-- ← 画像なし時はこちらへ --}}
-                                    <div class="comment-user-icon profile-placeholder"></div>
-                                @endif
-                                    <span class="comment-user-name">{{ auth()->user()->name }}</span>
-                            </div>
-                        @endauth
-                        {{-- ▼ 未ログイン：admin --}}
-                            @guest
-                                <div class="item-detail__comment-item">
-                                    <div class="comment-user-icon guest-icon"></div>
-                                        <span class="comment-user-name">admin</span>
-                                    </div>
-                            @endguest
-                            {{-- ▼ コメントが無い時のメッセージ --}}
-                                <div class="comment-placeholder-box">
-                                    <p class="comment-placeholder__text">こちらにコメントが入ります。</p>
-                                </div>
+                        <div class="item-detail__comment-item">
+                            <div class="comment-user-icon profile-placeholder"></div>
+                            <span class="comment-user-name">admin</span>
+                        </div>
+                        <div class="comment-placeholder-box">
+                            <p class="comment-placeholder__text">こちらにコメントが入ります。</p>
+                        </div>
                     {{-- ▼ コメント1件以上 --}}
                     @else
-                    {{-- ▼ 最初の5件だけ表示 --}}
+                        {{-- ▼ 最初の5件だけ表示 --}}
                         @foreach ($comments->take(5) as $comment)
                             @php
                                 $profile = $comment->user->profile;
                             @endphp
+                            <div class="item-detail__comment-item">
+                                @if ($profile && $profile->img_url)
+                                    <img src="{{ asset('storage/' . $profile->img_url) }}" class="comment-user-icon">
+                                @else
+                                    <div class="comment-user-icon profile-placeholder"></div>
+                                @endif
+                                <span class="comment-user-name">{{ $comment->user->name }}</span>
+                            </div>
+                            <div class="comment-placeholder-box">
+                                <p class="comment-placeholder__text">{{ $comment->comment }}</p>
+                            </div>
+                        @endforeach
+                        {{-- ▼ 6件目以降は非表示 --}}
+                        @foreach ($comments->slice(5) as $comment)
+                            @php
+                                $profile = $comment->user->profile;
+                            @endphp
+                            <div class="comment-hidden" style="display:none;">
                                 <div class="item-detail__comment-item">
                                     @if ($profile && $profile->img_url)
                                         <img src="{{ asset('storage/' . $profile->img_url) }}" class="comment-user-icon">
                                     @else
                                         <div class="comment-user-icon profile-placeholder"></div>
                                     @endif
-                                        <span class="comment-user-name">{{ $comment->user->name }}</span>
+                                    <span class="comment-user-name">{{ $comment->user->name }}</span>
                                 </div>
                                 <div class="comment-placeholder-box">
                                     <p class="comment-placeholder__text">{{ $comment->comment }}</p>
                                 </div>
+                            </div>
                         @endforeach
-                        {{-- ▼ 6件目以降は非表示 --}}
-                            @foreach ($comments->slice(5) as $comment)
-                                @php
-                                    $profile = $comment->user->profile;
-                                @endphp
-                                    <div class="comment-hidden" style="display:none;">
-                                        <div class="item-detail__comment-item">
-                                            @if ($profile && $profile->img_url)   {{-- ← ここ修正！ --}}
-                                                <img src="{{ asset('storage/' . $profile->img_url) }}" class="comment-user-icon">
-                                            @else
-                                                <div class="comment-user-icon profile-placeholder"></div> {{-- ← グレー丸 --}}
-                                            @endif
-                                                <span class="comment-user-name">{{ $comment->user->name }}</span>
-                                        </div>
-                                        <div class="comment-placeholder-box">
-                                            <p class="comment-placeholder__text">{{ $comment->comment }}</p>
-                                        </div>
-                                    </div>
-                            @endforeach
-                            {{-- ▼ もっと見る --}}
-                                @if ($comments->count() > 5)
-                                    <button id="show-more" class="comment-more-btn">もっと見る</button>
-                                @endif
-                                    <button id="close-comments" class="comment-close-btn" style="display:none;">閉じる</button>
+                        {{-- ▼ もっと見る --}}
+                        @if ($comments->count() > 5)
+                            <button id="show-more" class="comment-more-btn">もっと見る</button>
+                        @endif
+                        <button id="close-comments" class="comment-close-btn" style="display:none;">閉じる</button>
                     @endif
-                    <label class="comment-label">商品へのコメント</label>
-                            <form action="{{ route('comment.store', $item->id) }}" method="POST" class="item-detail__comment-form">
-                                @csrf
-                                <textarea class="comment-textarea" name="comment"></textarea>
-                                    @auth
-                                        <button type="submit" class="item-detail__comment-submit">
-                                            コメントを追加する
-                                        </button>
-                                    @endauth
-                            </form>
-                            {{-- ▼ 未ログイン --}}
-                            @guest
-                                <button class="item-detail__comment-submit disabled" disabled>
-                                    コメントを追加する
-                                </button>
-                            @endguest
-                    </div>
+                </div>
+                <label class="comment-label">商品へのコメント</label>
+                    <form action="{{ route('comment.store', $item->id) }}" method="POST" class="item-detail__comment-form">
+                        @csrf
+                        <textarea class="comment-textarea" name="comment"></textarea>
+                        @auth
+                            <button type="submit" class="item-detail__comment-submit">
+                                コメントを追加する
+                            </button>
+                        @endauth
+                    </form>
+                    {{-- ▼ 未ログイン --}}
+                    @guest
+                        <button class="item-detail__comment-submit disabled" disabled>
+                            コメントを追加する
+                        </button>
+                    @endguest
+                </div>
             </div>
         </div>
     </div>

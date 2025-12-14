@@ -141,3 +141,8 @@ body {
     cursor: default;
 }
 
+.form__error {
+    color: red;
+    font-size: 14px;
+    margin-top: 4px;
+}

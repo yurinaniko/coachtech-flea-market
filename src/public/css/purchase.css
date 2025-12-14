@@ -212,3 +212,11 @@
         max-width: 1200px;
     }
 }
+
+.purchase-error {
+    color: red;
+    font-size: 14px;
+    margin-top: 4px;
+    margin-left: 56px;
+    display: block;
+}
