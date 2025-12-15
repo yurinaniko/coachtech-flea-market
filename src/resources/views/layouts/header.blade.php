@@ -15,21 +15,20 @@
         @endif
 
         {{-- 右：メニュー --}}
-        <div class="header__menu">
-            @guest
-                @if (!Request::is('login') && !Request::is('register'))
-                    <a href="{{ route('login') }}">ログイン</a>
+        @if (!Request::is('login') && !Request::is('register'))
+            <div class="header__menu">
+                @auth
+                    <form action="{{ route('logout') }}" method="POST" style="display:inline;">
+                        @csrf
+                        <button type="submit" class="header__logout-button">ログアウト</button>
+                    </form>
                     <a href="{{ route('mypage.profile') }}">マイページ</a>
                     <a href="{{ route('items.item-sell') }}" class="header__sell-button">出品</a>
-                @endif
-            @else
-                <form action="{{ route('logout') }}" method="POST" style="display:inline;">
-                    @csrf
-                    <button type="submit" class="header__logout-button">ログアウト</button>
-                </form>
-                <a href="{{ route('mypage.profile') }}">マイページ</a>
-                <a href="{{ route('items.item-sell') }}" class="header__sell-button">出品</a>
-            @endguest
-        </div>
+                @endauth
+                @guest
+                    <a href="{{ route('login') }}">ログイン</a>
+                @endguest
+            </div>
+        @endif
     </div>
 </header>

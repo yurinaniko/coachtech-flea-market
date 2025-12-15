@@ -151,6 +151,9 @@
                     <form action="{{ route('comment.store', $item->id) }}" method="POST" class="item-detail__comment-form">
                         @csrf
                         <textarea class="comment-textarea" name="comment"></textarea>
+                        @error('comment')
+                            <p class="form__error">{{ $message }}</p>
+                        @enderror
                         @auth
                             <button type="submit" class="item-detail__comment-submit">
                                 コメントを追加する
