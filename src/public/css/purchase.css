@@ -200,6 +200,14 @@
     margin: 0;
 }
 
+.purchase-error {
+    color: red;
+    font-size: 14px;
+    margin-top: 4px;
+    margin-left: 56px;
+    display: block;
+}
+
 /* ====== PC幅（1400〜1540px） ====== */
 @media screen and (min-width: 1400px) {
     .purchase {
@@ -211,12 +219,4 @@
     .purchase {
         max-width: 1200px;
     }
-}
-
-.purchase-error {
-    color: red;
-    font-size: 14px;
-    margin-top: 4px;
-    margin-left: 56px;
-    display: block;
 }

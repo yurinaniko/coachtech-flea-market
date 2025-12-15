@@ -91,6 +91,31 @@ body {
     padding: 0;
 }
 
+.sold-badge {
+    position: absolute;
+    top: 12px;
+    left: 12px;
+    background-color: #ff4d4d;
+    color: #fff;
+    font-size: 14px;
+    padding: 6px 14px;
+    border-radius: 6px;
+    font-weight: bold;
+    z-index: 20;
+}
+
+.item-card__link.disabled {
+    pointer-events: none;
+    opacity: 0.5;
+    cursor: default;
+}
+
+.form__error {
+    color: red;
+    font-size: 14px;
+    margin-top: 4px;
+}
+
 /* ===============================
     レスポンシブ：PC幅調整
 =============================== */
@@ -120,29 +145,4 @@ body {
         gap: 12px;
         flex-shrink: 0;
     }
-}
-
-.sold-badge {
-    position: absolute;
-    top: 12px;
-    left: 12px;
-    background-color: #ff4d4d;
-    color: #fff;
-    font-size: 14px;
-    padding: 6px 14px;
-    border-radius: 6px;
-    font-weight: bold;
-    z-index: 20;
-}
-
-.item-card__link.disabled {
-    pointer-events: none;
-    opacity: 0.5;
-    cursor: default;
-}
-
-.form__error {
-    color: red;
-    font-size: 14px;
-    margin-top: 4px;
 }
