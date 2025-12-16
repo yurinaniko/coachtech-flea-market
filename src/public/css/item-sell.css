@@ -169,3 +169,9 @@ textarea {
 .sell__submit:hover {
     opacity: 0.85;
 }
+
+.image-upload__note {
+    font-size: 12px;
+    color: #999;
+    margin-top: 4px;
+}

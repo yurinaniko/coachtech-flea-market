@@ -52,7 +52,7 @@ class ItemSeeder extends Seeder
             [
                 'name' => 'ノートPC',
                 'price' => 45000,
-                'brand' => 'レノボ',
+                'brand' => '',
                 'description' => '高性能なノートパソコン',
                 'img_url' => 'images/laptop.jpeg',
                 'condition_id' => 1,

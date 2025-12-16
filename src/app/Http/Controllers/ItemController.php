@@ -19,7 +19,6 @@ class ItemController extends Controller
 
         $query = Item::with('condition');
 
-        // ★ 自分が出品した商品を除外
         if (Auth::check()) {
         $query->where('user_id', '!=', Auth::id());
         }
@@ -91,11 +90,26 @@ class ItemController extends Controller
         return view('items.item-detail', compact('item', 'comments'));
     }
 
-    public function update(Request $request, Item $item)
+    public function update(ItemRequest $request, Item $item)
     {
-        $item->update($request->all());
+        $validated = $request->validated();
 
-        $item->categories()->sync($request->categories);
+        $imagePath = $item->img_url;
+
+        if ($request->hasFile('img_url')) {
+            $imagePath = $request->file('img_url')->store('images', 'public');
+        }
+
+        $item->update([
+            'name' => $validated['name'],
+            'brand' => $validated['brand'] ?? null,
+            'condition_id' => $validated['condition_id'],
+            'description' => $validated['description'],
+            'price' => $validated['price'],
+            'img_url' => $imagePath,
+        ]);
+
+        $item->categories()->sync($validated['categories']);
 
         return redirect()->route('items.index');
     }
