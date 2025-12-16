@@ -27,6 +27,8 @@
                 @endauth
                 @guest
                     <a href="{{ route('login') }}">ログイン</a>
+                    <span class="header__link is-disabled">マイページ</span>
+                    <span class="header__sell-button is-disabled">出品</span>
                 @endguest
             </div>
         @endif

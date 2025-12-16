@@ -11,18 +11,19 @@
 {{-- カテゴリータブ --}}
 <div class="item-list__tabs-wrapper">
     <div class="item-list__tabs">
-        <a href="{{ route('mypage.index', ['page' => 'recommend']) }}"
-            class="tab {{ request('page') === 'recommend' ? 'active' : '' }}">
+        @php
+            $keyword = request('keyword');
+        @endphp
+        <a href="{{ route('mypage.index', ['page' => 'recommend', 'keyword' => $keyword]) }}"
+        class="tab {{ request('page') === 'recommend' ? 'active' : '' }}">
             おすすめ
         </a>
-
-        <a href="{{ route('mypage.index', ['page' => 'favorite']) }}"
-            class="tab {{ request('page') === 'favorite' ? 'active' : '' }}">
+        <a href="{{ route('mypage.index', ['page' => 'favorite', 'keyword' => $keyword]) }}"
+        class="tab {{ request('page') === 'favorite' ? 'active' : '' }}">
             マイリスト
         </a>
     </div>
 </div>
-
 {{-- 商品カード一覧 --}}
 <div class="item-list">
     <div class="item-list__grid">

@@ -75,13 +75,13 @@
                                     {{-- ブランド名 --}}
                                     <div class="form-group">
                                         <label class="form-label">ブランド名</label>
-                                        <input type="text" name="brand" class="form-input">
+                                        <input type="text" name="brand" class="form-input" value="{{ old('brand') }}">
                                     </div>
 
                                     {{-- 商品説明 --}}
                                     <div class="form-group">
                                         <label class="form-label">商品説明</label>
-                                        <textarea name="description" class="form-input" value="{{ old('description') }}"></textarea>
+                                        <textarea name="description" class="form-input">{{ old('description') }}</textarea>
                                         @error('description')
                                             <p class="form__error">{{ $message }}</p>
                                         @enderror
@@ -100,15 +100,16 @@
     </form>
 </div>
 <script>
-document.getElementById('image').addEventListener('change', function (e) {
+const imageInput = document.getElementById('image');
+const previewBox = document.getElementById('imagePreview');
+const uploadBox = document.querySelector('.image-upload');
+
+imageInput.addEventListener('change', function (e) {
     const file = e.target.files[0];
     if (!file) return;
 
     const reader = new FileReader();
     reader.onload = function(event) {
-        const previewBox = document.getElementById('imagePreview');
-        const uploadBox = document.querySelector('.image-upload');
-
         previewBox.style.backgroundImage = `url(${event.target.result})`;
         previewBox.classList.add('has-image');
 
@@ -119,6 +120,18 @@ document.getElementById('image').addEventListener('change', function (e) {
         if (btn) btn.style.display = 'none';
     };
     reader.readAsDataURL(file);
+});
+window.addEventListener('load', () => {
+    if (!imageInput.value) {
+        previewBox.style.backgroundImage = 'none';
+        previewBox.classList.remove('has-image');
+
+        uploadBox.style.border = '';
+        uploadBox.style.background = '';
+
+        const btn = previewBox.querySelector('.image-select-btn');
+        if (btn) btn.style.display = '';
+    }
 });
 </script>
 @endsection

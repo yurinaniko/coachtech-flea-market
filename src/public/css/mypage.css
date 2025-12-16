@@ -231,12 +231,6 @@
     width: 100%;
 }
 
-.item-list__grid {
-    display: grid;
-    grid-template-columns: repeat(4, 1fr);
-    gap: 30px;
-}
-
 .no-items-message {
     margin-top: 20px;
     color: #666;

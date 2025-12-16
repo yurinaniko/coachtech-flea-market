@@ -40,10 +40,7 @@ class MypageController extends Controller
                 ->get();
             } else {
             // キーワードなし → ランダム10件
-            $items = $query
-                ->inRandomOrder()
-                ->take(10)
-                ->get();
+            $items = $query->get();
             }
         }
 
