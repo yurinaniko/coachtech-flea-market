@@ -14,6 +14,10 @@
         <div class="purchase__left">
             <div class="purchase__product">
                 <div class="purchase__image-box">
+                    @if($item->is_sold)
+                        <span class="item-card__sold">sold</span>
+                    @endif
+
                     @if (!empty($item->full_image_path))
                         <img src="{{ asset('storage/' . $item->full_image_path) }}" alt="{{ $item->name }}">
                     @else

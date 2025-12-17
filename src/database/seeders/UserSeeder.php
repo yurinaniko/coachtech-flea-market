@@ -17,7 +17,7 @@ class UserSeeder extends Seeder
             'password' => Hash::make('password'),
             ]
         );
-       // ② 10人の固定ユーザーを追加
+
         for ($i = 1; $i <= 10; $i++) {
             User::updateOrCreate(
                 ['email' => "user{$i}@example.com"],
