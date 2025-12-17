@@ -10,6 +10,7 @@ use App\Http\Controllers\ProfileController;
 use App\Http\Controllers\ConditionController;
 use App\Http\Controllers\FavoriteController;
 use App\Http\Controllers\AddressController;
+use App\Http\Controllers\StripeWebhookController;
 
 // トップページ：ログインしていたらマイページ / していなければ商品一覧
 Route::get('/', function () {
@@ -76,8 +77,20 @@ Route::post('/items/{item}/comment', [CommentController::class, 'store'])
 Route::get('/items/{id}', [ItemController::class, 'show'])
     ->name('items.show');
 
+Route::post('/stripe/webhook', [StripeWebhookController::class, 'handle']);
+
+Route::get('/purchase/success', [PurchaseController::class, 'success'])
+    ->name('purchase.success');
+
+Route::get('/purchase/cancel', function () {
+    return view('purchase.cancel');
+})->name('purchase.cancel');
+
 // 購入
 Route::middleware('auth')->group(function () {
+    Route::get('/purchase/checkout', [PurchaseController::class, 'checkout'])
+        ->name('purchase.checkout');
+
     Route::get('/purchase/{item}', [PurchaseController::class, 'index'])
     ->name('purchase.index');
 

@@ -220,3 +220,43 @@
         max-width: 1200px;
     }
 }
+
+.item-card__sold {
+    position: absolute;
+    top: 8px;
+    left: 8px;
+    background: red;
+    color: #fff;
+    font-size: 14px;
+    padding: 4px 8px;
+    font-weight: bold;
+    z-index: 10;
+}
+
+.purchase-success {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    min-height: calc(100vh - 120px);
+}
+
+.purchase-success__box {
+    text-align: center;
+}
+
+.purchase-success__title {
+    font-size: 24px;
+    margin-bottom: 16px;
+}
+
+.purchase-success__text {
+    margin-bottom: 24px;
+}
+
+.purchase-success__button {
+    display: inline-block;
+    padding: 10px 24px;
+    background-color: #000;
+    color: #fff;
+    text-decoration: none;
+}
