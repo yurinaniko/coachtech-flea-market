@@ -8,7 +8,6 @@ use App\Models\Item;
 
 class MypageController extends Controller
 {
-    // マイページTOP（商品一覧）
     public function index(Request $request)
     {
         $page = $request->query('page', 'recommend');
@@ -18,7 +17,6 @@ class MypageController extends Controller
             return redirect()->route('items.index');
         }
 
-            // ★ マイリスト
         if ($page === 'favorite') {
             $items = Auth::user()->favorites;
 
@@ -45,6 +43,19 @@ class MypageController extends Controller
         }
 
         return view('mypage.index', compact('items', 'page', 'keyword'));
+    }
+
+    // 初回ログイン時の振り分け専用
+    public function profileGate()
+    {
+        $user = Auth::user();
+        $profile = $user->profile;
+
+        if ($profile) {
+            return redirect()->route('profile.edit');
+        } else {
+            return redirect()->route('profile.create');
+        }
     }
 
     public function profile(Request $request)
