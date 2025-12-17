@@ -27,6 +27,11 @@ Route::post('/register', [AuthController::class, 'register']);
 Route::get('/login', [AuthController::class, 'showLoginForm'])->name('login');
 Route::post('/login', [AuthController::class, 'login']);
 
+// プロフィール表示振り分け
+Route::get('/mypage/profile', [MypageController::class, 'profileGate'])
+    ->middleware('auth')
+    ->name('mypage.profile');
+
 // プロフィール登録
 Route::get('/profile/create', [ProfileController::class, 'create'])->name('profile.create');
 Route::post('/profile/store', [ProfileController::class, 'store'])->name('profile.store');
@@ -38,11 +43,6 @@ Route::put('/profile/update', [ProfileController::class, 'update'])->name('profi
 // マイページトップ（商品一覧）
 Route::get('/mypage', [MypageController::class, 'index'])
     ->name('mypage.index')
-    ->middleware('auth');
-
-// プロフィール表示
-Route::get('/mypage/profile', [MypageController::class, 'profile'])
-    ->name('mypage.profile')
     ->middleware('auth');
 
 // 商品一覧

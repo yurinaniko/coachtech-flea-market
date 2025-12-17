@@ -12,7 +12,6 @@ class ProfileController extends Controller
         $item = Item::findOrFail($itemId);
         $user = Auth::user();
 
-        // プレースホルダー住所
         $placeholder = [
             'postal_code' => 'XXX-YYYY',
             'address'     => 'ここに住所が自動的に入ります',
@@ -88,7 +87,6 @@ class ProfileController extends Controller
             $validated['img_url'] = 'profile/' . $imageName;
         }
 
-        // --- profiles テーブル更新 or 作成 ---
         $user->profile()->updateOrCreate(
             ['user_id' => $user->id],
             [

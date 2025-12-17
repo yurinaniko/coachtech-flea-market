@@ -39,8 +39,8 @@ class AuthController extends Controller
     {
         $validated = $request->validated();
         $credentials = [
-        'email' => $validated['email'],
-        'password' => $validated['password'],
+            'email' => $validated['email'],
+            'password' => $validated['password'],
         ];
 
         if (Auth::attempt($credentials)) {
@@ -49,17 +49,15 @@ class AuthController extends Controller
             $user = Auth::user();
             $profile = $user->profile;
 
-            // プロフィール未設定 → profile.create
             if (!$profile || empty($profile->postal_code) || empty($profile->address)) {
-            return redirect()->route('profile.create');
+                return redirect()->route('profile.create');
             }
 
-            // 設定済み → 商品一覧（あなたの希望どおり）
             return redirect()->route('mypage.index');
         }
 
-        return back()->withErrors([
-            'email' => 'ログイン情報が登録されていません。',
-        ]);
+            return back()->withErrors([
+                'email' => 'ログイン情報が登録されていません。',
+            ]);
     }
 }

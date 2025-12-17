@@ -125,4 +125,9 @@ class PurchaseController extends Controller
     {
         return view('purchase.success');
     }
+
+    public function cancel()
+    {
+        return view('purchase.cancel');
+    }
 }

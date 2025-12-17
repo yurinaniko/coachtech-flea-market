@@ -15,7 +15,7 @@ class CommentController extends Controller
             'item_id' => $itemId,
             'user_id' => auth()->id(),
             'comment' => $request->comment,
-    ]);
+        ]);
 
         return redirect()->back()->with('success', 'コメントを追加しました');
     }
