@@ -32,7 +32,7 @@ class AuthController extends Controller
 
         Auth::login($user);
 
-        return redirect()->route('profile.create');
+        return redirect()->route('verification.notice');
     }
 
     public function login(LoginRequest $request)

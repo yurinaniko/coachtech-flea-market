@@ -11,6 +11,8 @@ use App\Http\Controllers\ConditionController;
 use App\Http\Controllers\FavoriteController;
 use App\Http\Controllers\AddressController;
 use App\Http\Controllers\StripeWebhookController;
+use Illuminate\Foundation\Auth\EmailVerificationRequest;
+use Illuminate\Http\Request;
 
 // トップページ：ログインしていたらマイページ / していなければ商品一覧
 Route::get('/', function () {
@@ -27,9 +29,26 @@ Route::post('/register', [AuthController::class, 'register']);
 Route::get('/login', [AuthController::class, 'showLoginForm'])->name('login');
 Route::post('/login', [AuthController::class, 'login']);
 
+// メール認証案内画面
+Route::get('/email/verify', function () {
+    return view('auth.verify-email');
+})->middleware('auth')->name('verification.notice');
+
+// メール内リンクを踏んだとき
+Route::get('/email/verify/{id}/{hash}', function (EmailVerificationRequest $request) {
+    $request->fulfill();
+    return redirect()->route('mypage.profile');
+})->middleware(['auth', 'signed'])->name('verification.verify');
+
+// 認証メール再送
+Route::post('/email/verification-notification', function (Request $request) {
+    $request->user()->sendEmailVerificationNotification();
+    return back()->with('message', '認証メールを再送しました');
+})->middleware(['auth', 'throttle:6,1'])->name('verification.send');
+
 // プロフィール表示振り分け
 Route::get('/mypage/profile', [MypageController::class, 'profileGate'])
-    ->middleware('auth')
+    ->middleware(['auth', 'verified'])
     ->name('mypage.profile');
 
 // プロフィール登録
@@ -51,27 +70,27 @@ Route::get('/items', [ItemController::class, 'index'])->name('items.index');
 // 出品ページ（静的にしないと危険）
 Route::get('/items/sell', [ItemController::class, 'sell'])
     ->name('items.item-sell')
-    ->middleware('auth');
+    ->middleware(['auth', 'verified']);
 
 Route::post('/items/store', [ItemController::class, 'store'])->name('items.store');
 
 Route::get('mypage/address/edit', [AddressController::class, 'edit'])
     ->name('mypage.address.edit')
-    ->middleware('auth');
+    ->middleware(['auth', 'verified']);
 
 Route::put('mypage/address/update', [AddressController::class, 'update'])
     ->name('mypage.address.update')
-    ->middleware('auth');
+    ->middleware(['auth', 'verified']);
 
-// お気に入り
-Route::post('/items/{item}/favorite', [FavoriteController::class, 'toggle'])
-    ->name('favorite.toggle')
-    ->middleware('auth');
+Route::middleware(['auth', 'verified'])->group(function () {
+    // お気に入り
+    Route::post('/items/{item}/favorite', [FavoriteController::class, 'toggle'])
+    ->name('favorite.toggle');
 
-// コメント
-Route::post('/items/{item}/comment', [CommentController::class, 'store'])
-    ->name('comment.store')
-    ->middleware('auth');
+    // コメント
+    Route::post('/items/{item}/comment', [CommentController::class, 'store'])
+    ->name('comment.store');
+});
 
 // 商品詳細（最後に置く）
 Route::get('/items/{id}', [ItemController::class, 'show'])
@@ -87,7 +106,7 @@ Route::get('/purchase/cancel', function () {
 })->name('purchase.cancel');
 
 // 購入
-Route::middleware('auth')->group(function () {
+Route::middleware(['auth', 'verified'])->group(function () {
     Route::get('/purchase/checkout', [PurchaseController::class, 'checkout'])
         ->name('purchase.checkout');
 

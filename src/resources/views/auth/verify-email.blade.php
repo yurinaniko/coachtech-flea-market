@@ -7,17 +7,23 @@
 @endsection
 
 @section('content')
-<div class="auth">
-    <h2 class="auth__title">メール認証が必要です</h2>
-    <p>ご登録いただいたメールアドレスに認証メールを送信しました。</p>
-    <p>メール内のリンクをクリックして認証を完了してください。</p>
+<div class="auth-wrapper auth-wrapper--verify">
+    <div class="auth auth--verify">
+        <p class="auth__text">ご登録していただいたメールアドレスに認証メールを送付しました。</p>
+        <p class="auth__text">メール認証を完了してください。</p>
 
-    {{-- 再送信ボタン（後で機能付ける） --}}
-    <form action="#" method="POST" class="auth__form">
-        @csrf
-        <button class="auth__button">認証メールを再送信する</button>
-    </form>
+        <form action="{{ route('profile.create') }}" method="GET">
+            <button type="submit" class="auth__button">
+                認証はこちらから
+            </button>
+        </form>
 
-    <a href="{{ route('logout') }}" class="auth__link">ログイン画面に戻る</a>
+        <form method="POST" action="{{ route('verification.send') }}" >
+            @csrf
+            <button type="submit" class="auth__link">
+                認証メールを再送する
+            </button>
+        </form>
+    </div>
 </div>
 @endsection
