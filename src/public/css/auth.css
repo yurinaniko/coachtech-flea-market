@@ -119,3 +119,9 @@
 .auth--verify {
     margin-top: -60px;
 }
+
+.auth--verify form {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}

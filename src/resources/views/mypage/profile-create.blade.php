@@ -10,7 +10,16 @@
 @section('content')
 <div class="mypage-edit">
     <h2 class="mypage-edit__title">プロフィール設定</h2>
-
+    {{-- 初回だけ表示 --}}
+    @if (session('verified'))
+        <p class="alert alert-success">
+            メール認証が完了しました
+        </p>
+    @endif
+    {{-- 状態表示（常設） --}}
+    @if (auth()->user()->hasVerifiedEmail())
+        <p class="verified">メール認証済み</p>
+    @endif
     <form action="{{ route('profile.store') }}" method="POST" enctype="multipart/form-data" class="mypage-edit__form">
         @csrf
         {{-- プロフィール画像 --}}
@@ -68,16 +77,6 @@
         <button class="mypage-edit__button">更新する</button>
     </form>
 </div>
-
-<script>
-function previewImage(event) {
-    const reader = new FileReader();
-    reader.onload = function(e) {
-        document.getElementById('preview').setAttribute('src', e.target.result);
-    }
-    reader.readAsDataURL(event.target.files[0]);
-}
-</script>
 <script>
 function previewImage(event) {
     const file = event.target.files[0];
@@ -95,5 +94,16 @@ function previewImage(event) {
     };
     reader.readAsDataURL(file);
 }
+</script>
+<script>
+document.addEventListener('DOMContentLoaded', () => {
+    const flash = document.querySelector('.js-flash-message');
+    if (flash) {
+        setTimeout(() => {
+            flash.style.opacity = '0';
+            setTimeout(() => flash.remove(), 500);
+        }, 2000);
+    }
+});
 </script>
 @endsection
