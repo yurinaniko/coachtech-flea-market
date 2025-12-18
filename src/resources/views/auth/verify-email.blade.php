@@ -12,14 +12,11 @@
         <p class="auth__text">ご登録していただいたメールアドレスに認証メールを送付しました。</p>
         <p class="auth__text">メール認証を完了してください。</p>
 
-        <form action="{{ route('profile.create') }}" method="GET">
+        <form method="POST" action="{{ route('verification.send') }}">
+            @csrf
             <button type="submit" class="auth__button">
                 認証はこちらから
             </button>
-        </form>
-
-        <form method="POST" action="{{ route('verification.send') }}" >
-            @csrf
             <button type="submit" class="auth__link">
                 認証メールを再送する
             </button>

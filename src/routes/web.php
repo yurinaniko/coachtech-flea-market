@@ -31,13 +31,20 @@ Route::post('/login', [AuthController::class, 'login']);
 
 // メール認証案内画面
 Route::get('/email/verify', function () {
+    // ★ すでに認証済みなら二度と表示しない
+    if (auth()->user()->hasVerifiedEmail()) {
+        return redirect()->route('mypage.index');
+    }
+
     return view('auth.verify-email');
 })->middleware('auth')->name('verification.notice');
 
 // メール内リンクを踏んだとき
 Route::get('/email/verify/{id}/{hash}', function (EmailVerificationRequest $request) {
     $request->fulfill();
-    return redirect()->route('mypage.profile');
+    return redirect()
+        ->route('profile.create')
+        ->with('verified', true);
 })->middleware(['auth', 'signed'])->name('verification.verify');
 
 // 認証メール再送
