@@ -10,7 +10,7 @@
         @if (!Request::is('login') && !Request::is('register'))
             <form action="{{ Auth()->check() ? route('mypage.index') : route('items.index') }}" method="GET" class="header__search">
                 <input type="hidden" name="page" value="{{ request('page', 'recommend') }}">
-                <input type="text" name="keyword" placeholder="なにをお探しですか？" class="header__search-input" value="{{ request('keyword') }}" class="header__search-input">
+                <input type="text" name="keyword" placeholder="なにをお探しですか？" class="header__search-input" value="{{ request('keyword') }}">
             </form>
         @endif
 
@@ -22,7 +22,7 @@
                         @csrf
                         <button type="submit" class="header__logout-button">ログアウト</button>
                     </form>
-                    <a href="{{ route('mypage.profile') }}">マイページ</a>
+                    <a href="{{ route('mypage.index') }}">マイページ</a>
                     <a href="{{ route('items.item-sell') }}" class="header__sell-button">出品</a>
                 @endauth
                 @guest

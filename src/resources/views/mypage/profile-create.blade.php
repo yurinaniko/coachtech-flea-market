@@ -10,15 +10,10 @@
 @section('content')
 <div class="mypage-edit">
     <h2 class="mypage-edit__title">プロフィール設定</h2>
-    {{-- 初回だけ表示 --}}
     @if (session('verified'))
-        <p class="alert alert-success">
+        <div class="toast js-flash-message">
             メール認証が完了しました
-        </p>
-    @endif
-    {{-- 状態表示（常設） --}}
-    @if (auth()->user()->hasVerifiedEmail())
-        <p class="verified">メール認証済み</p>
+        </div>
     @endif
     <form action="{{ route('profile.store') }}" method="POST" enctype="multipart/form-data" class="mypage-edit__form">
         @csrf

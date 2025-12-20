@@ -10,7 +10,7 @@
 <div class="auth-wrapper">
     <div class="auth auth--login">
         <h1 class="auth__title">ログイン</h1>
-        <form action="#" method="POST" novalidate>
+        <form action="{{ route('login') }}" method="POST" novalidate>
             @csrf
             <div class="form-group">
                 <label class="form-label">メールアドレス</label>
@@ -28,7 +28,7 @@
             </div>
             <button class="auth__submit">ログインする</button>
         </form>
-        <a href="{{ route('register') }}" class="auth__link">会員登録はこちら</a>
+        <a href="{{ route('register.form') }}" class="auth__link">会員登録はこちら</a>
     </div>
 </div>
 @endsection
