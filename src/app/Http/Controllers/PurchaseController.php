@@ -82,6 +82,7 @@ class PurchaseController extends Controller
             'mode' => 'payment',
             'metadata' => [
                 'purchase_id' => $purchase->id,
+                'item_id' => $item->id,
             ],
 
             'success_url' => route('purchase.success', [], true),
@@ -110,7 +111,8 @@ class PurchaseController extends Controller
                 'expires_at' => now()->addHours(23)->timestamp,
 
                 'metadata' => [
-                'purchase_id' => $purchase->id,
+                    'purchase_id' => $purchase->id,
+                    'item_id' => $item->id,
                 ],
                 'success_url' => route('purchase.success', [], true),
                 'cancel_url' => route('purchase.cancel', [], true),

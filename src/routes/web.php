@@ -22,22 +22,15 @@ Route::get('/', function () {
 });
 
 // 会員登録画面
-Route::get('/register', [AuthController::class, 'showRegisterForm'])->name('register');
-Route::post('/register', [AuthController::class, 'register']);
+Route::get('/register', [AuthController::class, 'showRegisterForm'])
+    ->name('register.form');
 
 // ログイン画面
 Route::get('/login', [AuthController::class, 'showLoginForm'])->name('login');
-Route::post('/login', [AuthController::class, 'login']);
 
-// メール認証案内画面
-Route::get('/email/verify', function () {
-    // ★ すでに認証済みなら二度と表示しない
-    if (auth()->user()->hasVerifiedEmail()) {
-        return redirect()->route('mypage.index');
-    }
-
-    return view('auth.verify-email');
-})->middleware('auth')->name('verification.notice');
+Route::get('/email/verify', [AuthController::class, 'showVerifyEmail'])
+    ->middleware('auth')
+    ->name('verification.notice');
 
 // メール内リンクを踏んだとき
 Route::get('/email/verify/{id}/{hash}', function (EmailVerificationRequest $request) {
@@ -53,11 +46,6 @@ Route::post('/email/verification-notification', function (Request $request) {
     return back()->with('message', '認証メールを再送しました');
 })->middleware(['auth', 'throttle:6,1'])->name('verification.send');
 
-// プロフィール表示振り分け
-Route::get('/mypage/profile', [MypageController::class, 'profileGate'])
-    ->middleware(['auth', 'verified'])
-    ->name('mypage.profile');
-
 // プロフィール登録
 Route::get('/profile/create', [ProfileController::class, 'create'])->name('profile.create');
 Route::post('/profile/store', [ProfileController::class, 'store'])->name('profile.store');
@@ -69,7 +57,7 @@ Route::put('/profile/update', [ProfileController::class, 'update'])->name('profi
 // マイページトップ（商品一覧）
 Route::get('/mypage', [MypageController::class, 'index'])
     ->name('mypage.index')
-    ->middleware('auth');
+    ->middleware(['auth', 'verified']);
 
 // 商品一覧
 Route::get('/items', [ItemController::class, 'index'])->name('items.index');
