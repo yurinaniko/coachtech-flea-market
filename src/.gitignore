@@ -19,3 +19,6 @@ docker/mysql/logs/
 docker/mysql/conf/
 /storage/app/public
 /public/storage
+.DS_Store
+/storage/logs
+/storage/framework
