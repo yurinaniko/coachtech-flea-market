@@ -11,16 +11,16 @@ class CommentSeeder extends Seeder
 {
     public function run(): void
     {
-        $itemIds = Item::pluck('id')->toArray();
-        $userIds = User::pluck('id')->toArray();
+        $items = Item::all();
+        $users = User::all();
 
-        foreach ($itemIds as $itemId) {
-            $userId = $userIds[array_rand($userIds)];
+        foreach ($items as $item) {
+            $user = $users->random();
 
             Comment::create([
-                'item_id' => $itemId,
-                'user_id' => $userId,
-                'comment' => "これはユーザー{$userId}からのテストコメントです！",
+                'item_id' => $item->id,
+                'user_id' => $user->id,
+                'comment' => "{$user->name}からのテストコメントです。",
             ]);
         }
     }
