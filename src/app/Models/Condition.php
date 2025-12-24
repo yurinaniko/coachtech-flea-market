@@ -2,13 +2,17 @@
 
 namespace App\Models;
 
+use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 
 class Condition extends Model
 {
-    protected $fillable = ['condition'];
+    use HasFactory;
 
-    // Condition 1 : 多 Item
+    protected $fillable = [
+        'name',
+    ];
+
     public function items()
     {
         return $this->hasMany(Item::class);

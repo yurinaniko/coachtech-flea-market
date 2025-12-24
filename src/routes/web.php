@@ -69,12 +69,17 @@ Route::middleware(['auth', 'verified'])->group(function () {
 // 商品一覧
 Route::get('/items', [ItemController::class, 'index'])->name('items.index');
 
-// 出品ページ（静的にしないと危険）
-Route::get('/items/sell', [ItemController::class, 'sell'])
-    ->name('items.item-sell')
-    ->middleware(['auth', 'verified']);
+Route::middleware(['auth', 'verified'])->group(function () {
 
-Route::post('/items/store', [ItemController::class, 'store'])->name('items.store');
+// 出品ページ
+Route::get('/items/sell', [ItemController::class, 'sell'])
+    ->name('items.item-sell');
+
+// 出品処理
+Route::post('/items/store', [ItemController::class, 'store'])
+    ->name('items.store');
+
+});
 
 Route::get('mypage/address/edit', [AddressController::class, 'edit'])
     ->name('mypage.address.edit')
