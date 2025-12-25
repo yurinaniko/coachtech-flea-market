@@ -156,27 +156,27 @@ mysql:
 そのため、M1 / M2 Mac 環境でも
 追加設定なしで Docker を起動できます。
 ## 使用技術
-種類	バージョン
-PHP	8.x
-Laravel	8.x
-MySQL	8.0
-Nginx	1.25
-Docker / Docker Compose	最新
-Stripe	テスト環境
-MailHog	開発用
-phpMyAdmin	使用
+- 種類	バージョン
+- PHP	8.x
+- Laravel	8.x
+- MySQL	8.0
+- Nginx	1.25
+- Docker / Docker Compose	最新
+- Stripe	テスト環境
+- MailHog	開発用
+- phpMyAdmin	使用
 
 ## 機能一覧
-機能一覧
-会員登録 / メール認証（MailHog） / プロフィール登録（画像アップロード）
-ログイン
-プロフィール編集（画像アップロード）
-商品出品
-商品一覧 / 詳細表示
-お気に入り登録
-コメント投稿
-商品購入（Stripe 決済）
-プロフィール（出品商品 / 購入商品）
+- 機能一覧
+- 会員登録 / メール認証（MailHog） / プロフィール登録（画像アップロード）
+- ログイン
+- プロフィール編集（画像アップロード）
+- 商品出品
+- 商品一覧 / 詳細表示
+- お気に入り登録
+- コメント投稿
+- 商品購入（Stripe 決済）
+- プロフィール（出品商品 / 購入商品）
 
 ## ER 図・テーブル仕様
 ```
@@ -186,9 +186,9 @@ ER 図：docs/er.png
 ```
 
 ## 実現した応用機能
-メール認証(MailHog)
-Stripe Checkout 決済
-画像アップロード（storage 管理）
-中間テーブルによる多対多管理
-商品一覧画面でのおすすめ、マイリストのページネーション・検索機能の保持
-phpMyAdmin（DB確認用）
+- メール認証(MailHog)
+- Stripe Checkout 決済
+- 画像アップロード（storage 管理）
+- 中間テーブルによる多対多管理
+- 商品一覧画面でのおすすめ、マイリストのページネーション・検索機能の保持
+- phpMyAdmin（DB確認用）

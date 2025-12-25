@@ -7,11 +7,6 @@
 @endsection
 
 @section('content')
-@if (session('success'))
-    <div class="alert alert-success">
-        {{ session('success') }}
-    </div>
-@endif
 {{-- カテゴリータブ --}}
 <div class="item-list__tabs-wrapper">
     <div class="item-list__tabs">

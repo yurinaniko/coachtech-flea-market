@@ -48,6 +48,7 @@ Route::post('/email/verification-notification', function (Request $request) {
     return back()->with('message', '認証メールを再送しました');
 })->middleware(['auth', 'throttle:1,1'])->name('verification.send');
 
+Route::middleware('auth')->group(function () {
 // プロフィール登録
 Route::get('/profile/create', [ProfileController::class, 'create'])->name('profile.create');
 Route::post('/profile/store', [ProfileController::class, 'store'])->name('profile.store');
@@ -55,6 +56,8 @@ Route::post('/profile/store', [ProfileController::class, 'store'])->name('profil
 // プロフィール編集
 Route::get('/profile/edit', [ProfileController::class, 'edit'])->name('profile.edit');
 Route::put('/profile/update', [ProfileController::class, 'update'])->name('profile.update');
+
+});
 
 Route::middleware(['auth', 'verified'])->group(function () {
 
