@@ -19,6 +19,10 @@ docker/mysql/logs/
 docker/mysql/conf/
 /storage/app/public
 /public/storage
+<<<<<<< HEAD
 .DS_Store
 /storage/logs
 /storage/framework
+=======
+**/.DS_Store
+>>>>>>> 7a5371c (Fix DatabaseSeeder autoload issue (exclude mysql data))
