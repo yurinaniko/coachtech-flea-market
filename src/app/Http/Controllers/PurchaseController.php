@@ -15,7 +15,14 @@ class PurchaseController extends Controller
     public function index(Item $item, Request $request)
     {
         $user = Auth::user()->fresh();
-        $selectedMethod = $request->payment_method ?? '';
+        // ① 支払い方法が来ていたらセッションに保存
+        if ($request->filled('payment_method')) {
+        session(['payment_method' => $request->payment_method]);
+        }
+
+        // ② 表示用はセッションから取得
+        $selectedMethod = session('payment_method', '');
+
         session(['current_item_id' => $item->id]);
 
         $placeholder = [
