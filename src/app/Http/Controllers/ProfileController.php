@@ -7,23 +7,6 @@ use App\Http\Requests\ProfileRequest;
 
 class ProfileController extends Controller
 {
-    public function index($itemId)
-    {
-        $item = Item::findOrFail($itemId);
-        $user = Auth::user();
-
-        $placeholder = [
-            'postal_code' => 'XXX-YYYY',
-            'address'     => 'ここに住所が自動的に入ります',
-            'building'    => '',
-        ];
-
-        return view('purchase.index', [
-            'item' => $item,
-            'user' => $user,
-            'placeholder' => $placeholder,
-        ]);
-    }
     public function create()
     {
         $user = auth()->user();

@@ -44,7 +44,6 @@ body {
     margin-right: 20px;
 }
 
-
 .header__logo {
     display: flex;
     justify-content: flex-start;
@@ -70,7 +69,7 @@ body {
 }
 
 .header__menu a {
-    color:#fff;
+    color: #fff;
     text-decoration: none;
 }
 
@@ -128,7 +127,7 @@ body {
     font-weight: bold;
 }
 
-.header__link.is-disabled{
+.header__link.is-disabled {
     color: #fff;
     pointer-events: none;
     cursor: not-allowed;
