@@ -113,8 +113,8 @@
 }
 
 .profile-placeholder {
-    width: 32px;
-    height: 32px;
+    width: 38px;
+    height: 38px;
     border-radius: 50%;
     background-color: #E0E0E0;
 }
@@ -364,9 +364,5 @@
 
 .product-detail__condition strong {
     margin-right: 30px;
-}
-
-.item-detail__category {
-    margin: 12px 0;
 }
 

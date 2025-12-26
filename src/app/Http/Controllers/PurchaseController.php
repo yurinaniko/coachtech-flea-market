@@ -92,8 +92,8 @@ class PurchaseController extends Controller
                 'item_id' => $item->id,
             ],
 
-            'success_url' => route('purchase.success', [], true),
-            'cancel_url' => route('purchase.cancel', [], true),
+            'success_url' => route('purchase.result', ['status' => 'success'], true),
+            'cancel_url'  => route('purchase.result', ['status' => 'cancel'], true),
         ]);
 
             return redirect($session->url);
@@ -121,22 +121,19 @@ class PurchaseController extends Controller
                     'purchase_id' => $purchase->id,
                     'item_id' => $item->id,
                 ],
-                'success_url' => route('purchase.success', [], true),
-                'cancel_url' => route('purchase.cancel', [], true),
-            ]);
+                'success_url' => route('purchase.result', ['status' => 'success'], true),
+                'cancel_url'  => route('purchase.result', ['status' => 'cancel'], true),
+                ]);
 
             return redirect($session->url);
         }
             abort(400);
     }
 
-    public function success()
+    public function result(Request $request)
     {
-        return view('purchase.success');
-    }
+        $status = $request->query('status'); // success or cancel
 
-    public function cancel()
-    {
-        return view('purchase.cancel');
+        return view('purchase.result', compact('status'));
     }
 }

@@ -108,12 +108,8 @@ Route::get('/items/{id}', [ItemController::class, 'show'])
 
 Route::post('/stripe/webhook', [StripeWebhookController::class, 'handle']);
 
-Route::get('/purchase/success', [PurchaseController::class, 'success'])
-    ->name('purchase.success');
-
-Route::get('/purchase/cancel', function () {
-    return view('purchase.cancel');
-})->name('purchase.cancel');
+Route::get('/purchase/result', [PurchaseController::class, 'result'])
+    ->name('purchase.result');
 
 // 購入
 Route::middleware(['auth', 'verified'])->group(function () {
