@@ -28,12 +28,13 @@ class ItemTest extends TestCase
     /** @test */
     public function guest_cannot_create_item()
     {
+        $condition = Condition::factory()->create();
         $response = $this->post(route('items.store'), [
             'name' => 'テスト商品',
             'price' => 1000,
-            'condition_id' => 1,
+            'condition_id' => $condition->id,
             'description' => 'テスト説明',
-            'img_url' => UploadedFile::fake()->image('test.jpg'),
+            'img_url' => UploadedFile::fake()->create('test.jpg'),
         ]);
 
         $response->assertRedirect('/login');
@@ -54,7 +55,7 @@ class ItemTest extends TestCase
             'price' => 1000,
             'condition_id' => $condition->id,
             'description' => 'テスト説明',
-            'img_url' => UploadedFile::fake()->image('test.jpg'),
+            'img_url' => UploadedFile::fake()->create('test.jpg'),
             'categories' => [$category->id],
         ]);
 
