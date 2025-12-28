@@ -53,7 +53,7 @@ MAIL_USERNAME=null
 MAIL_PASSWORD=null
 MAIL_ENCRYPTION=null
 MAIL_FROM_ADDRESS=test@example.com
-MAIL_FROM_NAME="Laravel"
+MAIL_FROM_NAME="coachtech-flea-market"
 ```
 ### ④ Stripe（テスト環境）
 ```env
