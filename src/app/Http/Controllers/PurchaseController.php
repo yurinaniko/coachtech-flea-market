@@ -41,17 +41,27 @@ class PurchaseController extends Controller
 
     public function store(PurchaseRequest $request, $itemId)
     {
-        $validated = $request->validated();
         $item = Item::findOrFail($itemId);
 
-        $purchase = Purchase::firstOrCreate(
+        $alreadyPurchased = Purchase::where('item_id', $item->id)
+            ->where('status', 'completed')
+            ->exists();
+
+        if ($alreadyPurchased) {
+        abort(403, 'This item has already been purchased.');
+        }
+        $validated = $request->validated();
+
+        $purchase = Purchase::updateOrCreate(
         [
             'user_id' => Auth::id(),
             'item_id' => $item->id,
         ],
         [
             'price'            => $item->price,
-            'status'           => 'pending',
+            'status'           => $validated['payment_method'] === 'konbini'
+                                    ? 'pending'
+                                    : 'completed',
             'payment_method'   => $validated['payment_method'],
             'sending_postcode' => $validated['postal_code'],
             'sending_address'  => $validated['address'],
@@ -114,9 +124,6 @@ class PurchaseController extends Controller
                 ]],
                 'mode' => 'payment',
 
-                // ★ 24時間未満にする（重要）
-                'expires_at' => now()->addHours(23)->timestamp,
-
                 'metadata' => [
                     'purchase_id' => $purchase->id,
                     'item_id' => $item->id,
@@ -132,7 +139,7 @@ class PurchaseController extends Controller
 
     public function result(Request $request)
     {
-        $status = $request->query('status'); // success or cancel
+        $status = $request->query('status');
 
         return view('purchase.result', compact('status'));
     }
