@@ -53,7 +53,7 @@ MAIL_USERNAME=null
 MAIL_PASSWORD=null
 MAIL_ENCRYPTION=null
 MAIL_FROM_ADDRESS=test@example.com
-MAIL_FROM_NAME="Laravel"
+MAIL_FROM_NAME="coachtech-flea-market"
 ```
 ### ④ Stripe（テスト環境）
 ```env
@@ -81,6 +81,8 @@ php artisan migrate:fresh --seed
 ```bash
 php artisan storage:link
 ```
+※ 商品画像・プロフィール画像は storage/app/public 配下に保存されるため、
+GitHub 上には含まれていません。
 ## 9 アプリケーション確認
 以下のURLにアクセスすると、アプリケーションが表示されます。
 ```
@@ -120,7 +122,7 @@ http://localhost:8000
 - 商品出品画面
 - 商品購入画面
 - 住所変更画面
-- stripe決済
+- Stripe決済
 - 購入完了画面（カード払いの時のみ表示）
 ※商品購入ボタンを押すとログイン画面に遷移されます。
 ※ヘッダーのログインボタンからもログインページに遷移します。
@@ -144,7 +146,8 @@ MailHog： http://localhost:8025
 メール認証・通知メールは MailHog 上で確認できます。
 メール認証誘導画面の認証はこちらからのボタンを押すとメール認証画面（MailHog画面）に遷移されます。
 
-## 備考（M1 / M2 Mac）
+## 備考
+※（M1 / M2 Mac）
 本プロジェクトでは、Apple Silicon（M1 / M2 Mac）環境でも
 問題なく動作するよう、docker-compose.yml にて
 ARM64 対応の Docker image を使用しています。
@@ -155,6 +158,11 @@ mysql:
 ```
 そのため、M1 / M2 Mac 環境でも
 追加設定なしで Docker を起動できます。
+### コメント機能について
+```
+・商品詳細画面では、Seederにより初期コメントが表示されます。
+・ログインユーザーが投稿したコメントは、既存コメントの下に時系列で追加表示されます。
+```
 ## 使用技術
 - 種類	バージョン
 - PHP	8.x
