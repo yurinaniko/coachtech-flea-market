@@ -33,7 +33,7 @@ class ProfileController extends Controller
                 'img_url' => $validated['img_url'] ?? optional($user->profile)->img_url,
                 'postal_code' => $validated['postal_code'],
                 'address'     => $validated['address'],
-                'building'    => $validated['building'],
+                'building' => $validated['building'] ?? null,
             ]
         );
 
@@ -76,7 +76,7 @@ class ProfileController extends Controller
                 'img_url' => $validated['img_url'] ?? optional($profile)->img_url,
                 'postal_code' => $validated['postal_code'],
                 'address'     => $validated['address'],
-                'building'    => $validated['building'],
+                'building' => $validated['building'] ?? null,
             ]
         );
 

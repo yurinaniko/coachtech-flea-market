@@ -7,6 +7,9 @@ use Illuminate\Foundation\Testing\WithFaker;
 use Tests\TestCase;
 use App\Models\User;
 use App\Models\Item;
+use Illuminate\Http\UploadedFile;
+use Illuminate\Support\Facades\Storage;
+
 
 class MypageTest extends TestCase
 {
@@ -178,5 +181,92 @@ class MypageTest extends TestCase
         $response->assertStatus(200);
         $response->assertSee('購入した商品');
         $response->assertDontSee('購入していない商品');
+    }
+
+    /** @test */
+    public function name_cannot_exceed_20_characters()
+    {
+        $user = User::factory()->create();
+
+        $response = $this->actingAs($user)->post(route('profile.store'), [
+            'name' => str_repeat('あ', 21),
+            'postal_code' => '123-4567',
+            'address' => '東京都',
+        ]);
+
+        $response->assertSessionHasErrors('name');
+    }
+
+    /** @test */
+    public function postal_code_is_required()
+    {
+        $user = User::factory()->create();
+
+        $response = $this->actingAs($user)->post(route('profile.store'), [
+            'name' => 'テスト',
+            'postal_code' => '',
+            'address' => '東京都',
+        ]);
+
+        $response->assertSessionHasErrors('postal_code');
+    }
+
+    /** @test */
+    public function postal_code_with_invalid_characters_is_rejected()
+    {
+        $user = User::factory()->create();
+
+        $response = $this->actingAs($user)->post(route('profile.store'), [
+            'name' => 'テスト',
+            'postal_code' => '12a-4567',
+            'address' => '東京都',
+        ]);
+
+        $response->assertSessionHasErrors('postal_code');
+    }
+
+    /** @test */
+    public function image_must_be_jpeg_or_png()
+    {
+        Storage::fake('public');
+        $user = User::factory()->create();
+
+        $response = $this->actingAs($user)->post(route('profile.store'), [
+            'name' => 'テスト',
+            'postal_code' => '123-4567',
+            'address' => '東京都',
+            'image' => UploadedFile::fake()->create('test.pdf', 100),
+        ]);
+
+        $response->assertSessionHasErrors('image');
+    }
+
+    /** @test */
+    public function profile_can_be_updated_without_image()
+    {
+        $user = User::factory()->create();
+
+        $user->profile()->create([
+            'postal_code' => '123-4567',
+            'address' => '初期住所',
+            'building' => null,
+            'img_url' => null,
+        ]);
+
+        $response = $this->actingAs($user)->put(route('profile.update'), [
+            'name' => '更新ユーザー', // ← users.name 用、profiles では見ない
+            'postal_code' => '123-4567',
+            'address' => '東京都',
+        ]);
+
+        $response->assertRedirect(
+            route('mypage.profile', ['page' => 'sell'])
+        );
+
+        $this->assertDatabaseHas('profiles', [
+            'user_id' => $user->id,
+            'postal_code' => '123-4567',
+            'address' => '東京都',
+        ]);
     }
 }
