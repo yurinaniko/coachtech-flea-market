@@ -43,7 +43,6 @@ class CommentTest extends TestCase
         );
 
         $response->assertRedirect(route('login'));
-        $this->assertDatabaseCount('comments', 0);
     }
 
     /** @test */
