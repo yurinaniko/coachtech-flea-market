@@ -43,6 +43,7 @@ class CommentTest extends TestCase
         );
 
         $response->assertRedirect(route('login'));
+        $this->assertDatabaseCount('comments', 0);
     }
 
     /** @test */
@@ -57,5 +58,35 @@ class CommentTest extends TestCase
         );
 
         $response->assertSessionHasErrors('comment');
+        $this->assertDatabaseCount('comments', 0);
+    }
+
+    /** @test */
+    public function comment_cannot_exceed_255_characters()
+    {
+        $user = User::factory()->create();
+        $item = Item::factory()->create();
+
+        $response = $this->actingAs($user)->post(
+            route('comment.store', $item->id),
+            ['comment' => str_repeat('a', 256)]
+        );
+
+        $response->assertSessionHasErrors('comment');
+        $this->assertDatabaseCount('comments', 0);
+    }
+
+    /** @test */
+    public function comment_within_255_characters_can_be_posted()
+    {
+        $user = User::factory()->create();
+        $item = Item::factory()->create();
+
+        $this->actingAs($user)->post(
+            route('comment.store', $item->id),
+            ['comment' => str_repeat('a', 255)]
+        );
+
+        $this->assertDatabaseCount('comments', 1);
     }
 }
