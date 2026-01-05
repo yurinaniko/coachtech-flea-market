@@ -10,12 +10,11 @@
 {{-- カテゴリータブ --}}
 <div class="item-list__tabs-wrapper">
     <div class="item-list__tabs">
-        <button class="tab active">おすすめ</button>
-        <button class="tab">マイリスト</button>
+        <button class="item-list__tab is-active">おすすめ</button>
+        <button class="item-list__tab">マイリスト</button>
     </div>
 </div>
 <div class="item-list">
-    {{-- 商品カード一覧（ダミーデータ8個） --}}
     <div class="item-list__grid">
         @foreach ($items as $item)
             <a href="{{ $item->purchase ? 'javascript:void(0);' : route('items.show', $item->id) }}"

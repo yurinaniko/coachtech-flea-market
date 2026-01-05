@@ -1,19 +1,31 @@
-/* ====== 全体 ====== */
 .purchase {
     max-width: 1300px;
     margin: 40px auto;
 }
 
-/* ====== 2カラムコンテナ ====== */
 .purchase__container {
     margin-top: 30px;
     display: flex;
     gap: 80px;
 }
 
-/* ====== 左カラム ====== */
 .purchase__left {
     width: 65%;
+}
+
+.purchase__product {
+    display: flex;
+    gap: 20px;
+    padding: 10px 20px 10px 0;
+    align-items: flex-start;
+    border-bottom: 1px solid #333;
+}
+
+.purchase__image-box img {
+    width: 200px;
+    height: 200px;
+    object-fit: cover;
+    border-radius: 4px;
 }
 
 .purchase__item-box {
@@ -22,6 +34,18 @@
     flex-direction: column;
     justify-content: center;
     gap: 8px;
+}
+
+.item__card-sold {
+    position: absolute;
+    top: 8px;
+    left: 8px;
+    background: red;
+    color: #fff;
+    font-size: 14px;
+    padding: 4px 8px;
+    font-weight: bold;
+    z-index: 10;
 }
 
 .purchase__name {
@@ -42,7 +66,6 @@
     display: flex;
     flex-direction: column;
     width: 100%;
-    border-bottom: 1px solid #333;
     padding: 20px 0;
 }
 
@@ -87,7 +110,6 @@
     text-decoration: underline;
 }
 
-/* ====== 購入ボタン ====== */
 .purchase__button {
     width: 100%;
     background-color: #FF6F6F;
@@ -104,7 +126,6 @@
     opacity: 0.9;
 }
 
-/* ====== 右カラム（サマリー） ====== */
 .purchase__right {
     padding-top: 20px;
     width: 300px;
@@ -113,34 +134,34 @@
     gap: 30px;
 }
 
-.purchase-summary {
+.purchase__summary {
     border: 1px solid #333;
     padding: 0;
     background: #fff;
 }
 
-.purchase-summary__row {
+.purchase__summary-row {
     display: flex;
     justify-content: space-between;
     padding: 6px 16px;
     border-bottom: 1px solid #333;
 }
 
-.purchase-summary__row:last-child {
+.purchase__summary-row:last-child {
     border-bottom: none;
 }
 
-.purchase-summary__label {
+.purchase__summary-label {
     margin-top: 22px;
     font-size: 16px;
 }
 
-.purchase-summary__price {
+.purchase__summary-price {
     font-size: 20px;
     margin-bottom: 16px;
 }
 
-.purchase-summary__method {
+.purchase__summary-method {
     font-size: 20px;
 }
 
@@ -156,56 +177,20 @@
     padding-bottom: 20px;
 }
 
-.purchase__product {
-    display: flex;
-    align-items: center;
-    gap: 20px;
-    padding: 10px 20px 10px 0;
-    align-items: flex-start;
-    border-bottom: 1px solid #333;
-}
-
-.purchase__image-box img {
-    width: 200px;
-    height: 200px;
-    object-fit: cover;
-    border-radius: 4px;
-}
-
-.purchase__image-placeholder {
-    width: 160px;
-    height: 160px;
-    background-color: #E5E5E5;
-    border-radius: 2px;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    color: #777;
-    font-size: 14px;
-}
-
-.purchase_address-box {
+.purchase__address-box {
     margin-left: 100px;
     line-height: 1.5;
 }
 
-.purchase_address-box p {
+.purchase__address-box p {
     margin-bottom: 4px;
     font-weight: 600;
 }
 
-.purchase_address-postal,
-.purchase_address-address,
-.purchase_address-building{
+.purchase__address-postal,
+.purchase__address-address,
+.purchase__address-building{
     margin: 0;
-}
-
-.purchase-error {
-    color: red;
-    font-size: 14px;
-    margin-top: 4px;
-    margin-left: 56px;
-    display: block;
 }
 
 /* ====== PC幅（1400〜1540px） ====== */
@@ -221,39 +206,27 @@
     }
 }
 
-.item-card__sold {
-    position: absolute;
-    top: 8px;
-    left: 8px;
-    background: red;
-    color: #fff;
-    font-size: 14px;
-    padding: 4px 8px;
-    font-weight: bold;
-    z-index: 10;
-}
-
-.purchase-success {
+.purchase__success {
     display: flex;
     justify-content: center;
     align-items: center;
     min-height: calc(100vh - 120px);
 }
 
-.purchase-success__box {
+.purchase__success-box {
     text-align: center;
 }
 
-.purchase-success__title {
+.purchase__success-title {
     font-size: 24px;
     margin-bottom: 16px;
 }
 
-.purchase-success__text {
+.purchase__success-text {
     margin-bottom: 24px;
 }
 
-.purchase-success__button {
+.purchase__success-button {
     display: inline-block;
     padding: 10px 24px;
     background-color: #000;
@@ -261,9 +234,6 @@
     text-decoration: none;
 }
 
-.purchase-cancel {
-    display: flex;
-        justify-content: center;
-        align-items: center;
-        min-height: calc(100vh - 120px);
+.purchase .form__error {
+    margin-left: 56px;
 }

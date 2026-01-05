@@ -15,22 +15,27 @@ class PurchaseController extends Controller
     public function index(Item $item, Request $request)
     {
         $user = Auth::user()->fresh();
-        // ① 支払い方法が来ていたらセッションに保存
-        if ($request->filled('payment_method')) {
-        session(['payment_method' => $request->payment_method]);
+        // 商品が変わったら支払い方法をリセット
+        if (session('current_item_id') !== $item->id) {
+        session()->forget('payment_method');
         }
-
+        // ① 支払い方法が送られてきた場合の処理
+        if ($request->has('payment_method')) {
+            if ($request->filled('payment_method')) {
+            session(['payment_method' => $request->payment_method]);
+            } else {
+            // 未選択ならセッションをクリア
+            session()->forget('payment_method');
+            }
+        }
         // ② 表示用はセッションから取得
         $selectedMethod = session('payment_method', '');
-
         session(['current_item_id' => $item->id]);
-
         $placeholder = [
             'postal_code' => 'XXX-YYYY',
             'address'     => 'ここには住所と建物が入ります',
             'building'    => '',
         ];
-
         return view('purchase.index', [
             'item' => $item,
             'user' => $user,
@@ -68,9 +73,7 @@ class PurchaseController extends Controller
             'sending_building' => $validated['building'],
         ]
         );
-
         session(['purchase_id' => $purchase->id]);
-
         return redirect()->route('purchase.checkout');
     }
 
@@ -101,7 +104,6 @@ class PurchaseController extends Controller
                 'purchase_id' => $purchase->id,
                 'item_id' => $item->id,
             ],
-
             'success_url' => route('purchase.result', ['status' => 'success'], true),
             'cancel_url'  => route('purchase.result', ['status' => 'cancel'], true),
         ]);
@@ -131,7 +133,6 @@ class PurchaseController extends Controller
                 'success_url' => route('purchase.result', ['status' => 'success'], true),
                 'cancel_url'  => route('purchase.result', ['status' => 'cancel'], true),
                 ]);
-
             return redirect($session->url);
         }
             abort(400);
@@ -140,7 +141,6 @@ class PurchaseController extends Controller
     public function result(Request $request)
     {
         $status = $request->query('status');
-
         return view('purchase.result', compact('status'));
     }
 }

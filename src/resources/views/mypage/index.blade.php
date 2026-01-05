@@ -14,12 +14,12 @@
             $keyword = request('keyword');
         @endphp
         <a href="{{ route('mypage.index', ['page' => 'recommend', 'keyword' => $keyword]) }}"
-        class="tab {{ request('page') === 'recommend' ? 'active' : '' }}">
-            おすすめ
+        class="item-list__tab {{ request('page') === 'recommend' ? 'is-active' : '' }}">
+        おすすめ
         </a>
         <a href="{{ route('mypage.index', ['page' => 'favorite', 'keyword' => $keyword]) }}"
-        class="tab {{ request('page') === 'favorite' ? 'active' : '' }}">
-            マイリスト
+        class="item-list__tab {{ request('page') === 'favorite' ? 'is-active' : '' }}">
+        マイリスト
         </a>
     </div>
 </div>

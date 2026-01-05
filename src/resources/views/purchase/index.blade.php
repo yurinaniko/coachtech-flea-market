@@ -3,6 +3,7 @@
 @section('css')
 <link rel="stylesheet" href="{{ asset('css/sanitize.css') }}">
 <link rel="stylesheet" href="{{ asset('css/common.css') }}">
+<link rel="stylesheet" href="{{ asset('css/form.css') }}">
 <link rel="stylesheet" href="{{ asset('css/purchase.css') }}">
 @endsection
 
@@ -15,14 +16,9 @@
             <div class="purchase__product">
                 <div class="purchase__image-box">
                     @if($item->is_sold)
-                        <span class="item-card__sold">sold</span>
+                        <span class="item__card-sold">sold</span>
                     @endif
-
-                    @if (!empty($item->full_image_path))
-                        <img src="{{ asset('storage/' . $item->full_image_path) }}" alt="{{ $item->name }}">
-                    @else
-                        <div class="purchase__image-placeholder">商品画像</div>
-                    @endif
+                    <img src="{{ asset('storage/' . $item->full_image_path) }}" alt="{{ $item->name }}">
                 </div>
                 {{-- 右：商品名＋価格（プレースホルダー対応） --}}
                 <div class="purchase__info-box">
@@ -40,7 +36,7 @@
             </div>
             <div class="purchase__underline">
                 <label class="purchase__label">支払い方法</label>
-                    <form method="GET" action="{{ route('purchase.index', $item->id) }}" class="method-form">
+                    <form method="GET" action="{{ route('purchase.index', $item->id) }}" class="method__form">
                         <select name="payment_method" class="purchase__select" onchange="this.form.submit()">
                             <option value="">選択してください</option>
                             <option value="card" {{ $selectedMethod === 'card' ? 'selected' : '' }}>カード払い</option>
@@ -48,7 +44,7 @@
                         </select>
                     </form>
                         @error('payment_method')
-                            <p class="purchase-error">{{ $message }}</p>
+                            <p class="form__error">{{ $message }}</p>
                         @enderror
             </div>
             <form action="{{ route('purchase.store', $item->id) }}" method="POST" class="purchase__form">
@@ -64,26 +60,26 @@
                         <p class="purchase__address-label">配送先</p>
                         <a href="{{ route('mypage.address.edit') }}" class="purchase__address-edit">変更する</a>
                     </div>
-                    <div class="purchase_address-box">
-                        <p class="purchase_address-postal">〒{{ $user->profile->postal_code }}</p>
-                        <p class="purchase_address-address">{{ $user->profile->address }}</p>
-                        <p class="purchase_address-building">{{ $user->profile->building }}</p>
+                    <div class="purchase__address-box">
+                        <p class="purchase__address-postal">〒{{ $user->profile->postal_code }}</p>
+                        <p class="purchase__address-address">{{ $user->profile->address }}</p>
+                        <p class="purchase__address-building">{{ $user->profile->building }}</p>
                     </div>
                     @error('address')
-                        <p class="purchase-error">{{ $message }}</p>
+                        <p class="form__error">{{ $message }}</p>
                     @enderror
                 </div>
         </div>
         {{-- 右：価格サマリー --}}
         <div class="purchase__right">
-            <div class="purchase-summary">
-                <div class="purchase-summary__row">
-                    <p class="purchase-summary__label">商品価格</p>
-                    <p class="purchase-summary__price">¥{{ number_format($item->price) }}</p>
+            <div class="purchase__summary">
+                <div class="purchase__summary-row">
+                    <p class="purchase__summary-label">商品価格</p>
+                    <p class="purchase__summary-price">¥{{ number_format($item->price) }}</p>
                 </div>
-                <div class="purchase-summary__row">
-                    <p class="purchase-summary__label">支払い方法</p>
-                    <p class="purchase-summary__method">{{ $selectedMethod === 'card' ? 'カード払い' :($selectedMethod === 'konbini' ? 'コンビニ払い' : '選択してください') }}</p>
+                <div class="purchase__summary-row">
+                    <p class="purchase__summary-label">支払い方法</p>
+                    <p class="purchase__summary-method">{{ $selectedMethod === 'card' ? 'カード払い' :($selectedMethod === 'konbini' ? 'コンビニ払い' : '選択してください') }}</p>
                 </div>
             </div>
             <button type="submit" class="purchase__button">購入する</button>

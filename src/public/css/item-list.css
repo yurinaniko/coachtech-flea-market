@@ -25,7 +25,7 @@
     padding: 4px 0;
 }
 
-.tab {
+.item-list__tab {
     background: none;
     border: none;
     font-size: 16px;
@@ -35,14 +35,8 @@
     color: #C4C4C4;
 }
 
-.tab.active {
+.item-list__tab.is-active {
     color: #FF4F5E;
-}
-
-.item-list__tabs-border {
-    width: 100%;
-    border-bottom: 1px solid #C4C4C4;
-    margin-bottom: 30px;
 }
 
 .item-list__grid {
@@ -93,8 +87,3 @@
     text-align: left;
 }
 
-.img-content {
-    width: 100%;
-    aspect-ratio: 1/1;
-    object-fit: cover;
-}

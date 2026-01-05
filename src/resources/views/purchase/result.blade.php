@@ -9,16 +9,16 @@
     $status = $status ?? 'success';
 @endphp
 @section('content')
-<div class="purchase-success">
-    <div class="purchase-success__box">
-        <h2 class="purchase-success__title">
+<div class="purchase__success">
+    <div class="purchase__success-box">
+        <h2 class="purchase__success-title">
             @if($status === 'success')
                 購入が完了しました
             @else
                 購入はキャンセルされました
             @endif
         </h2>
-        <p class="purchase-success__text">
+        <p class="purchase__success-text">
             @if($status === 'success')
                 ご購入ありがとうございます。<br>
                 商品一覧より購入内容をご確認ください。
@@ -28,7 +28,7 @@
             @endif
         </p>
 
-        <a href="{{ route('mypage.index') }}" class="purchase-success__button">
+        <a href="{{ route('mypage.index') }}" class="purchase__success-button">
             商品一覧へ戻る
         </a>
     </div>

@@ -1,94 +1,41 @@
-.mypage-edit {
-    max-width: 680px;
-    margin: 0 auto;
-    background: #fff;
-    padding: 20px;
-    border-radius: 8px;
+.form__error {
+    color: red;
+    font-size: 14px;
+    margin-top: 4px;
 }
 
-.mypage-edit__title {
-    text-align: center;
-    margin-bottom: 10px;
-    font-size: 28px;
-    font-weight: bold;
-    color: #333;
-}
-
-.mypage-edit__image-input {
-    display: none;
-}
-
-.mypage-edit__group {
-    margin-bottom: 20px;
-}
-
-.mypage-edit__label {
-    font-weight: bold;
-    display: block;
-    margin-bottom: 4px;
-}
-
-.mypage-edit__input {
-    width: 100%;
-    border: 1px solid #ccc;
-    padding: 10px;
-    border-radius: 6px;
-    margin-bottom: 16px;
-}
-
-.mypage-edit__button {
-    display: block;
-    width: 100%;
-    margin: 0 auto 30px;
-    background: #FF6F6F;
-    color: white;
-    border: none;
-    padding: 12px;
-    border-radius: 8px;
-    font-weight: bold;
-    cursor: pointer;
-}
-
-.mypage-edit__image-area {
-    width: 100%;
+.form-group {
     display: flex;
-    justify-content: flex-start;
-    align-items: center;
-    gap: 20px;
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 4px;
     margin-bottom: 30px;
 }
 
-.profile-edit__image,
-.profile-placeholder {
-    width: 120px;
-    height: 120px;
-    border-radius: 50%;
-    object-fit: cover;
-    background-color: #E0E0E0;
-    border: 1px solid #ddd;
+.form-label {
+    font-size: 18px;
+    color: #444;
+    font-weight: 600;
+    margin-bottom: 0;
 }
 
-.profile-placeholder {
-    display: block;
-}
-
-.mypage-edit__image-label {
-    padding: 6px 14px;
-    border: 1px solid #E20036;
-    border-radius: 6px;
-    color: #E20036;
-    cursor: pointer;
+.form-input {
+    width: 100%;
+    padding: 12px 14px;
+    border: 1px solid #C4C4C4;
+    border-radius: 4px;
     font-size: 14px;
 }
 
-.mypage-edit__image-input {
-    display: none;
+.alert {
+    padding: 12px 16px;
+    margin: 16px 0;
+    border-radius: 4px;
+    font-size: 14px;
 }
 
-#preview {
-    width: 120px;
-    height: 120px;
-    object-fit: cover;
-    border-radius: 50%;
-    border: 1px solid #ddd;
+.alert-success {
+    background-color: #e6f4ea;
+    color: #276749;
+    border: 1px solid #9ae6b4;
 }
