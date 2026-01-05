@@ -5,7 +5,8 @@
 <link rel="stylesheet" href="{{ asset('css/common.css') }}">
 <link rel="stylesheet" href="{{ asset('css/item-list.css') }}">
 <link rel="stylesheet" href="{{ asset('css/mypage.css') }}">
-<link rel="stylesheet" href="{{ asset('css/form.css') }}">
+<link rel="stylesheet" href="{{ asset('css/profile-form.css') }}">
+<link rel="stylesheet" href="{{ asset('css/profile.css') }}">
 @endsection
 
 @section('content')
@@ -17,9 +18,9 @@
                 $hasImage = optional($profile)->img_url;
             @endphp
             @if ($hasImage)
-                <img src="{{ asset('storage/' . $hasImage) }}" class="profile-edit__image">
+                <img src="{{ asset('storage/' . $hasImage) }}" class="profile-form__image">
             @else
-                <div class="profile-placeholder"></div>
+                <div class="profile-form__placeholder"></div>
             @endif
             <p class="mypage__username">{{ $user->name }}</p>
         </div>
@@ -27,7 +28,7 @@
     </div>
 </div>
 {{-- ② タブ --}}
-<div class="mypage-tabs-wrapper">
+<div class="mypage__tabs-wrapper">
     <ul class="mypage__tabs">
         <li class="mypage__tab {{ $page === 'sell' ? 'is-active' : '' }}">
             <a href="{{ route('mypage.profile', ['page' => 'sell']) }}">出品した商品</a>
@@ -56,5 +57,4 @@
         @endforeach
     </div>
 </div>
-
 @endsection

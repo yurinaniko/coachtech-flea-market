@@ -20,7 +20,6 @@ class PurchaseRequest extends FormRequest
             'string',
             'regex:/^[0-9]{3}-[0-9]{4}$/',
             ],
-
             'address' => 'required|string|max:255',
             'building' => 'nullable|string|max:255',
         ];

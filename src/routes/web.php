@@ -49,76 +49,53 @@ Route::post('/email/verification-notification', function (Request $request) {
 })->middleware(['auth', 'throttle:1,1'])->name('verification.send');
 
 Route::middleware('auth')->group(function () {
-// プロフィール登録
-Route::get('/profile/create', [ProfileController::class, 'create'])->name('profile.create');
-Route::post('/profile/store', [ProfileController::class, 'store'])->name('profile.store');
-
-// プロフィール編集
-Route::get('/profile/edit', [ProfileController::class, 'edit'])->name('profile.edit');
-Route::put('/profile/update', [ProfileController::class, 'update'])->name('profile.update');
-
+    // プロフィール登録
+    Route::get('/profile/create', [ProfileController::class, 'create'])->name('profile.create');
+    Route::post('/profile/store', [ProfileController::class, 'store'])->name('profile.store');
+    // プロフィール編集
+    Route::get('/profile/edit', [ProfileController::class, 'edit'])->name('profile.edit');
+    Route::put('/profile/update', [ProfileController::class, 'update'])->name('profile.update');
 });
 
 Route::middleware(['auth', 'verified'])->group(function () {
-
+    // マイページ
     Route::get('/mypage', [MypageController::class, 'index'])
         ->name('mypage.index');
-
     Route::get('/mypage/profile', [MypageController::class, 'profile'])
         ->name('mypage.profile');
-
+    // 住所変更
+    Route::get('mypage/address/edit', [AddressController::class, 'edit'])
+    ->name('mypage.address.edit');
+    Route::put('mypage/address/update', [AddressController::class, 'update'])
+    ->name('mypage.address.update');
+    // 出品ページ
+    Route::get('/items/sell', [ItemController::class, 'sell'])
+    ->name('items.item-sell');
+    // 出品処理
+    Route::post('/items/store', [ItemController::class, 'store'])
+    ->name('items.store');
+    // お気に入り
+    Route::post('/items/{item}/favorite', [FavoriteController::class, 'toggle'])
+    ->name('favorite.toggle');
+    // コメント
+    Route::post('/items/{item}/comment', [CommentController::class, 'store'])
+    ->name('comment.store');
+    // 購入
+    Route::get('/purchase/checkout', [PurchaseController::class, 'checkout'])
+        ->name('purchase.checkout');
+    Route::get('/purchase/{item}', [PurchaseController::class, 'index'])
+    ->name('purchase.index');
+    Route::post('/purchase/{item}', [PurchaseController::class, 'store'])
+    ->name('purchase.store');
+    Route::get('/purchase/result', [PurchaseController::class, 'result'])
+    ->name('purchase.result');
 });
 
 // 商品一覧
 Route::get('/items', [ItemController::class, 'index'])->name('items.index');
 
-Route::middleware(['auth', 'verified'])->group(function () {
-
-// 出品ページ
-Route::get('/items/sell', [ItemController::class, 'sell'])
-    ->name('items.item-sell');
-
-// 出品処理
-Route::post('/items/store', [ItemController::class, 'store'])
-    ->name('items.store');
-
-});
-
-Route::get('mypage/address/edit', [AddressController::class, 'edit'])
-    ->name('mypage.address.edit')
-    ->middleware(['auth', 'verified']);
-
-Route::put('mypage/address/update', [AddressController::class, 'update'])
-    ->name('mypage.address.update')
-    ->middleware(['auth', 'verified']);
-
-Route::middleware(['auth', 'verified'])->group(function () {
-    // お気に入り
-    Route::post('/items/{item}/favorite', [FavoriteController::class, 'toggle'])
-    ->name('favorite.toggle');
-
-    // コメント
-    Route::post('/items/{item}/comment', [CommentController::class, 'store'])
-    ->name('comment.store');
-});
-
-// 商品詳細（最後に置く）
+// 商品詳細（未ログイン可）
 Route::get('/items/{id}', [ItemController::class, 'show'])
     ->name('items.show');
 
 Route::post('/stripe/webhook', [StripeWebhookController::class, 'handle']);
-
-Route::get('/purchase/result', [PurchaseController::class, 'result'])
-    ->name('purchase.result');
-
-// 購入
-Route::middleware(['auth', 'verified'])->group(function () {
-    Route::get('/purchase/checkout', [PurchaseController::class, 'checkout'])
-        ->name('purchase.checkout');
-
-    Route::get('/purchase/{item}', [PurchaseController::class, 'index'])
-    ->name('purchase.index');
-
-    Route::post('/purchase/{item}', [PurchaseController::class, 'store'])
-    ->name('purchase.store');
-});
