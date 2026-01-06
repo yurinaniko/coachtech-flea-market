@@ -27,15 +27,16 @@
             <div class="item-detail__actions">
                 <div class="item-detail__favorite">
                     @php
+                        $isOwnItem = Auth::check() && Auth::id() === $item->user_id;
                         $isFavorite = Auth::check() && Auth::user()->favorites->contains('id', $item->id);
                     @endphp
                     @auth
                         <form action="{{ route('favorite.toggle', $item->id) }}" method="POST">
                             @csrf
-                            <button type="submit" class="item-detail__favorite-btn">
-                                <img src="{{ $isFavorite ? asset('images/pink-heart.png') : asset('images/heart.png') }}"
-                                class="item-detail__favorite-icon" alt="favorite">
-                                <span class="item-detail__favorite-count">{{ $item->users->count() }}</span>
+                            <button type="submit" class="item-detail__favorite-btn"
+                            @if($isOwnItem) disabled @endif>
+                            <img src="{{ $isFavorite ? asset('images/pink-heart.png') : asset('images/heart.png') }}" class="item-detail__favorite-icon" alt="favorite">
+                            <span class="item-detail__favorite-count">{{ $item->users->count() }}</span>
                             </button>
                         </form>
                     @endauth
@@ -158,7 +159,7 @@
     </div>
 </div>
 @endsection
-@section('scripts')
+@push('scripts')
 <script>
 document.addEventListener('DOMContentLoaded', () => {
     const icon = document.querySelector('.item-detail__favorite-icon');
@@ -195,4 +196,4 @@ document.addEventListener("DOMContentLoaded", function () {
     }
 });
 </script>
-@endsection
+@endpush

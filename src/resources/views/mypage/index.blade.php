@@ -42,20 +42,4 @@
         @endforeach
     </div>
 </div>
-@push('scripts')
-<script>
-document.addEventListener('DOMContentLoaded', () => {
-    const tabs = document.querySelectorAll('.item-list__tab');
-
-    tabs.forEach(tab => {
-    tab.addEventListener('click', () => {
-    tabs.forEach(t =>
-        t.classList.remove('item-list__tab--active')
-    );
-        tab.classList.add('item-list__tab--active');
-    });
-    });
-});
-</script>
-@endpush
 @endsection

@@ -13,6 +13,11 @@
         <h1 class="auth__title">ログイン</h1>
         <form action="{{ route('login') }}" method="POST" novalidate>
             @csrf
+            @if ($errors->has('login'))
+                <p class="form__error form__error--global">
+                    {{ $errors->first('login') }}
+                </p>
+            @endif
             <div class="form__group">
                 <label class="form__label">メールアドレス</label>
                 <input type="email" class="form__input" name="email" value="{{ old('email') }}">

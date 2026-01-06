@@ -292,3 +292,8 @@
 .item-detail__notice--own {
     color: #999;
 }
+
+.item-detail__favorite-btn:disabled {
+    opacity: 0.4;
+    cursor: not-allowed;
+}

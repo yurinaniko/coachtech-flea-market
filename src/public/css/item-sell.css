@@ -59,6 +59,10 @@
     display: none;
 }
 
+.sell__image-upload--has-image {
+    border: none;
+}
+
 .sell__image-select-btn:hover {
     background-color: #FF6F61;
     color: white;

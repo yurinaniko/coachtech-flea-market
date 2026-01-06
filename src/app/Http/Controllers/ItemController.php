@@ -12,7 +12,6 @@ use App\Http\Requests\ExhibitionRequest;
 
 class ItemController extends Controller
 {
-
     public function index(Request $request)
     {
         $keyword = $request->input('keyword');
@@ -29,20 +28,15 @@ class ItemController extends Controller
             }
         return view('items.index', compact('items', 'keyword'));
         }
-
         // recommend（通常の商品一覧）
         $query = Item::with('condition', 'purchase');
-
         if (Auth::check()) {
             $query->where('user_id', '!=', Auth::id());
         }
-
         if (!empty($keyword)) {
             $query->where('name', 'LIKE', '%' . $keyword . '%');
         }
-
         $items = $query->get();
-
         return view('items.index', compact('items', 'keyword'));
     }
 
@@ -81,9 +75,7 @@ class ItemController extends Controller
 
         // 中間テーブル（カテゴリ）
         $item->categories()->sync($validated['categories']);
-
-        return redirect()->route('mypage.index')
-            ->with('success', '商品を出品しました！');
+        return redirect()->route('mypage.index');
     }
 
     public function show($id)
@@ -106,7 +98,6 @@ class ItemController extends Controller
         if ($request->hasFile('img_url')) {
             $imagePath = $request->file('img_url')->store('images', 'public');
         }
-
         $item->update([
             'name' => $validated['name'],
             'brand' => $validated['brand'] ?? null,
@@ -115,7 +106,6 @@ class ItemController extends Controller
             'price' => $validated['price'],
             'img_url' => $imagePath,
         ]);
-
         $item->categories()->sync($validated['categories']);
         return redirect()->route('items.index');
     }

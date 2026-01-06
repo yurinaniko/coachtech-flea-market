@@ -91,6 +91,8 @@
         <button type="submit" class="sell__button">出品する</button>
     </form>
 </div>
+@endsection
+@push('scripts')
 <script>
 const imageInput = document.getElementById('image');
 const previewBox = document.getElementById('imagePreview');
@@ -104,6 +106,7 @@ imageInput.addEventListener('change', function (e) {
     reader.onload = function(event) {
         previewBox.style.backgroundImage = `url(${event.target.result})`;
         previewBox.classList.add('sell__image-preview--has-image');
+        uploadBox.classList.add('sell__image-upload--has-image');
     };
     reader.readAsDataURL(file);
 });
@@ -116,4 +119,4 @@ window.addEventListener('load', () => {
     }
 });
 </script>
-@endsection
+@endpush
