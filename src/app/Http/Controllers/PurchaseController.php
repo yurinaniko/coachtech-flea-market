@@ -47,16 +47,13 @@ class PurchaseController extends Controller
     public function store(PurchaseRequest $request, $itemId)
     {
         $item = Item::findOrFail($itemId);
-
         $alreadyPurchased = Purchase::where('item_id', $item->id)
             ->where('status', 'completed')
             ->exists();
-
         if ($alreadyPurchased) {
         abort(403, 'This item has already been purchased.');
         }
         $validated = $request->validated();
-
         $purchase = Purchase::updateOrCreate(
         [
             'user_id' => Auth::id(),
@@ -80,12 +77,10 @@ class PurchaseController extends Controller
     public function checkout(Request $request)
     {
         \Stripe\Stripe::setApiKey(config('services.stripe.secret'));
-
         $purchaseId = session('purchase_id');
         $purchase = Purchase::findOrFail($purchaseId);
         $item = $purchase->item;
         $paymentMethod = $purchase->payment_method;
-
         if ($paymentMethod === 'card') {
         $session = StripeSession::create([
             'payment_method_types' => ['card'],
@@ -107,7 +102,6 @@ class PurchaseController extends Controller
             'success_url' => route('purchase.result', ['status' => 'success'], true),
             'cancel_url'  => route('purchase.result', ['status' => 'cancel'], true),
         ]);
-
             return redirect($session->url);
         }
 
@@ -125,7 +119,6 @@ class PurchaseController extends Controller
                     'quantity' => 1,
                 ]],
                 'mode' => 'payment',
-
                 'metadata' => [
                     'purchase_id' => $purchase->id,
                     'item_id' => $item->id,

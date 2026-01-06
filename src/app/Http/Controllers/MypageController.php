@@ -12,7 +12,6 @@ class MypageController extends Controller
     {
         $page = $request->query('tab', 'recommend');
         $keyword = $request->query('keyword');
-
         if (!Auth::check()) {
             return view('mypage.index', [
                 'items' => collect(),
@@ -22,39 +21,29 @@ class MypageController extends Controller
         }
 
         if ($page === 'mylist') {
-        $items = Auth::user()->favorites;
-
-            // マイリストの中で検索したい場合
+            $items = Auth::user()->favorites;
             if ($keyword) {
                 $items = $items->filter(function($item) use ($keyword) {
                     return mb_stripos($item->name, $keyword) !== false;
                 })->values();
             }
-
         } else {
-
             $query = Item::where('user_id', '!=', Auth::id());
-
             if ($keyword) {
-            // キーワードあり → 通常検索
             $items = $query
                 ->where('name', 'like', '%' . $keyword . '%')
                 ->get();
             } else {
-            // キーワードなし → ランダム10件
             $items = $query->get();
             }
         }
-
         return view('mypage.index', compact('items', 'page', 'keyword'));
     }
-
     // 初回ログイン時の振り分け専用
     public function profileGate()
     {
         $user = Auth::user();
         $profile = $user->profile;
-
         if ($profile) {
             return redirect()->route('profile.edit');
         } else {
@@ -67,7 +56,6 @@ class MypageController extends Controller
         $user = Auth::user();
         $profile = $user->profile;
         $page = $request->query('page', 'sell');
-
         if ($page === 'sell') {
             $items = $user->items()->get();
         } elseif ($page === 'buy') {
@@ -75,7 +63,6 @@ class MypageController extends Controller
         } else {
             $items = collect();
         }
-
         return view('mypage.profile', compact('user', 'profile', 'items', 'page'));
     }
 }

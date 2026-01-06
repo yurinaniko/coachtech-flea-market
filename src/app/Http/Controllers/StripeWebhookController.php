@@ -15,7 +15,6 @@ class StripeWebhookController extends Controller
         $payload = $request->getContent();
         $sigHeader = $request->header('Stripe-Signature');
         $secret = config('services.stripe.webhook_secret');
-
         try {
             $event = Webhook::constructEvent(
                 $payload,
@@ -30,14 +29,12 @@ class StripeWebhookController extends Controller
 
         if ($event->type === 'checkout.session.completed') {
         $session = $event->data->object;
-
         $purchaseId = $session->metadata->purchase_id ?? null;
             if ($purchaseId) {
             Purchase::where('id', $purchaseId)
                 ->where('status', '!=', 'purchased')
                 ->update(['status' => 'purchased']);
             }
-
         $itemId = $session->metadata->item_id ?? null;
             if ($itemId) {
             Item::where('id', $itemId)
@@ -45,7 +42,6 @@ class StripeWebhookController extends Controller
                 ->update(['is_sold' => true]);
             }
         }
-
         return response()->json(['status' => 'success']);
     }
 }

@@ -11,7 +11,6 @@ class ProfileController extends Controller
     {
         $user = auth()->user();
         $profile = $user->profile;
-
         return view('mypage.profile-create', compact('user', 'profile'));
     }
 
@@ -19,13 +18,11 @@ class ProfileController extends Controller
     {
         $validated = $request->validated();
         $user = auth()->user();
-
         if ($request->hasFile('image')) {
             $imageName = time() . '.' . $request->image->extension();
             $request->image->storeAs('public/profile', $imageName);
             $validated['img_url'] = 'profile/' . $imageName;
         }
-
         // --- profiles テーブル保存 ---
         $user->profile()->updateOrCreate(
             ['user_id' => $user->id],
@@ -36,14 +33,12 @@ class ProfileController extends Controller
                 'building' => $validated['building'] ?? null,
             ]
         );
-
-        return redirect()->route('mypage.index')->with('success', 'プロフィールを更新しました！');
+        return redirect()->route('mypage.index');
     }
 
     public function edit()
     {
         $user = auth()->user();
-
         // プロフィールが無ければ作成して返す
         $profile = $user->profile()->firstOrCreate(
             ['user_id' => $user->id],
@@ -62,14 +57,12 @@ class ProfileController extends Controller
         $validated = $request->validated();
         $user = auth()->user();
         $profile = $user->profile;
-
         // --- 画像が新しくアップロードされた場合 ---
         if ($request->hasFile('image')) {
             $imageName = time() . '.' . $request->image->extension();
             $request->image->storeAs('public/profile', $imageName);
             $validated['img_url'] = 'profile/' . $imageName;
         }
-
         $user->profile()->updateOrCreate(
             ['user_id' => $user->id],
             [
@@ -79,9 +72,7 @@ class ProfileController extends Controller
                 'building' => $validated['building'] ?? null,
             ]
         );
-
         return redirect()
-            ->route('mypage.profile', ['page' => 'sell'])
-            ->with('success', 'プロフィールを更新しました！');
+            ->route('mypage.profile', ['page' => 'sell']);
     }
 }

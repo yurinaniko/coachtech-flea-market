@@ -31,3 +31,8 @@
     height: 120px;
     resize: none;
 }
+
+.form__error--global {
+    margin-bottom: 16px;
+    text-align: center;
+}

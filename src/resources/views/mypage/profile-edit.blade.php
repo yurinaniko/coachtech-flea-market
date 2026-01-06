@@ -63,6 +63,8 @@
         <button class="profile-form__button">更新する</button>
     </form>
 </div>
+@endsection
+@push('scripts')
 <script>
 function previewImage(event) {
     const reader = new FileReader();
@@ -78,4 +80,4 @@ function previewImage(event) {
     reader.readAsDataURL(event.target.files[0]);
 }
 </script>
-@endsection
+@endpush

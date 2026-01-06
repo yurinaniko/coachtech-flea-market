@@ -67,16 +67,15 @@
         <button class="profile-form__button">更新する</button>
     </form>
 </div>
-{{-- 画像プレビュー --}}
+@endsection
+@push('scripts')
 <script>
 function previewImage(event) {
     const file = event.target.files[0];
     if (!file) return;
-
     const reader = new FileReader();
     reader.onload = function(e) {
         const preview = document.getElementById('preview');
-
         if (preview.tagName === 'DIV') {
             preview.outerHTML =
                 `<img id="preview" class="profile-edit__image" src="${e.target.result}">`;
@@ -87,7 +86,6 @@ function previewImage(event) {
     reader.readAsDataURL(file);
 }
 </script>
-
 {{-- トースト --}}
 <script>
 document.addEventListener('DOMContentLoaded', () => {
@@ -100,4 +98,4 @@ document.addEventListener('DOMContentLoaded', () => {
     }
 });
 </script>
-@endsection
+@endpush
