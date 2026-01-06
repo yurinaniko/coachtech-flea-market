@@ -13,30 +13,30 @@
         <h2 class="auth__title">会員登録</h2>
         <form action="/register" method="POST" class="auth__form" novalidate>
             @csrf
-            <div class="form-group">
-                <label class="form-label">ユーザー名</label>
-                <input type="text" name="name" class="form-input" value="{{ old('name') }}">
+            <div class="form__group">
+                <label class="form__label">ユーザー名</label>
+                <input type="text" name="name" class="form__input" value="{{ old('name') }}">
                 @error('name')
                     <p class="form__error">{{ $message }}</p>
                 @enderror
             </div>
-            <div class="form-group">
-                <label class="form-label">メールアドレス</label>
-                <input type="email" name="email" class="form-input" value="{{ old('email') }}">
+            <div class="form__group">
+                <label class="form__label">メールアドレス</label>
+                <input type="email" name="email" class="form__input" value="{{ old('email') }}">
                 @error('email')
                     <p class="form__error">{{ $message }}</p>
                 @enderror
             </div>
-            <div class="form-group">
-                <label class="form-label">パスワード</label>
-                <input type="password" name="password" class="form-input">
+            <div class="form__group">
+                <label class="form__label">パスワード</label>
+                <input type="password" name="password" class="form__input">
                 @error('password')
                     <p class="form__error">{{ $message }}</p>
                 @enderror
             </div>
-            <div class="form-group">
-                <label class="form-label">確認用パスワード</label>
-                <input type="password" name="password_confirmation" class="form-input">
+            <div class="form__group">
+                <label class="form__label">確認用パスワード</label>
+                <input type="password" name="password_confirmation" class="form__input">
                 @error('password_confirmation')
                     <p class="form__error">{{ $message }}</p>
                 @enderror

@@ -10,15 +10,19 @@ class MypageController extends Controller
 {
     public function index(Request $request)
     {
-        $page = $request->query('page', 'recommend');
+        $page = $request->query('tab', 'recommend');
         $keyword = $request->query('keyword');
 
         if (!Auth::check()) {
-            return redirect()->route('items.index');
+            return view('mypage.index', [
+                'items' => collect(),
+                'page' => $page,
+                'keyword' => $keyword,
+            ]);
         }
 
-        if ($page === 'favorite') {
-            $items = Auth::user()->favorites;
+        if ($page === 'mylist') {
+        $items = Auth::user()->favorites;
 
             // マイリストの中で検索したい場合
             if ($keyword) {

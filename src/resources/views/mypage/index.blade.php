@@ -13,14 +13,14 @@
         @php
             $keyword = request('keyword');
         @endphp
-        <a href="{{ route('mypage.index', ['page' => 'recommend', 'keyword' => $keyword]) }}"
-        class="item-list__tab {{ request('page') === 'recommend' ? 'is-active' : '' }}">
-        おすすめ
-        </a>
-        <a href="{{ route('mypage.index', ['page' => 'favorite', 'keyword' => $keyword]) }}"
-        class="item-list__tab {{ request('page') === 'favorite' ? 'is-active' : '' }}">
-        マイリスト
-        </a>
+            <a href="{{ route('mypage.index', ['tab' => 'recommend','keyword' => request('keyword')]) }}"
+            class="item-list__tab {{ $page === 'recommend' ? 'item-list__tab--active' : '' }}">
+                おすすめ
+            </a>
+            <a href="{{ route('mypage.index', ['tab' => 'mylist','keyword' => request('keyword')]) }}"
+            class="item-list__tab {{ $page === 'mylist' ? 'item-list__tab--active' : '' }}">
+                マイリスト
+            </a>
     </div>
 </div>
 {{-- 商品カード一覧 --}}
@@ -42,4 +42,20 @@
         @endforeach
     </div>
 </div>
+@push('scripts')
+<script>
+document.addEventListener('DOMContentLoaded', () => {
+    const tabs = document.querySelectorAll('.item-list__tab');
+
+    tabs.forEach(tab => {
+    tab.addEventListener('click', () => {
+    tabs.forEach(t =>
+        t.classList.remove('item-list__tab--active')
+    );
+        tab.classList.add('item-list__tab--active');
+    });
+    });
+});
+</script>
+@endpush
 @endsection
