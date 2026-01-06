@@ -16,11 +16,25 @@ class ItemController extends Controller
     public function index(Request $request)
     {
         $keyword = $request->input('keyword');
+        $tab = $request->query('tab', 'recommend');
+        if ($tab === 'mylist') {
+            if (Auth::check()) {
+                $items = Auth::user()
+                ->favorites()
+                ->with('condition', 'purchase')
+                ->get();
+            } else {
+            // 未ログイン時：空のマイリスト
+            $items = collect();
+            }
+        return view('items.index', compact('items', 'keyword'));
+        }
 
-        $query = Item::with('condition');
+        // recommend（通常の商品一覧）
+        $query = Item::with('condition', 'purchase');
 
         if (Auth::check()) {
-        $query->where('user_id', '!=', Auth::id());
+            $query->where('user_id', '!=', Auth::id());
         }
 
         if (!empty($keyword)) {
@@ -35,7 +49,6 @@ class ItemController extends Controller
     public function sell() {
         $categories = Category::all();
         $conditions = Condition::all();
-
         return view('items.item-sell', compact('categories', 'conditions'));
     }
 
@@ -43,14 +56,12 @@ class ItemController extends Controller
     {
         $conditions = \App\Models\Condition::all();
         $categories = \App\Models\Category::all();
-
         return view('items.item-sell', compact('conditions', 'categories'));
     }
 
     public function store(ExhibitionRequest $request)
     {
         $validated = $request->validated();
-
         // 画像保存
         if ($request->hasFile('img_url')) {
         $path = $request->file('img_url')->store('images', 'public');
@@ -84,18 +95,14 @@ class ItemController extends Controller
             'condition',
             'purchase'
         ])->findOrFail($id);
-
         $comments = $item->comments;
-
         return view('items.item-detail', compact('item', 'comments'));
     }
 
     public function update(ItemRequest $request, Item $item)
     {
         $validated = $request->validated();
-
         $imagePath = $item->img_url;
-
         if ($request->hasFile('img_url')) {
             $imagePath = $request->file('img_url')->store('images', 'public');
         }
@@ -110,8 +117,6 @@ class ItemController extends Controller
         ]);
 
         $item->categories()->sync($validated['categories']);
-
         return redirect()->route('items.index');
     }
-
 }

@@ -30,8 +30,6 @@ class AddressController extends Controller
 
         // ユーザー情報をリフレッシュ
         Auth::user()->fresh();
-
-        return redirect()->route('purchase.index', ['item' => session('current_item_id')])
-                    ->with('success', '住所を更新しました！');
+        return redirect()->route('purchase.index', ['item' => session('current_item_id')]);
     }
 }

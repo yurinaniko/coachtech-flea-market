@@ -10,8 +10,14 @@
 {{-- カテゴリータブ --}}
 <div class="item-list__tabs-wrapper">
     <div class="item-list__tabs">
-        <button class="item-list__tab is-active">おすすめ</button>
-        <button class="item-list__tab">マイリスト</button>
+        <a href="{{ route('items.index', ['tab' => 'recommend']) }}"
+            class="item-list__tab {{ request('tab', 'recommend') === 'recommend' ? 'item-list__tab--active' : '' }}">
+            おすすめ
+        </a>
+        <a href="{{ route('items.index', ['tab' => 'mylist']) }}"
+            class="item-list__tab {{ request('tab') === 'mylist' ? 'item-list__tab--active' : '' }}">
+            マイリスト
+        </a>
     </div>
 </div>
 <div class="item-list">

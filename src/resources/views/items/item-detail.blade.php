@@ -14,7 +14,7 @@
             @if($item->purchase)
                 <span class="sold-badge">sold</span>
             @endif
-                <img src="{{ asset('storage/' . $item->img_url) }}" alt="" class=item-detail__image>
+                <img src="{{ asset('storage/' . $item->img_url) }}" alt="" class="item-detail__image">
         </div>
         <div class="item-detail__info">
             <h1 class="item-detail__name">{{ $item->name }}</h1>
@@ -25,39 +25,35 @@
             </p>
             {{-- お気に入りボタン--}}
             <div class="item-detail__actions">
-                <div class="favorite-wrapper">
+                <div class="item-detail__favorite">
                     @php
                         $isFavorite = Auth::check() && Auth::user()->favorites->contains('id', $item->id);
                     @endphp
                     @auth
                         <form action="{{ route('favorite.toggle', $item->id) }}" method="POST">
                             @csrf
-                            <button type="submit" class="favorite-btn">
+                            <button type="submit" class="item-detail__favorite-btn">
                                 <img src="{{ $isFavorite ? asset('images/pink-heart.png') : asset('images/heart.png') }}"
-                                class="favorite-icon" alt="favorite">
-                                <span class="favorite-count">{{ $item->users->count() }}</span>
+                                class="item-detail__favorite-icon" alt="favorite">
+                                <span class="item-detail__favorite-count">{{ $item->users->count() }}</span>
                             </button>
                         </form>
                     @endauth
                     @guest
-                        <button class="favorite-btn favorite-btn--guest" disabled>
-                            <img src="{{ asset('images/heart.png') }}" class="favorite-icon" alt="favorite">
-                            <span class="favorite-count">{{ $item->users->count() }}</span>
+                        <button class="item-detail__favorite-btn item-detail__favorite-btn--guest" disabled>
+                            <img src="{{ asset('images/heart.png') }}" class="item-detail__favorite-icon" alt="favorite">
+                            <span class="item-detail__favorite-count">{{ $item->users->count() }}</span>
                         </button>
                     @endguest
                 </div>
-                <div class="comment-wrapper">
-                    <img src="{{ asset('images/comment.png') }}" alt="コメント" class="comment-icon">
-                    <span class="comment-count">{{ $item->comments->count() }}</span>
+                <div class="item-detail__comment-action">
+                    <img src="{{ asset('images/comment.png') }}" alt="コメント" class="item-detail__comment-icon">
+                    <span class="item-detail__comment-count">{{ $item->comments->count() }}</span>
                 </div>
             </div>
             {{-- ★ 自分の商品なら購入ボタンは表示しない --}}
             @if ($item->user_id === Auth::id())
-                <p class="sold-message">※これはあなたが出品した商品です</p>
-            {{-- ★ 売り切れ商品の場合 --}}
-            @elseif ($item->purchase && $item->purchase->status === 'sold')
-                <p class="sold-message">※この商品は売り切れました</p>
-            {{-- ★ それ以外 → 購入できる --}}
+                <p class="item-detail__notice item-detail__notice--own">※これはあなたが出品した商品です</p>
             @else
                 <form action="{{ route('purchase.index', $item->id) }}" method="GET">
                     @csrf
@@ -157,23 +153,22 @@
                     コメントを追加する
                     </button>
                 @endguest
-            </div>{{-- .item-detail__comment-wrapper --}}
-        </div>{{-- .item-detail__info --}}
-    </div>{{-- .item-detail__container --}}
-</div>{{-- .item-detail --}}
+            </div>
+        </div>
+    </div>
+</div>
 @endsection
 @section('scripts')
 <script>
 document.addEventListener('DOMContentLoaded', () => {
-    const icon = document.querySelector('.favorite-icon');
-    const count = document.querySelector('.favorite-count');
-    if(icon) {
+    const icon = document.querySelector('.item-detail__favorite-icon');
+    const count = document.querySelector('.item-detail__favorite-count');
+
+    if (icon && count) {
         icon.addEventListener('click', () => {
-            icon.classList.add('active');
-            count.classList.add('active');
+                count.classList.add('item-detail__favorite-count--active');
             setTimeout(() => {
-                icon.classList.remove('active');
-                count.classList.remove('active');
+                count.classList.remove('item-detail__favorite-count--active');
             }, 400);
         });
     }

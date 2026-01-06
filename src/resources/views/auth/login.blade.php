@@ -13,16 +13,16 @@
         <h1 class="auth__title">ログイン</h1>
         <form action="{{ route('login') }}" method="POST" novalidate>
             @csrf
-            <div class="form-group">
-                <label class="form-label">メールアドレス</label>
-                <input type="email" class="form-input" name="email" value="{{ old('email') }}">
+            <div class="form__group">
+                <label class="form__label">メールアドレス</label>
+                <input type="email" class="form__input" name="email" value="{{ old('email') }}">
                 @error('email')
                     <p class="form__error">{{ $message }}</P>
                 @enderror
             </div>
-            <div class="form-group">
-                <label class="form-label">パスワード</label>
-                <input type="password" class="form-input" name="password">
+            <div class="form__group">
+                <label class="form__label">パスワード</label>
+                <input type="password" class="form__input" name="password">
                 @error('password')
                     <p class="form__error">{{ $message }}</P>
                 @enderror
