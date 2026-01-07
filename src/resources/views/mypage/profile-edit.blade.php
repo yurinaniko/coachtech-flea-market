@@ -13,7 +13,6 @@
     <form action="{{ route('profile.update') }}" method="POST" enctype="multipart/form-data" class="profile-form__body">
         @csrf
         @method('PUT')
-        {{-- プロフィール画像 --}}
         <div class="profile-form__image-area">
             @if(optional($profile)->img_url)
                 <img id="preview" src="{{ asset('storage/' . $profile->img_url) }}" class="profile-form__image" alt="プロフィール画像">
@@ -28,7 +27,6 @@
                 <p class="form__error">{{ $message }}</p>
             @enderror
         </div>
-        {{-- 名前 --}}
         <div class="profile-form__group">
             <label class="profile-form__label">ユーザー名</label>
             <input type="text" name="name" value="{{ old('name', $user->name) }}" class="profile-form__input">
@@ -36,7 +34,6 @@
                 <p class="form__error">{{ $message }}</p>
             @enderror
         </div>
-        {{-- 郵便番号 --}}
         <div class="profile-form__group">
             <label class="profile-form__label">郵便番号</label>
             <input type="text" name="postal_code" value="{{ old('postal_code', $profile->postal_code ?? '') }}" class="profile-form__input">
@@ -44,7 +41,6 @@
                 <p class="form__error">{{ $message }}</p>
             @enderror
         </div>
-        {{-- 住所 --}}
         <div class="profile-form__group">
             <label class="profile-form__label">住所</label>
             <input type="text" name="address" value="{{ old('address', $profile->address ?? '') }}" class="profile-form__input">
@@ -52,7 +48,6 @@
                 <p class="form__error">{{ $message }}</p>
             @enderror
         </div>
-        {{-- 建物名 --}}
         <div class="profile-form__group">
             <label class="profile-form__label">建物名</label>
             <input type="text" name="building" value="{{ old('building', $profile->building ?? '') }}" class="profile-form__input">

@@ -31,16 +31,10 @@ class PurchaseController extends Controller
         // ② 表示用はセッションから取得
         $selectedMethod = session('payment_method', '');
         session(['current_item_id' => $item->id]);
-        $placeholder = [
-            'postal_code' => 'XXX-YYYY',
-            'address'     => 'ここには住所と建物が入ります',
-            'building'    => '',
-        ];
         return view('purchase.index', [
             'item' => $item,
             'user' => $user,
             'selectedMethod' => $selectedMethod,
-            'placeholder' => $placeholder,
         ]);
     }
 

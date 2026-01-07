@@ -24,21 +24,12 @@ class AddressRequest extends FormRequest
         ];
     }
 
-    public function attributes(): array
-    {
-        return [
-            'postal_code' => '郵便番号',
-            'address' => '住所',
-            'building' => '建物名',
-        ];
-    }
-
     public function messages(): array
     {
         return [
-            'postal_code.required' => '郵便番号を入力してください。',
-            'postal_code.regex'    => '郵便番号は「000-0000」の形式で入力してください。',
-            'address.required'     => '住所を入力してください。',
+            'postal_code.required' => '郵便番号を入力してください',
+            'postal_code.regex'    => '郵便番号は「000-0000」の形式で入力してください',
+            'address.required'     => '住所を入力してください',
         ];
     }
 }
