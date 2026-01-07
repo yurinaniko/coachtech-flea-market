@@ -10,7 +10,7 @@
 }
 
 .purchase__left {
-    width: 65%;
+    width: calc(100% - 380px);
 }
 
 .purchase__product {
@@ -36,7 +36,7 @@
     gap: 8px;
 }
 
-.item__card--sold {
+.item__card-sold {
     position: absolute;
     top: 8px;
     left: 8px;
@@ -84,26 +84,27 @@
 }
 
 .purchase__select {
-    width: 35%;
+    width: 200px;
     height: 40px;
     padding: 0 10px;
     border: 1px solid #333;
     border-radius: 4px;
-    margin: 20px 60px;
+    margin-top: 12px;
+    margin-left: 100px;
 }
 
 .purchase__address {
     margin-bottom: 20px;
 }
 
-.purchase__address--label {
+.purchase__address-label {
     font-weight: 600;
     font-size: 18px;
     margin-left: 20px;
     margin-bottom: 8px;
 }
 
-.purchase__address--edit {
+.purchase__address-edit {
     display: inline-block;
     color: #0073CC;
     font-size: 14px;
@@ -129,6 +130,7 @@
 .purchase__right {
     padding-top: 20px;
     width: 300px;
+    flex-shrink: 0;
     display: flex;
     flex-direction: column;
     gap: 30px;
@@ -140,14 +142,14 @@
     background: #fff;
 }
 
-.purchase__summary--row {
+.purchase__summary-row {
     display: flex;
     justify-content: space-between;
     padding: 6px 16px;
     border-bottom: 1px solid #333;
 }
 
-.purchase__summary--row:last-child {
+.purchase__summary-row:last-child {
     border-bottom: none;
 }
 
@@ -156,16 +158,16 @@
     font-size: 16px;
 }
 
-.purchase__summary--price {
+.purchase__summary-price {
     font-size: 20px;
     margin-bottom: 16px;
 }
 
-.purchase__summary--method {
+.purchase__summary-method {
     font-size: 20px;
 }
 
-.purchase__address--header {
+.purchase__address-header {
     display: flex;
     justify-content: space-between;
     align-items: center;
@@ -177,19 +179,19 @@
     padding-bottom: 20px;
 }
 
-.purchase__address--box {
+.purchase__address-box {
     margin-left: 100px;
     line-height: 1.5;
 }
 
-.purchase__address--box p {
+.purchase__address-box p {
     margin-bottom: 4px;
     font-weight: 600;
 }
 
-.purchase__address--postal,
-.purchase__address--address,
-.purchase__address--building{
+.purchase__address-postal,
+.purchase__address-address,
+.purchase__address-building{
     margin: 0;
 }
 
@@ -213,20 +215,20 @@
     min-height: calc(100vh - 120px);
 }
 
-.purchase__success--box {
+.purchase__success-box {
     text-align: center;
 }
 
-.purchase__success--title {
+.purchase__success-title {
     font-size: 24px;
     margin-bottom: 16px;
 }
 
-.purchase__success--text {
+.purchase__success-text {
     margin-bottom: 24px;
 }
 
-.purchase__success--button {
+.purchase__success-button {
     display: inline-block;
     padding: 10px 24px;
     background-color: #000;
@@ -235,5 +237,6 @@
 }
 
 .purchase .form__error {
-    margin-left: 56px;
+    margin-top: 12px;
+    margin-left: 100px;
 }

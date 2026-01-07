@@ -18,18 +18,11 @@ class CommentRequest extends FormRequest
         ];
     }
 
-    public function attributes()
-    {
-        return [
-            'comment' => '商品コメント',
-        ];
-    }
-
     public function messages()
     {
         return [
-            'comment.required' => '商品コメントを入力してください。',
-            'comment.max' => '商品コメントは255文字以内で入力してください。',
+            'comment.required' => '商品コメントを入力してください',
+            'comment.max' => '商品コメントは255文字以内で入力してください',
         ];
     }
 }

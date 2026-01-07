@@ -19,14 +19,6 @@ class LoginRequest extends FormRequest
         ];
     }
 
-    public function attributes(): array
-    {
-        return [
-            'email' => 'メールアドレス',
-            'password' => 'パスワード',
-        ];
-    }
-
     public function messages(): array
     {
         return [

@@ -65,30 +65,34 @@ Route::middleware(['auth', 'verified'])->group(function () {
         ->name('mypage.profile');
     // 住所変更
     Route::get('mypage/address/edit', [AddressController::class, 'edit'])
-    ->name('mypage.address.edit');
+        ->name('mypage.address.edit');
     Route::put('mypage/address/update', [AddressController::class, 'update'])
-    ->name('mypage.address.update');
+        ->name('mypage.address.update');
     // 出品ページ
     Route::get('/items/sell', [ItemController::class, 'sell'])
-    ->name('items.item-sell');
+        ->name('items.item-sell');
     // 出品処理
     Route::post('/items/store', [ItemController::class, 'store'])
-    ->name('items.store');
+        ->name('items.store');
     // お気に入り
     Route::post('/items/{item}/favorite', [FavoriteController::class, 'toggle'])
-    ->name('favorite.toggle');
+        ->name('favorite.toggle');
     // コメント
     Route::post('/items/{item}/comment', [CommentController::class, 'store'])
-    ->name('comment.store');
+        ->name('comment.store');
     // 購入
     Route::get('/purchase/checkout', [PurchaseController::class, 'checkout'])
         ->name('purchase.checkout');
-    Route::get('/purchase/{item}', [PurchaseController::class, 'index'])
-    ->name('purchase.index');
-    Route::post('/purchase/{item}', [PurchaseController::class, 'store'])
-    ->name('purchase.store');
     Route::get('/purchase/result', [PurchaseController::class, 'result'])
-    ->name('purchase.result');
+        ->middleware(['auth', 'verified'])
+        ->name('purchase.result');
+
+    Route::get('/purchase/{item}', [PurchaseController::class, 'index'])
+        ->whereNumber('item')
+        ->name('purchase.index');
+    Route::post('/purchase/{item}', [PurchaseController::class, 'store'])
+        ->whereNumber('item')
+        ->name('purchase.store');
 });
 
 // 商品一覧
@@ -96,6 +100,7 @@ Route::get('/items', [ItemController::class, 'index'])->name('items.index');
 
 // 商品詳細（未ログイン可）
 Route::get('/items/{id}', [ItemController::class, 'show'])
+    ->whereNumber('item')
     ->name('items.show');
 
 Route::post('/stripe/webhook', [StripeWebhookController::class, 'handle']);

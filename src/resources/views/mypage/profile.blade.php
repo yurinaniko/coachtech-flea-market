@@ -10,7 +10,6 @@
 @endsection
 
 @section('content')
-{{-- ① プロフィール情報 --}}
 <div class="user-info-wrapper">
     <div class="user-info">
         <div class="user-info__center">
@@ -27,7 +26,6 @@
         <a href="{{ route('profile.edit') }}" class="mypage__edit-btn">プロフィールを編集</a>
     </div>
 </div>
-{{-- ② タブ --}}
 <div class="mypage__tabs-wrapper">
     <ul class="mypage__tabs">
         <li class="mypage__tab {{ $page === 'sell' ? 'is-active' : '' }}">
@@ -38,7 +36,6 @@
         </li>
     </ul>
 </div>
-{{-- 商品カード一覧 --}}
 <div class="item-list">
     <div class="item-list__grid">
         @foreach ($items as $item)
