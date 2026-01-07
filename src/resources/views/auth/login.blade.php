@@ -8,7 +8,7 @@
 @endsection
 
 @section('content')
-<div class="auth-wrapper">
+<div class="auth__wrapper">
     <div class="auth auth--login">
         <h1 class="auth__title">ログイン</h1>
         <form action="{{ route('login') }}" method="POST" novalidate>

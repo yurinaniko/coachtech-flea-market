@@ -11,7 +11,7 @@
     margin-top: 30px;
 }
 
-.auth-wrapper {
+.auth__wrapper {
     display: flex;
     justify-content: center;
     align-items: center;
@@ -52,7 +52,7 @@
     margin-top: 30px;
 }
 
-.auth-wrapper--verify {
+.auth__wrapper--verify {
     min-height: calc(100vh - 80px);
 }
 

@@ -7,7 +7,7 @@
 @endsection
 
 @section('content')
-<div class="auth-wrapper auth-wrapper--verify">
+<div class="auth__wrapper auth__wrapper--verify">
     <div class="auth auth--verify">
         <p class="auth__text">ご登録していただいたメールアドレスに認証メールを送付しました。</p>
         <p class="auth__text">メール認証を完了してください。</p>

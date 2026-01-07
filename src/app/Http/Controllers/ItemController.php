@@ -48,8 +48,8 @@ class ItemController extends Controller
 
     public function create()
     {
-        $conditions = \App\Models\Condition::all();
-        $categories = \App\Models\Category::all();
+        $conditions = Condition::all();
+        $categories = Category::all();
         return view('items.item-sell', compact('conditions', 'categories'));
     }
 
@@ -61,7 +61,6 @@ class ItemController extends Controller
         $path = $request->file('img_url')->store('images', 'public');
         $validated['img_url'] = $path;
         }
-
        // 商品作成
         $item = Item::create([
             'user_id' => auth()->id(),
@@ -72,7 +71,6 @@ class ItemController extends Controller
             'price' => $validated['price'],
             'img_url' => $validated['img_url'],
         ]);
-
         // 中間テーブル（カテゴリ）
         $item->categories()->sync($validated['categories']);
         return redirect()->route('mypage.index');

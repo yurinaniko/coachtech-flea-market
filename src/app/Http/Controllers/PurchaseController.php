@@ -7,7 +7,6 @@ use Illuminate\Support\Facades\Auth;
 use App\Models\Purchase;
 use App\Models\Item;
 use App\Http\Requests\PurchaseRequest;
-use Stripe\Stripe;
 use Stripe\Checkout\Session as StripeSession;
 
 class PurchaseController extends Controller
