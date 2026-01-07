@@ -20,7 +20,6 @@
                 <p class="form__error">{{ $message }}</p>
             @enderror
         </div>
-
         <div class="form__group">
             <label class="form__label">住所</label>
             <input type="text" name="address" class="form__input" value="{{ old('address', $user->profile->address ?? '') }}">
@@ -28,7 +27,6 @@
                 <p class="form__error">{{ $message }}</p>
             @enderror
         </div>
-
         <div class="form__group">
             <label class="form__label">建築名</label>
             <input type="text" name="building" class="form__input" value="{{ old('building', $user->profile->building ?? '') }}">
@@ -36,9 +34,7 @@
                 <p class="form__error">{{ $message }}</p>
             @enderror
         </div>
-
         <button class="address-edit__button">更新する</button>
     </form>
-
 </div>
 @endsection

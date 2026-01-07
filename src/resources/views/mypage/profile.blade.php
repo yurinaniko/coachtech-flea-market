@@ -10,7 +10,7 @@
 @endsection
 
 @section('content')
-<div class="user-info-wrapper">
+<div class="user-info__wrapper">
     <div class="user-info">
         <div class="user-info__center">
             @php

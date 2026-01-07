@@ -14,7 +14,7 @@
             @if($item->purchase)
                 <span class="sold-badge">sold</span>
             @endif
-                <img src="{{ asset('storage/' . $item->img_url) }}" alt="" class="item-detail__image">
+            <img src="{{ asset('storage/' . $item->img_url) }}" alt="" class="item-detail__image">
         </div>
         <div class="item-detail__info">
             <h1 class="item-detail__name">{{ $item->name }}</h1>
@@ -164,7 +164,6 @@
 document.addEventListener('DOMContentLoaded', () => {
     const icon = document.querySelector('.item-detail__favorite-icon');
     const count = document.querySelector('.item-detail__favorite-count');
-
     if (icon && count) {
         icon.addEventListener('click', () => {
                 count.classList.add('item-detail__favorite-count--active');

@@ -7,6 +7,7 @@ use App\Models\Purchase;
 use Stripe\Webhook;
 use Stripe\Exception\SignatureVerificationException;
 use UnexpectedValueException;
+use App\Models\Item;
 
 class StripeWebhookController extends Controller
 {

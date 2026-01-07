@@ -97,11 +97,9 @@
 const imageInput = document.getElementById('image');
 const previewBox = document.getElementById('imagePreview');
 const uploadBox = document.querySelector('.sell__image-upload');
-
 imageInput.addEventListener('change', function (e) {
     const file = e.target.files[0];
     if (!file) return;
-
     const reader = new FileReader();
     reader.onload = function(event) {
         previewBox.style.backgroundImage = `url(${event.target.result})`;
@@ -110,7 +108,6 @@ imageInput.addEventListener('change', function (e) {
     };
     reader.readAsDataURL(file);
 });
-
 window.addEventListener('load', () => {
     if (!imageInput.value) {
         previewBox.style.backgroundImage = 'none';
