@@ -3,7 +3,6 @@
 namespace Tests\Feature;
 
 use Illuminate\Foundation\Testing\RefreshDatabase;
-use Illuminate\Foundation\Testing\WithFaker;
 use Tests\TestCase;
 use App\Models\User;
 use App\Models\Item;
@@ -14,6 +13,7 @@ use Illuminate\Support\Facades\Storage;
 class MypageTest extends TestCase
 {
     use RefreshDatabase;
+
     public function test_guest_cannot_access_mypage()
     {
         $response = $this->get('/mypage');
@@ -39,12 +39,11 @@ class MypageTest extends TestCase
         $response->assertViewHas('page', 'recommend');
     }
 
-    public function test_can_access_favorite_page()
+    public function test_can_access_mylist_page()
     {
         $user = User::factory()->create();
 
-        $response = $this->actingAs($user)->get('/mypage?page=favorite');
-
+        $response = $this->actingAs($user)->get('/mypage?tab=mylist');
         $response->assertStatus(200);
     }
 
@@ -61,13 +60,11 @@ class MypageTest extends TestCase
     {
         $user = User::factory()->create();
 
-        // 検索にヒットする商品
         $matchedItem = Item::factory()->create([
             'name' => '腕時計 ロレックス',
-            'user_id' => User::factory()->create()->id, // 他人の商品
+            'user_id' => User::factory()->create()->id,
         ]);
 
-        // 検索にヒットしない商品
         $unmatchedItem = Item::factory()->create([
             'name' => 'スニーカー ナイキ',
             'user_id' => User::factory()->create()->id,
@@ -79,10 +76,8 @@ class MypageTest extends TestCase
 
         $response->assertStatus(200);
 
-        // ヒットする商品は表示される
         $response->assertSee('腕時計 ロレックス');
 
-        // ヒットしない商品は表示されない
         $response->assertDontSee('スニーカー ナイキ');
     }
 
@@ -90,22 +85,18 @@ class MypageTest extends TestCase
     {
         $user = User::factory()->create();
 
-        // お気に入り + keyword一致
         $favoriteMatched = Item::factory()->create([
             'name' => '腕時計 ロレックス',
         ]);
 
-        // お気に入り + keyword不一致
         $favoriteUnmatched = Item::factory()->create([
             'name' => 'スニーカー ナイキ',
         ]);
 
-        // keyword一致だが「お気に入りじゃない」
         $notFavoriteMatched = Item::factory()->create([
             'name' => '腕時計 セイコー',
         ]);
 
-        // お気に入り登録（Aユーザー）
         $user->favorites()->attach([
             $favoriteMatched->id,
             $favoriteUnmatched->id,
@@ -113,14 +104,12 @@ class MypageTest extends TestCase
 
         $response = $this
             ->actingAs($user)
-            ->get('/mypage?page=favorite&keyword=腕');
+            ->get('/mypage?tab=mylist&keyword=腕');
 
         $response->assertStatus(200);
 
-        // 表示される
         $response->assertSee('腕時計 ロレックス');
 
-        // 表示されない
         $response->assertDontSee('スニーカー ナイキ');
         $response->assertDontSee('腕時計 セイコー');
     }
@@ -130,13 +119,11 @@ class MypageTest extends TestCase
         $user = User::factory()->create();
         $otherUser = User::factory()->create();
 
-        // 自分の出品商品
         $myItem = Item::factory()->create([
             'user_id' => $user->id,
             'name' => '自分の商品',
         ]);
 
-        // 他人の商品
         $otherItem = Item::factory()->create([
             'user_id' => $otherUser->id,
             'name' => '他人の商品',
@@ -166,10 +153,9 @@ class MypageTest extends TestCase
             'price' => 20000,
         ]);
 
-        // 購入済みとして紐付け（price 必須）
         $user->purchases()->attach($item1->id, [
             'price' => $item1->price,
-            'payment_method' => 'card', // or 'konbini'
+            'payment_method' => 'card',
             'sending_postcode' => '123-4567',
             'sending_address' => '東京都テスト区1-2-3',
         ]);
@@ -254,7 +240,7 @@ class MypageTest extends TestCase
         ]);
 
         $response = $this->actingAs($user)->put(route('profile.update'), [
-            'name' => '更新ユーザー', // ← users.name 用、profiles では見ない
+            'name' => '更新ユーザー',
             'postal_code' => '123-4567',
             'address' => '東京都',
         ]);

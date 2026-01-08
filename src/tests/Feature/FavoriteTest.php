@@ -35,8 +35,6 @@ class FavoriteTest extends TestCase
         $item = Item::factory()->create();
         $this->actingAs($user)
             ->post(route('favorite.toggle', $item));
-
-        // いいね解除
         $this->actingAs($user)
             ->post(route('favorite.toggle', $item));
 

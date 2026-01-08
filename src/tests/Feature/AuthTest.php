@@ -9,7 +9,6 @@ use Illuminate\Foundation\Testing\RefreshDatabase;
 class AuthTest extends TestCase
 {
     use RefreshDatabase;
-
     /** @test */
     public function guest_cannot_access_mypage()
     {
@@ -17,7 +16,6 @@ class AuthTest extends TestCase
 
         $response->assertRedirect('/login');
     }
-
     /** @test */
     public function logged_in_user_can_access_mypage()
     {
