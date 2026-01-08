@@ -39,7 +39,7 @@ DB_PASSWORD=root
 ```
 ### ②　 アプリケーション設定
 ```env
-APP_NAME=Laravel
+APP_NAME=coachtechフリマ
 APP_ENV=local
 APP_DEBUG=true
 APP_URL=http://localhost
@@ -53,7 +53,7 @@ MAIL_USERNAME=null
 MAIL_PASSWORD=null
 MAIL_ENCRYPTION=null
 MAIL_FROM_ADDRESS=test@example.com
-MAIL_FROM_NAME="coachtech-flea-market"
+MAIL_FROM_NAME="coachtechフリマ"
 ```
 ### ④ Stripe（テスト環境）
 ```env
