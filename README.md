@@ -154,6 +154,38 @@ MailHog： http://localhost:8025
 メール認証・通知メールは MailHog 上で確認できます。
 メール認証誘導画面の認証はこちらからのボタンを押すとメール認証画面（MailHog画面）に遷移されます。
 
+## ER 図
+
+![ER図](docs/er.png)
+
+## テーブル仕様
+本アプリのテーブル設計は以下のドキュメントにまとめています。
+
+- 公開用テーブル仕様書（Googleスプレッドシート）
+  https://docs.google.com/spreadsheets/d/1WawV5RIZnWRc3QdGLYek37lFXsTvPbVhaPI3sUQbhQY/edit?usp=sharing
+
+補足として、各テーブルの役割概要を以下にまとめています。（リポジトリ内）
+- [テーブル仕様概要を見る](docs/table-spec.md)
+
+※ 詳細なカラム定義・制約は Google スプレッドシートを正とします。
+### ユニークキー設計について
+
+Usersテーブルでは email にユニーク制約を設定しています。
+
+一方で、FavoritesテーブルやCategory_Itemテーブルなどの中間テーブルでは、
+同一ユーザーが同一商品を重複して登録できないよう、
+`user_id` と `item_id` の複合ユニークキーを設定しています。
+
+これにより、データの整合性を保ちつつ、
+アプリケーション側の重複制御をシンプルにしています。
+
+## ルート・コントローラー・ビュー構成
+画面ごとのルーティング、コントローラー、アクション対応、ビューは
+以下のドキュメントにまとめています。
+
+- 公開用ルート・コントローラー・ビュー一覧
+  https://docs.google.com/spreadsheets/d/1T3pl04Rojh7BDxyX_WiL4z-hYS4srfVMADkOSNfAd9k/edit?usp=sharing
+
 ## 備考
 ※（M1 / M2 Mac）
 本プロジェクトでは、Apple Silicon（M1 / M2 Mac）環境でも
@@ -240,30 +272,6 @@ FormRequest を使用してバリデーションを実装しています。
 - コメント投稿
 - 商品購入（Stripe 決済）
 - プロフィール（出品商品 / 購入商品）
-
-## ER 図
-
-![ER図](docs/er.png)
-
-## テーブル仕様
-本アプリケーションのテーブル設計は、以下の仕様書に基づいています。
-- テーブル仕様書（Googleスプレッドシート）
-  https://docs.google.com/spreadsheets/d/xxxxxxxx
-
-補足として、各テーブルの役割概要を以下にまとめています。
-- [テーブル仕様概要を見る](docs/table-spec.md)
-
-※ 詳細なカラム定義・制約は Google スプレッドシートを正とします。
-### ユニークキー設計について
-
-Usersテーブルでは email にユニーク制約を設定しています。
-
-一方で、FavoritesテーブルやCategory_Itemテーブルなどの中間テーブルでは、
-同一ユーザーが同一商品を重複して登録できないよう、
-`user_id` と `item_id` の複合ユニークキーを設定しています。
-
-これにより、データの整合性を保ちつつ、
-アプリケーション側の重複制御をシンプルにしています。
 
 ## 実現した応用機能
 - メール認証(MailHog)
