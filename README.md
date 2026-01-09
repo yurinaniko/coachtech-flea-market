@@ -243,9 +243,9 @@ FormRequest を使用してバリデーションを実装しています。
 
 ## ER 図・テーブル仕様
 ```
-ER 図：docs/er.png
+![ER図](docs/er.png)
 
-テーブル仕様書：docs/table-spec.md
+- docs/table-spec.md
 ```
 ※ 詳細なカラム定義・制約はコーチテック提供の要件シートに準拠しています。
 ### ユニークキー設計について
