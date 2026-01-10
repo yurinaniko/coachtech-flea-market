@@ -23,12 +23,10 @@ class ItemController extends Controller
                 ->with('condition', 'purchase')
                 ->get();
             } else {
-            // 未ログイン時：空のマイリスト
             $items = collect();
             }
         return view('items.index', compact('items', 'keyword'));
         }
-        // recommend（通常の商品一覧）
         $query = Item::with('condition', 'purchase');
         if (Auth::check()) {
             $query->where('user_id', '!=', Auth::id());
@@ -81,12 +79,16 @@ class ItemController extends Controller
         $item = Item::with([
             'categories',
             'comments.user',
-            'users',
             'condition',
-            'purchase'
-        ])->findOrFail($id);
-        $comments = $item->comments;
-        return view('items.item-detail', compact('item', 'comments'));
+            'purchase',
+        ])
+            ->withCount(['favorites', 'comments'])
+            ->findOrFail($id);
+
+        return view('items.item-detail', [
+            'item' => $item,
+            'comments' => $item->comments,
+        ]);
     }
 
     public function update(ItemRequest $request, Item $item)

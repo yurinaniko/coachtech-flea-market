@@ -26,9 +26,14 @@ class Item extends Model
         : 'images/' . $this->img_url;
     }
 
-    public function users()
+    public function favorites()
     {
-        return $this->belongsToMany(User::class, 'favorites', 'item_id', 'user_id')->withTimestamps();
+        return $this->belongsToMany(
+            User::class,
+            'favorites',
+            'item_id',
+            'user_id'
+        )->withTimestamps();
     }
 
     public function comments()

@@ -180,6 +180,7 @@
 .item-detail__favorite-count,
 .item-detail__comment-count {
     font-size: 16px;
+    line-height: 1.2;
     color: #333;
 }
 

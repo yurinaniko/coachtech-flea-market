@@ -14,7 +14,7 @@
             @if($item->purchase)
                 <span class="sold-badge">sold</span>
             @endif
-            <img src="{{ asset('storage/' . $item->img_url) }}" alt="" class="item-detail__image">
+            <img src="{{ asset('storage/'.$item->img_url) }}" alt="{{ $item->name }}" class="item-detail__image">
         </div>
         <div class="item-detail__info">
             <h1 class="item-detail__name">{{ $item->name }}</h1>
@@ -36,20 +36,24 @@
                             <button type="submit" class="item-detail__favorite-btn"
                             @if($isOwnItem) disabled @endif>
                             <img src="{{ $isFavorite ? asset('images/pink-heart.png') : asset('images/heart.png') }}" class="item-detail__favorite-icon" alt="favorite">
-                            <span class="item-detail__favorite-count">{{ $item->users->count() }}</span>
+                            <span class="item-detail__favorite-count">
+                                {{ $item->favorites_count ?? 0 }}
+                            </span>
                             </button>
                         </form>
                     @endauth
                     @guest
                         <button class="item-detail__favorite-btn item-detail__favorite-btn--guest" disabled>
                             <img src="{{ asset('images/heart.png') }}" class="item-detail__favorite-icon" alt="favorite">
-                            <span class="item-detail__favorite-count">{{ $item->users->count() }}</span>
+                            <span class="item-detail__favorite-count">
+                                {{ $item->favorites_count ?? 0 }}
+                            </span>
                         </button>
                     @endguest
                 </div>
                 <div class="item-detail__comment-action">
                     <img src="{{ asset('images/comment.png') }}" alt="コメント" class="item-detail__comment-icon">
-                    <span class="item-detail__comment-count">{{ $item->comments->count() }}</span>
+                    <span class="item-detail__comment-count">{{ $item->comments_count ?? 0 }}</span>
                 </div>
             </div>
             {{-- ★ 自分の商品なら購入ボタンは表示しない --}}
@@ -68,7 +72,7 @@
                 <p class="item-detail__category">
                     <strong>カテゴリ</strong>
                     <span class="item-detail__category-tags">
-                        @foreach ($item->categories as $category)
+                        @foreach ($item->categories ?? [] as $category)
                             <span class="category-tag">{{ $category->name }}</span>
                         @endforeach
                     </span>
