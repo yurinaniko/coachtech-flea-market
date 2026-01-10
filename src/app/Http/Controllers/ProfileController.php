@@ -18,21 +18,33 @@ class ProfileController extends Controller
     {
         $validated = $request->validated();
         $user = auth()->user();
+        if (isset($validated['name'])) {
+            $user->update([
+                'name' => $validated['name'],
+            ]);
+        }
         if ($request->hasFile('image')) {
             $imageName = time() . '.' . $request->image->extension();
             $request->image->storeAs('public/profile', $imageName);
             $validated['img_url'] = 'profile/' . $imageName;
         }
-        // --- profiles テーブル保存 ---
-        $user->profile()->updateOrCreate(
-            ['user_id' => $user->id],
-            [
-                'img_url' => $validated['img_url'] ?? optional($user->profile)->img_url,
+        $profile = $user->profile;
+
+        if ($profile) {
+            $profile->update([
+                'img_url' => $validated['img_url'] ?? $profile->img_url,
                 'postal_code' => $validated['postal_code'],
-                'address'     => $validated['address'],
+                'address' => $validated['address'],
                 'building' => $validated['building'] ?? null,
-            ]
-        );
+            ]);
+        } else {
+            $user->profile()->create([
+            'img_url' => $validated['img_url'] ?? null,
+            'postal_code' => $validated['postal_code'],
+            'address' => $validated['address'],
+            'building' => $validated['building'] ?? null,
+            ]);
+        }
         return redirect()->route('mypage.index');
     }
 
@@ -57,6 +69,12 @@ class ProfileController extends Controller
         $validated = $request->validated();
         $user = auth()->user();
         $profile = $user->profile;
+
+        if (isset($validated['name'])) {
+            $user->update([
+                'name' => $validated['name'],
+            ]);
+        }
         // --- 画像が新しくアップロードされた場合 ---
         if ($request->hasFile('image')) {
             $imageName = time() . '.' . $request->image->extension();

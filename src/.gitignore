@@ -17,5 +17,9 @@ docker/mysql/data/
 /docker/mysql/
 docker/mysql/logs/
 docker/mysql/conf/
-/storage/app/public
+/storage/app/public/*
+!/storage/app/public/images/
+!/storage/app/public/images/*.jpg
+!/storage/app/public/images/*.jpeg
+!/storage/app/public/images/*.png
 /public/storage

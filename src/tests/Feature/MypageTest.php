@@ -23,18 +23,14 @@ class MypageTest extends TestCase
     public function test_logged_in_user_can_access_mypage()
     {
         $user = User::factory()->create();
-
         $response = $this->actingAs($user)->get('/mypage');
-
         $response->assertStatus(200);
     }
 
     public function test_default_page_is_recommend()
     {
         $user = User::factory()->create();
-
         $response = $this->actingAs($user)->get('/mypage');
-
         $response->assertStatus(200);
         $response->assertViewHas('page', 'recommend');
     }
@@ -42,74 +38,113 @@ class MypageTest extends TestCase
     public function test_can_access_mylist_page()
     {
         $user = User::factory()->create();
-
         $response = $this->actingAs($user)->get('/mypage?tab=mylist');
         $response->assertStatus(200);
+    }
+
+    /** @test */
+    public function mylist_displays_only_favorited_items()
+    {
+        $user = User::factory()->create();
+        $favoriteItem = Item::factory()->create(['name' => 'いいね商品']);
+        $notFavoriteItem = Item::factory()->create(['name' => '未いいね商品']);
+        $user->favorites()->attach($favoriteItem->id);
+        $response = $this->actingAs($user)
+            ->get('/mypage?tab=mylist');
+        $response->assertSee('いいね商品');
+        $response->assertDontSee('未いいね商品');
+    }
+
+    /** @test */
+    public function mylist_purchased_items_are_marked_as_sold()
+    {
+        $user = User::factory()->create();
+        $item = Item::factory()->create(['name' => '購入済み商品']);
+        $user->favorites()->attach($item->id);
+        $user->purchases()->attach($item->id, [
+            'price' => $item->price,
+            'payment_method' => 'card',
+            'sending_postcode' => '123-4567',
+            'sending_address' => '東京都',
+        ]);
+        $response = $this->actingAs($user)
+            ->get('/mypage?tab=mylist');
+        $response->assertSee('購入済み商品');
+        $response->assertSee('sold');
+    }
+
+    /** @test */
+    public function guest_cannot_access_mylist()
+    {
+        $response = $this->get('/mypage?tab=mylist');
+        $response->assertRedirect('/login');
     }
 
     public function test_can_search_items_by_keyword()
     {
         $user = User::factory()->create();
-
         $response = $this->actingAs($user)->get('/mypage?keyword=腕');
-
         $response->assertStatus(200);
     }
 
     public function test_keyword_search_displays_matching_items_only()
     {
         $user = User::factory()->create();
-
         $matchedItem = Item::factory()->create([
             'name' => '腕時計 ロレックス',
             'user_id' => User::factory()->create()->id,
         ]);
-
         $unmatchedItem = Item::factory()->create([
             'name' => 'スニーカー ナイキ',
             'user_id' => User::factory()->create()->id,
         ]);
-
         $response = $this
             ->actingAs($user)
             ->get('/mypage?keyword=腕');
-
         $response->assertStatus(200);
-
         $response->assertSee('腕時計 ロレックス');
-
         $response->assertDontSee('スニーカー ナイキ');
+    }
+
+    /** @test */
+    public function mypage_search_keyword_is_kept_when_switching_to_mylist()
+    {
+        $user = User::factory()->create();
+        $matchedItem = Item::factory()->create(['name' => 'テスト商品']);
+        $unmatchedItem = Item::factory()->create(['name' => '別の商品']);
+        $user->favorites()->attach($matchedItem->id);
+        $user->favorites()->attach($unmatchedItem->id);
+        $response = $this->actingAs($user)->get(
+            route('mypage.index', [
+                'tab' => 'mylist',
+                'keyword' => 'テスト',
+            ])
+        );
+        $response->assertSee('テスト商品');
+        $response->assertDontSee('別の商品');
     }
 
     public function test_favorite_keyword_search_filters_items_correctly()
     {
         $user = User::factory()->create();
-
         $favoriteMatched = Item::factory()->create([
             'name' => '腕時計 ロレックス',
         ]);
-
         $favoriteUnmatched = Item::factory()->create([
             'name' => 'スニーカー ナイキ',
         ]);
-
         $notFavoriteMatched = Item::factory()->create([
             'name' => '腕時計 セイコー',
         ]);
-
         $user->favorites()->attach([
             $favoriteMatched->id,
             $favoriteUnmatched->id,
         ]);
-
         $response = $this
             ->actingAs($user)
             ->get('/mypage?tab=mylist&keyword=腕');
-
         $response->assertStatus(200);
-
         $response->assertSee('腕時計 ロレックス');
-
         $response->assertDontSee('スニーカー ナイキ');
         $response->assertDontSee('腕時計 セイコー');
     }
@@ -118,23 +153,18 @@ class MypageTest extends TestCase
     {
         $user = User::factory()->create();
         $otherUser = User::factory()->create();
-
         $myItem = Item::factory()->create([
             'user_id' => $user->id,
             'name' => '自分の商品',
         ]);
-
         $otherItem = Item::factory()->create([
             'user_id' => $otherUser->id,
             'name' => '他人の商品',
         ]);
-
         $response = $this
             ->actingAs($user)
             ->get('/mypage/profile?page=sell');
-
         $response->assertStatus(200);
-
         $response->assertSee('自分の商品');
         $response->assertDontSee('他人の商品');
     }
@@ -142,28 +172,23 @@ class MypageTest extends TestCase
     public function test_profile_buy_shows_only_purchased_items()
     {
         $user = User::factory()->create();
-
         $item1 = Item::factory()->create([
             'name' => '購入した商品',
             'price' => 10000,
         ]);
-
         $item2 = Item::factory()->create([
             'name' => '購入していない商品',
             'price' => 20000,
         ]);
-
         $user->purchases()->attach($item1->id, [
             'price' => $item1->price,
             'payment_method' => 'card',
             'sending_postcode' => '123-4567',
             'sending_address' => '東京都テスト区1-2-3',
         ]);
-
         $response = $this
             ->actingAs($user)
             ->get('/mypage/profile?page=buy');
-
         $response->assertStatus(200);
         $response->assertSee('購入した商品');
         $response->assertDontSee('購入していない商品');
@@ -173,13 +198,11 @@ class MypageTest extends TestCase
     public function name_cannot_exceed_20_characters()
     {
         $user = User::factory()->create();
-
         $response = $this->actingAs($user)->post(route('profile.store'), [
             'name' => str_repeat('あ', 21),
             'postal_code' => '123-4567',
             'address' => '東京都',
         ]);
-
         $response->assertSessionHasErrors('name');
     }
 
@@ -187,13 +210,11 @@ class MypageTest extends TestCase
     public function postal_code_is_required()
     {
         $user = User::factory()->create();
-
         $response = $this->actingAs($user)->post(route('profile.store'), [
             'name' => 'テスト',
             'postal_code' => '',
             'address' => '東京都',
         ]);
-
         $response->assertSessionHasErrors('postal_code');
     }
 
@@ -201,13 +222,11 @@ class MypageTest extends TestCase
     public function postal_code_with_invalid_characters_is_rejected()
     {
         $user = User::factory()->create();
-
         $response = $this->actingAs($user)->post(route('profile.store'), [
             'name' => 'テスト',
             'postal_code' => '12a-4567',
             'address' => '東京都',
         ]);
-
         $response->assertSessionHasErrors('postal_code');
     }
 
@@ -216,14 +235,12 @@ class MypageTest extends TestCase
     {
         Storage::fake('public');
         $user = User::factory()->create();
-
         $response = $this->actingAs($user)->post(route('profile.store'), [
             'name' => 'テスト',
             'postal_code' => '123-4567',
             'address' => '東京都',
             'image' => UploadedFile::fake()->create('test.pdf', 100),
         ]);
-
         $response->assertSessionHasErrors('image');
     }
 
@@ -231,28 +248,91 @@ class MypageTest extends TestCase
     public function profile_can_be_updated_without_image()
     {
         $user = User::factory()->create();
-
         $user->profile()->create([
             'postal_code' => '123-4567',
             'address' => '初期住所',
             'building' => null,
             'img_url' => null,
         ]);
-
         $response = $this->actingAs($user)->put(route('profile.update'), [
             'name' => '更新ユーザー',
             'postal_code' => '123-4567',
             'address' => '東京都',
         ]);
-
         $response->assertRedirect(
             route('mypage.profile', ['page' => 'sell'])
         );
-
         $this->assertDatabaseHas('profiles', [
             'user_id' => $user->id,
             'postal_code' => '123-4567',
             'address' => '東京都',
         ]);
+    }
+
+    /** @test */
+    public function user_can_update_profile_information()
+    {
+        Storage::fake('public');
+        $user = User::factory()->create();
+        $user->profile()->create([
+            'postal_code' => '111-1111',
+            'address' => '旧住所',
+        ]);
+        $response = $this->actingAs($user)
+            ->put(route('profile.update'), [
+                'postal_code' => '222-2222',
+                'address' => '新住所',
+                'image' => UploadedFile::fake()->image('profile.png'),
+            ]);
+        $response->assertRedirect();
+        $this->assertDatabaseHas('profiles', [
+            'user_id' => $user->id,
+            'postal_code' => '222-2222',
+            'address' => '新住所',
+        ]);
+    }
+
+    /** @test */
+    public function profile_sell_page_shows_only_selling_items()
+    {
+        $user = User::factory()->create();
+        Item::factory()->create([
+            'user_id' => $user->id,
+            'name' => '出品商品',
+        ]);
+        $buyItem = Item::factory()->create(['name' => '購入商品']);
+        $user->purchases()->attach($buyItem->id, [
+            'price' => $buyItem->price,
+            'payment_method' => 'card',
+            'sending_postcode' => '123-4567',
+            'sending_address' => '東京都',
+        ]);
+        $response = $this->actingAs($user)
+            ->get('/mypage/profile?page=sell');
+        $response->assertSee('出品商品');
+        $response->assertDontSee('購入商品');
+    }
+
+    /** @test */
+    public function profile_buy_page_shows_only_purchased_items()
+    {
+        $user = User::factory()->create();
+        $sellItem = Item::factory()->create([
+            'user_id' => $user->id,
+            'name' => '出品商品',
+        ]);
+        $buyItem = Item::factory()->create([
+            'name' => '購入商品',
+        ]);
+        $user->purchases()->attach($buyItem->id, [
+            'price' => $buyItem->price,
+            'payment_method' => 'card',
+            'sending_postcode' => '123-4567',
+            'sending_address' => '東京都',
+        ]);
+        $response = $this->actingAs($user)
+            ->get('/mypage/profile?page=buy');
+        $response->assertSee('購入商品');
+        $response->assertDontSee('出品商品');
     }
 }
