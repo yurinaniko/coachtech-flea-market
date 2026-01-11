@@ -70,10 +70,12 @@ php artisan migrate:fresh --seed
 ```
 ## 8 画像表示設定
 本アプリでは、商品画像を以下のルールで管理しています。
+※ Seeder による初期データ投入後、画像を正しく表示するために
+以下の設定を行っています。
 
 - Seederで使用するダミー画像
   → storage/app/public/dummy/ に配置
-  → ダミー画像は GitHub に含めています（初期表示確認用）
+  → GitHub には含めていません
 
 - 実際にユーザーがアップロードした画像
   → storage/app/public/images/ に保存

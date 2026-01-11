@@ -29,6 +29,11 @@ class Item extends Model
         )->withTimestamps();
     }
 
+    public function getFullImagePathAttribute()
+    {
+        return 'storage/' . $this->img_url;
+    }
+
     public function comments()
     {
         return $this->hasMany(Comment::class);
