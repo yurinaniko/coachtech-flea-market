@@ -67,7 +67,7 @@ function previewImage(event) {
         const preview = document.getElementById('preview');
         if (preview.tagName === 'DIV') {
             preview.outerHTML =
-                `<img id="preview" class="profile-image" src="${e.target.result}">`;
+                `<img id="preview" class="profile-form__image" src="${e.target.result}">`
         } else {
             preview.src = e.target.result;
         }

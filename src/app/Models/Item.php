@@ -19,13 +19,6 @@ class Item extends Model
     'img_url',
     ];
 
-    public function getFullImagePathAttribute()
-    {
-        return str_contains($this->img_url, 'images/')
-        ? $this->img_url
-        : 'images/' . $this->img_url;
-    }
-
     public function favorites()
     {
         return $this->belongsToMany(

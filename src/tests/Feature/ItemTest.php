@@ -82,10 +82,10 @@ class ItemTest extends TestCase
         $item = Item::factory()->create([
             'name' => 'テスト商品',
             'brand' => 'テストブランド',
-            'price' => 12,345,
+            'price' => 12345,
             'description' => 'テスト説明文',
             'condition_id' => $condition->id,
-            'img_url' => 'images/test.jpg',
+            'img_url' => 'dummy/test.jpg',
         ]);
         $item->categories()->attach($categories->pluck('id'));
         $user->favorites()->attach($item->id);
@@ -99,7 +99,7 @@ class ItemTest extends TestCase
         $response->assertStatus(200);
         $response->assertSee('テスト商品');
         $response->assertSee('テストブランド');
-        $response->assertSee('12345');
+        $response->assertSee('12,345');
         $response->assertSee('テスト説明文');
         $response->assertSee('新品');
         foreach ($categories as $category) {
@@ -109,7 +109,7 @@ class ItemTest extends TestCase
         $response->assertSee('1');
         $response->assertSee('とても良い商品です');
         $response->assertSee($commentUser->name);
-        $response->assertSee('images/test.jpg');
+        $response->assertSee('dummy/test.jpg');
     }
 
     /** @test */

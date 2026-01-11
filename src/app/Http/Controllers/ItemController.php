@@ -54,12 +54,10 @@ class ItemController extends Controller
     public function store(ExhibitionRequest $request)
     {
         $validated = $request->validated();
-        // 画像保存
         if ($request->hasFile('img_url')) {
         $path = $request->file('img_url')->store('images', 'public');
         $validated['img_url'] = $path;
         }
-       // 商品作成
         $item = Item::create([
             'user_id' => auth()->id(),
             'name' => $validated['name'],
@@ -69,7 +67,6 @@ class ItemController extends Controller
             'price' => $validated['price'],
             'img_url' => $validated['img_url'],
         ]);
-        // 中間テーブル（カテゴリ）
         $item->categories()->sync($validated['categories']);
         return redirect()->route('mypage.index');
     }

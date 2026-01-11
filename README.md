@@ -69,13 +69,20 @@ STRIPE_WEBHOOK_SECRET=whsec_xxxxxxxxxxxxxxxxx
 php artisan migrate:fresh --seed
 ```
 ## 8 画像表示設定
-本アプリでは、以下のように画像を管理しています。
-```
-- 商品画像（Seeder登録・出品画像）
-  → `storage/app/public/images`
-- プロフィール画像
-  → `storage/app/public/profile`
+本アプリでは、商品画像を以下のルールで管理しています。
 
+- 実際にユーザーがアップロードした画像
+  → `storage/app/public/images/` に保存
+  → DBには相対パス（例：`images/xxxx.jpg`）のみ保存
+
+- Seederで使用するダミー画像
+  → `storage/app/public/dummy/` に配置
+  → DBには相対パス（例：`dummy/watch.jpeg`）を保存
+
+表示時は、実画像・ダミー画像ともに以下のように統一しています。
+
+```md
+<img src="{{ asset('storage/' . $item->img_url) }}">
 画像はすべて `storage/app/public` 配下に保存されるため、
 初回セットアップ時には以下のコマンドを必ず実行してください。
 ```

@@ -17,7 +17,7 @@
                 $hasImage = optional($profile)->img_url;
             @endphp
             @if ($hasImage)
-                <img src="{{ asset('storage/' . $hasImage) }}" class="profile-form__image">
+                <img src="{{ asset('storage/' . $hasImage) }}" class="profile-view__icon">
             @else
                 <div class="profile-form__placeholder"></div>
             @endif
