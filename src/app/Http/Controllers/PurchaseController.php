@@ -14,20 +14,16 @@ class PurchaseController extends Controller
     public function index(Item $item, Request $request)
     {
         $user = Auth::user()->fresh();
-        // 商品が変わったら支払い方法をリセット
         if (session('current_item_id') !== $item->id) {
         session()->forget('payment_method');
         }
-        // ① 支払い方法が送られてきた場合の処理
         if ($request->has('payment_method')) {
             if ($request->filled('payment_method')) {
             session(['payment_method' => $request->payment_method]);
             } else {
-            // 未選択ならセッションをクリア
             session()->forget('payment_method');
             }
         }
-        // ② 表示用はセッションから取得
         $selectedMethod = session('payment_method', '');
         session(['current_item_id' => $item->id]);
         return view('purchase.index', [

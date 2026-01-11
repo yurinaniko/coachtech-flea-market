@@ -12,31 +12,6 @@ class PurchaseTest extends TestCase
 {
     use RefreshDatabase;
 
-    /** @test */
-    public function logged_in_user_can_purchase_item()
-    {
-        $user = User::factory()->create();
-        $item = Item::factory()->create();
-
-        $response = $this->actingAs($user)->post(
-            route('purchase.store', $item->id),
-            [
-                'payment_method' => 'card',
-                'postal_code'    => '123-4567',
-                'address'        => '東京都渋谷区',
-                'building'       => 'テストビル',
-            ]
-        );
-
-        $response->assertRedirect(route('purchase.checkout'));
-
-        $this->assertDatabaseHas('purchases', [
-            'user_id' => $user->id,
-            'item_id' => $item->id,
-            'status'  => 'completed',
-        ]);
-    }
-
     private function validPurchaseData(): array
     {
         return [
@@ -176,6 +151,105 @@ class PurchaseTest extends TestCase
             'item_id' => $item->id,
             'status' => 'pending',
             'payment_method' => 'konbini',
+        ]);
+    }
+
+    /** @test */
+    public function user_can_complete_purchase_by_clicking_purchase_button()
+    {
+        $user = User::factory()->create();
+        $item = Item::factory()->create();
+        $response = $this->actingAs($user)->post(
+            route('purchase.store', $item->id),
+            [
+                'payment_method' => 'card',
+                'postal_code'    => '123-4567',
+                'address'        => '東京都渋谷区',
+                'building'       => 'テストビル',
+            ]
+        );
+        $response->assertRedirect(route('purchase.checkout'));
+        $this->assertDatabaseHas('purchases', [
+            'user_id' => $user->id,
+            'item_id' => $item->id,
+            'status'  => 'completed',
+        ]);
+    }
+
+    /** @test */
+    public function purchased_item_is_displayed_as_sold_on_item_list_page()
+    {
+        $user = User::factory()->create();
+        $item = Item::factory()->create();
+
+        Purchase::factory()->create([
+            'user_id' => $user->id,
+            'item_id' => $item->id,
+            'status'  => 'completed',
+        ]);
+        $response = $this->get(route('items.index'));
+        $response->assertStatus(200);
+        $response->assertSee('sold');
+    }
+
+    /** @test */
+    public function purchased_item_is_shown_in_user_purchase_history_on_profile_page()
+    {
+        $user = User::factory()->create();
+        $item = Item::factory()->create([
+            'name' => 'テスト商品',
+        ]);
+        Purchase::factory()->create([
+            'user_id' => $user->id,
+            'item_id' => $item->id,
+            'status'  => 'completed',
+        ]);
+        $response = $this->actingAs($user)->get(route('mypage.index'));
+        $response->assertStatus(200);
+        $response->assertSee('テスト商品');
+    }
+
+    /** @test */
+    public function updated_address_is_reflected_on_purchase_screen()
+    {
+        $user = User::factory()->create();
+        $user->profile()->create([
+            'postal_code' => '111-1111',
+            'address' => '東京都旧住所',
+        ]);
+        $user->profile()->update([
+            'postal_code' => '222-2222',
+            'address' => '東京都新住所',
+        ]);
+        $item = Item::factory()->create();
+        $response = $this->actingAs($user)
+            ->get(route('purchase.index', $item->id));
+        $response->assertStatus(200);
+        $response->assertSee('222-2222');
+        $response->assertSee('東京都新住所');
+    }
+
+    /** @test */
+    public function delivery_address_is_saved_with_purchase()
+    {
+        $user = User::factory()->create();
+        $item = Item::factory()->create();
+
+        $data = [
+            'payment_method' => 'card',
+            'postal_code'    => '333-3333',
+            'address'        => '東京都配送先住所',
+            'building'       => '配送ビル',
+        ];
+
+        $this->actingAs($user)
+            ->post(route('purchase.store', $item->id), $data);
+
+        $this->assertDatabaseHas('purchases', [
+            'item_id'          => $item->id,
+            'sending_postcode' => '333-3333',
+            'sending_address'  => '東京都配送先住所',
+            'sending_building' => '配送ビル',
         ]);
     }
 }
