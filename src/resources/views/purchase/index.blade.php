@@ -28,7 +28,7 @@
                 </div>
             </div>
             <div class="purchase__underline">
-                <label class="purchase__label">支払い方法</label>
+                <h3 class="purchase__label">支払い方法</h3>
                 <form method="GET" action="{{ route('purchase.index', $item->id) }}">
                     <select name="payment_method" class="purchase__select" id="js-payment-select" onchange="this.form.submit()">
                         <option value="">選択してください</option>
@@ -42,7 +42,7 @@
             </div>
             <div class="purchase__item-box purchase__underline">
                 <div class="purchase__address-header">
-                    <p class="purchase__address-label">配送先</p>
+                    <h3 class="purchase__address-label">配送先</h3>
                     <a href="{{ route('mypage.address.edit') }}" class="purchase__address-edit">変更する</a>
                 </div>
                 <div class="purchase__address-box">
@@ -64,11 +64,11 @@
             <div class="purchase__right">
                 <div class="purchase__summary">
                     <div class="purchase__summary-row">
-                        <p class="purchase__summary-label">商品価格</p>
+                        <h3 class="purchase__summary-label">商品価格</h3>
                         <p class="purchase__summary-price">¥{{ number_format($item->price) }}</p>
                     </div>
                     <div class="purchase__summary-row">
-                        <p class="purchase__summary-label">支払い方法</p>
+                        <h3 class="purchase__summary-label">支払い方法</h3>
                         <p class="purchase__summary-method" id="js-payment-method">{{ $selectedMethod === 'card' ? 'カード払い' :($selectedMethod === 'konbini' ? 'コンビニ払い' : '選択してください') }}</p>
                     </div>
                 </div>

@@ -17,7 +17,6 @@
     @endif
     <form action="{{ route('profile.store') }}" method="POST" enctype="multipart/form-data" class="profile-form__body">
         @csrf
-        {{-- プロフィール画像 --}}
         <div class="profile-form__image-area">
             @if(!empty($profile?->img_url))
                 <img id="preview" src="{{ asset('storage/' . $profile->img_url) }}" class="profile-form__image" alt="プロフィール画像">
@@ -82,7 +81,6 @@ function previewImage(event) {
     reader.readAsDataURL(file);
 }
 </script>
-{{-- トースト --}}
 <script>
 document.addEventListener('DOMContentLoaded', () => {
     const flash = document.querySelector('.js-flash-message');

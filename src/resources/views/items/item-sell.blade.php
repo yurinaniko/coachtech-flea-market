@@ -62,31 +62,31 @@
         <div class="sell__section">
             <h3 class="sell__section-title">商品名と説明</h3>
             <div class="sell__section-divider"></div>
-                <div class="form__group">
-                    <label class="form__label">商品名</label>
-                    <input type="text" name="name" class="form__input" value="{{ old('name') }}">
-                    @error('name')
-                        <p class="form__error">{{ $message }}</p>
-                    @enderror
-                </div>
-                <div class="form__group">
-                    <label class="form__label">ブランド名</label>
-                    <input type="text" name="brand" class="form__input" value="{{ old('brand') }}">
-                </div>
-                <div class="form__group">
-                    <label class="form__label">商品説明</label>
-                    <textarea name="description" class="form__input form__input--textarea">{{ old('description') }}</textarea>
-                    @error('description')
-                        <p class="form__error">{{ $message }}</p>
-                    @enderror
-                </div>
-                <div class="form__group">
-                    <label class="form__label">販売価格</label>
-                    <input type="text" name="price" class="form__input" placeholder="¥" value="{{ old('price') }}">
-                    @error('price')
-                        <p class="form__error">{{ $message }}</p>
-                    @enderror
-                </div>
+            <div class="form__group">
+                <label class="form__label">商品名</label>
+                <input type="text" name="name" class="form__input" value="{{ old('name') }}">
+                @error('name')
+                    <p class="form__error">{{ $message }}</p>
+                @enderror
+            </div>
+            <div class="form__group">
+                <label class="form__label">ブランド名</label>
+                <input type="text" name="brand" class="form__input" value="{{ old('brand') }}">
+            </div>
+            <div class="form__group">
+                <label class="form__label">商品説明</label>
+                <textarea name="description" class="form__input form__input--textarea">{{ old('description') }}</textarea>
+                @error('description')
+                    <p class="form__error">{{ $message }}</p>
+                @enderror
+            </div>
+            <div class="form__group">
+                <label class="form__label">販売価格</label>
+                <input type="text" name="price" class="form__input" placeholder="¥" value="{{ old('price') }}">
+                @error('price')
+                    <p class="form__error">{{ $message }}</p>
+                @enderror
+            </div>
         </div>
         <button type="submit" class="sell__button">出品する</button>
     </form>

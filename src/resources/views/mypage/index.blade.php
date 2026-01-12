@@ -7,7 +7,6 @@
 @endsection
 
 @section('content')
-{{-- カテゴリータブ --}}
 <div class="item-list__tabs-wrapper">
     <div class="item-list__tabs">
         @php
@@ -23,7 +22,6 @@
             </a>
     </div>
 </div>
-{{-- 商品カード一覧 --}}
 <div class="item-list">
     <div class="item-list__grid">
         @foreach ($items as $item)
