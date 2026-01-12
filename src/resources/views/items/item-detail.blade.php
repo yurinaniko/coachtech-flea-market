@@ -8,7 +8,7 @@
 @endsection
 
 @section('content')
-<div class="item-detail">
+<div class="">
     <div class="item-detail__container">
         <div class="item-detail__image-area">
             @if($item->purchase)
@@ -23,7 +23,6 @@
                 ¥{{ number_format($item->price) }}
                 <span class="item-detail__tax">(税込)</span>
             </p>
-            {{-- お気に入りボタン--}}
             <div class="item-detail__actions">
                 <div class="item-detail__favorite">
                     @php
@@ -83,7 +82,7 @@
                 </div>
             </div>
             {{-- コメント --}}
-            <div class="item-detail__comment-wrapper">
+            <div class="">
                 <label class="item-detail__section-title">
                     コメント({{ $item->comments->count() }})
                 </label>

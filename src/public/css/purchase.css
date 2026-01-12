@@ -77,12 +77,6 @@
     margin-left: 20px;
 }
 
-.purchase__value {
-    margin-top: 0;
-    font-size: 16px;
-    color: #333;
-}
-
 .purchase__select {
     width: 200px;
     height: 40px;
@@ -153,12 +147,12 @@
     border-bottom: none;
 }
 
-.purchase__summary--label {
+.purchase__summary-label {
     margin-top: 22px;
     font-size: 16px;
 }
 
-.purchase__summary-price {
+.purchase__summary-price{
     font-size: 20px;
     margin-bottom: 16px;
 }

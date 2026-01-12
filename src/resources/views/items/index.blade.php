@@ -25,15 +25,13 @@
         @foreach ($items as $item)
             <a href="{{ $item->purchase ? 'javascript:void(0);' : route('items.show', $item->id) }}"
             class="item-card__link {{ $item->purchase ? 'disabled' : '' }}">
-                <div class="item-card">
-                    <div class="item-card__image">
-                        @if($item->purchase)
-                            <span class="sold-badge">sold</span>
-                        @endif
-                        <img src="{{ asset('storage/' . $item->img_url) }}" alt="">
-                    </div>
-                    <p class="item-card__name">{{ $item->name }}</p>
+                <div class="item-card__image">
+                    @if($item->purchase)
+                        <span class="sold-badge">sold</span>
+                    @endif
+                    <img src="{{ asset('storage/' . $item->img_url) }}" alt="">
                 </div>
+                <p class="item-card__name">{{ $item->name }}</p>
             </a>
         @endforeach
     </div>
