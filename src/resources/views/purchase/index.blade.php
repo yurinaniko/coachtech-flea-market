@@ -84,19 +84,14 @@ document.addEventListener('DOMContentLoaded', () => {
     const select  = document.getElementById('js-payment-select');
     const hidden  = document.getElementById('js-payment-hidden');
     const display = document.getElementById('js-payment-method');
-
     const labels = {
         card: 'カード払い',
         konbini: 'コンビニ払い'
     };
-
-    // 初期表示
     if (select.value) {
         display.textContent = labels[select.value];
         hidden.value = select.value;
     }
-
-    // 変更時
     select.addEventListener('change', () => {
         hidden.value = select.value;
         display.textContent = labels[select.value] ?? '選択してください';

@@ -4,12 +4,6 @@
     margin: 40px auto;
 }
 
-.item-list__title {
-    font-size: 24px;
-    font-weight: bold;
-    margin-bottom: 20px;
-}
-
 .item-list__tabs-wrapper {
     width: 100%;
     margin-top: 30px;
@@ -43,10 +37,6 @@
     display: grid;
     grid-template-columns: repeat(4, minmax(0, 1fr));
     gap: 40px;
-}
-
-.item-card {
-    text-align: center;
 }
 
 .item-card__image {
