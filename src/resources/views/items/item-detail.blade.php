@@ -64,10 +64,10 @@
                     <button type="submit" class="item-detail__buy-button">購入手続きへ</button>
                 </form>
             @endif
-            <label class="item-detail__section-title">商品説明</label>
+            <h3 class="item-detail__section-title">商品説明</h3>
             <p class="item-detail__description">{{ $item->description }}</p>
             <div class="item-detail__attributes">
-                <label class="item-detail__section-title">商品の情報</label>
+                <h3 class="item-detail__section-title">商品の情報</h3>
                 <p class="item-detail__category">
                     <strong>カテゴリ</strong>
                     <span class="item-detail__category-tags">
