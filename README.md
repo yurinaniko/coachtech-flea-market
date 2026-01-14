@@ -57,7 +57,7 @@ MAIL_FROM_ADDRESS=test@example.com
 MAIL_FROM_NAME="coachtechフリマ"
 ```
 ### ④ Stripe（テスト環境）
-## Stripe Webhook 設定
+#### Stripe Webhook 設定
 
 1. Stripeダッシュボードにログイン
 2. 開発者 → Webhook → エンドポイントを追加
