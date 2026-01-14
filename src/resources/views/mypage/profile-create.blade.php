@@ -9,7 +9,7 @@
 
 @section('content')
 <div class="profile-form">
-    <h2 class="profile-form__title">プロフィール設定</h2>
+    <h1 class="profile-form__title">プロフィール設定</h1>
     @if (session('verified'))
         <div class="toast js-flash-message">
             メール認証が完了しました

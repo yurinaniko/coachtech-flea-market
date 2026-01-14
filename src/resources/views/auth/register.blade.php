@@ -10,7 +10,7 @@
 @section('content')
 <div class="auth__wrapper">
     <div class="auth auth--register">
-        <h2 class="auth__title">会員登録</h2>
+        <h1 class="auth__title">会員登録</h1>
         <form action="/register" method="POST" class="auth__form" novalidate>
             @csrf
             <div class="form__group">

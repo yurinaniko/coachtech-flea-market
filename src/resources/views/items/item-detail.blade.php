@@ -64,10 +64,10 @@
                     <button type="submit" class="item-detail__buy-button">購入手続きへ</button>
                 </form>
             @endif
-            <h3 class="item-detail__section-title">商品説明</h3>
+            <h2 class="item-detail__section-title">商品説明</h2>
             <p class="item-detail__description">{{ $item->description }}</p>
             <div class="item-detail__attributes">
-                <h3 class="item-detail__section-title">商品の情報</h3>
+                <h2 class="item-detail__section-title">商品の情報</h2>
                 <p class="item-detail__category">
                     <strong>カテゴリ</strong>
                     <span class="item-detail__category-tags">
@@ -83,9 +83,9 @@
             </div>
             {{-- コメント --}}
             <div class="">
-                <label class="item-detail__section-title">
+                <h2 class="item-detail__section-title">
                     コメント({{ $item->comments->count() }})
-                </label>
+                </h2>
                 @if ($comments->count() === 0)
                     <div class="item-detail__comment-item">
                         <div class="comment-user-icon profile-placeholder"></div>
