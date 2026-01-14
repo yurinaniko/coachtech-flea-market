@@ -64,6 +64,13 @@ STRIPE_WEBHOOK_SECRET=whsec_xxxxxxxxxxxxxxxxx
 ※ Stripe のキーは各自の **テスト用 API キー** を設定してください。
 （本番キーは使用しません）
 ```
+## Stripe Webhook 設定
+
+1. Stripeダッシュボードにログイン
+2. 開発者 → Webhook → エンドポイントを追加
+3. Webhookシークレットを取得
+4. .env に以下を設定
+
 ## 7 データベース初期化（マイグレーション & シーディング）
 ```bash
 php artisan migrate:fresh --seed
@@ -252,6 +259,8 @@ MailHog： http://localhost:8025
 初期表示では「出品した商品」の一覧が表示され、
 「購入した商品」はタブを選択することで切り替えて確認できます。
 
+※ プロフィール画像は任意項目。未設定時はデフォルト画像を表示する。
+
 - **出品した商品**
   自身が出品した商品の一覧が表示され、出品状況を確認できます。
 
@@ -306,6 +315,12 @@ FormRequest を使用してバリデーションを実装しています。
 - Docker 環境上で以下のコマンドを実行し、
 **すべてのテストが PASS することを確認しています。**
 
+## テスト実行手順
+
+1. テスト用DBを作成
+2. .env.testing を作成
+3. 以下を実行
 ```bash
+php artisan migrate:fresh --env=testing
 php artisan test
 ```
