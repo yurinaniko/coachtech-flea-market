@@ -11,13 +11,13 @@
 @section('content')
 <div class="purchase__success">
     <div class="purchase__success-box">
-        <h2 class="purchase__success-title">
+        <h1 class="purchase__success-title">
             @if($status === 'success')
                 購入が完了しました
             @else
                 購入はキャンセルされました
             @endif
-        </h2>
+        </h1>
         <p class="purchase__success-text">
             @if($status === 'success')
                 ご購入ありがとうございます。<br>

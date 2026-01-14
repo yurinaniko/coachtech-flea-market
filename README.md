@@ -57,6 +57,12 @@ MAIL_FROM_ADDRESS=test@example.com
 MAIL_FROM_NAME="coachtechフリマ"
 ```
 ### ④ Stripe（テスト環境）
+## Stripe Webhook 設定
+
+1. Stripeダッシュボードにログイン
+2. 開発者 → Webhook → エンドポイントを追加
+3. Webhookシークレットを取得
+4. .env に以下を設定
 ```env
 STRIPE_KEY=pk_test_xxxxxxxxxxxxxxxxx
 STRIPE_SECRET=sk_test_xxxxxxxxxxxxxxxxx
@@ -64,13 +70,8 @@ STRIPE_WEBHOOK_SECRET=whsec_xxxxxxxxxxxxxxxxx
 ※ Stripe のキーは各自の **テスト用 API キー** を設定してください。
 （本番キーは使用しません）
 ```
-## Stripe Webhook 設定
-
-1. Stripeダッシュボードにログイン
-2. 開発者 → Webhook → エンドポイントを追加
-3. Webhookシークレットを取得
-4. .env に以下を設定
-
+- ※ Stripe Webhook はローカル環境では実際の受信確認までは行っていませんが、
+Checkout セッション作成および購入ステータス更新処理まで実装しています。
 ## 7 データベース初期化（マイグレーション & シーディング）
 ```bash
 php artisan migrate:fresh --seed
