@@ -18,7 +18,6 @@ class AuthController extends Controller
             'password' => Hash::make($request->password),
         ]);
         auth()->login($user);
-        // 認証メール送信
         $user->sendEmailVerificationNotification();
         return redirect()->route('verification.notice');
     }
