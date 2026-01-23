@@ -315,12 +315,27 @@ FormRequest を使用してバリデーションを実装しています。
 
 - Docker 環境上で以下のコマンドを実行し、
 **すべてのテストが PASS することを確認しています。**
+※ テスト実行時は phpunit.xml にて、
+キャッシュ・セッション・メールなどを
+テスト用設定（array / sync）に切り替えています。
 
 ## テスト実行手順
 
-1. テスト用DBを作成
-2. .env.testing を作成
-3. 以下を実行
+1. `.env.testing` を作成
+```bash
+cp .env .env.testing
+```
+2. .env.testing をテスト用に編集
+```env
+APP_ENV=test
+DB_CONNECTION=mysql_test
+DB_DATABASE=demo_test
+※ DBユーザー名・パスワードは、ご自身の環境に合わせて設定してください。
+```
+3. テスト用データベースを作成
+上記で指定した DB_DATABASE（例：demo_test）を、
+MySQL 上に作成してください。
+4. マイグレーション & テスト実行
 ```bash
 php artisan migrate:fresh --env=testing
 php artisan test
