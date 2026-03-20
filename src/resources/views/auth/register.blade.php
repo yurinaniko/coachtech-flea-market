@@ -1,8 +1,6 @@
 @extends('layouts.app')
 
 @section('css')
-<link rel="stylesheet" href="{{ asset('css/sanitize.css') }}">
-<link rel="stylesheet" href="{{ asset('css/common.css') }}">
 <link rel="stylesheet" href="{{ asset('css/form.css') }}">
 <link rel="stylesheet" href="{{ asset('css/auth.css') }}">
 @endsection
@@ -11,7 +9,7 @@
 <div class="auth__wrapper">
     <div class="auth auth--register">
         <h1 class="auth__title">会員登録</h1>
-        <form action="/register" method="POST" class="auth__form" novalidate>
+        <form action="{{ route('register') }}" method="POST" class="auth__form" novalidate>
             @csrf
             <div class="form__group">
                 <label class="form__label">ユーザー名</label>

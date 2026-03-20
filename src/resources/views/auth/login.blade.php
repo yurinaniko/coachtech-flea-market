@@ -1,8 +1,6 @@
 @extends('layouts.app')
 
 @section('css')
-<link rel="stylesheet" href="{{ asset('css/sanitize.css') }}">
-<link rel="stylesheet" href="{{ asset('css/common.css') }}">
 <link rel="stylesheet" href="{{ asset('css/form.css') }}">
 <link rel="stylesheet" href="{{ asset('css/auth.css') }}">
 @endsection
@@ -11,7 +9,7 @@
 <div class="auth__wrapper">
     <div class="auth auth--login">
         <h1 class="auth__title">ログイン</h1>
-        <form action="{{ route('login') }}" method="POST" novalidate>
+        <form class="auth__form" action="{{ route('login') }}" method="POST" novalidate>
             @csrf
             @if ($errors->has('login'))
                 <p class="form__error form__error--global">
@@ -34,7 +32,7 @@
             </div>
             <button class="auth__submit">ログインする</button>
         </form>
-        <a href="{{ route('register.form') }}" class="auth__link">会員登録はこちら</a>
+        <a href="{{ route('register') }}" class="auth__link">会員登録はこちら</a>
     </div>
 </div>
 @endsection

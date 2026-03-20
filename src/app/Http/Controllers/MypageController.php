@@ -39,7 +39,7 @@ class MypageController extends Controller
         }
         return view('mypage.index', compact('items', 'page', 'keyword'));
     }
-    // 初回ログイン時の振り分け専用
+
     public function profileGate()
     {
         $user = Auth::user();

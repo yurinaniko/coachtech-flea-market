@@ -74,7 +74,7 @@ class ProfileController extends Controller
                 'name' => $validated['name'],
             ]);
         }
-        // --- 画像が新しくアップロードされた場合 ---
+
         if ($request->hasFile('image')) {
             $imageName = time() . '.' . $request->image->extension();
             $request->image->storeAs('public/profile', $imageName);

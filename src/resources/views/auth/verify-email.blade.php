@@ -1,13 +1,16 @@
 @extends('layouts.app')
 
 @section('css')
-<link rel="stylesheet" href="{{ asset('css/sanitize.css') }}">
-<link rel="stylesheet" href="{{ asset('css/common.css') }}">
 <link rel="stylesheet" href="{{ asset('css/auth.css') }}">
 @endsection
 
 @section('content')
 <div class="auth__wrapper auth__wrapper--verify">
+    @if (session('message'))
+        <div class="auth__flash js-flash-message">
+            {{ session('message') }}
+        </div>
+    @endif
     <div class="auth auth--verify">
         <p class="auth__text">ご登録していただいたメールアドレスに認証メールを送付しました。</p>
         <p class="auth__text">メール認証を完了してください。</p>
@@ -24,4 +27,16 @@
         </div>
     </div>
 </div>
+@push('scripts')
+<script>
+document.addEventListener('DOMContentLoaded', () => {
+    const flash = document.querySelector('.js-flash-message');
+    if (flash) {
+        setTimeout(() => {
+            flash.remove();
+        }, 3000);
+    }
+});
+</script>
+@endpush
 @endsection

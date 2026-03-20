@@ -104,18 +104,20 @@ class AuthTest extends TestCase
     }
 
     /** @test */
-    public function user_can_register_and_redirect_to_profile_create()
+    public function user_can_register_and_redirect_to_email_verification()
     {
-        $response = $this->post('/register', [
+        $response = $this->followingRedirects()->post('/register', [
             'name' => 'テストユーザー',
             'email' => 'success@example.com',
             'password' => 'password123',
             'password_confirmation' => 'password123',
         ]);
-        $response->assertRedirect(route('verification.notice'));
+        $response->assertSee('認証はこちらから');
+
         $this->assertDatabaseHas('users', [
-        'email' => 'success@example.com',
+            'email' => 'success@example.com',
         ]);
+
         $this->assertAuthenticated();
     }
 

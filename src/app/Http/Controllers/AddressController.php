@@ -26,7 +26,7 @@ class AddressController extends Controller
                 'building'    => $validated['building'] ?? null,
                 ]
         );
-        // ユーザー情報をリフレッシュ
+
         Auth::user()->fresh();
         return redirect()->route('purchase.index', ['item' => session('current_item_id')]);
     }

@@ -1,6 +1,5 @@
 .auth {
     width: 680px;
-    margin: 20px auto;
     padding: 30px;
     background: #fff;
     border-radius: 8px;
@@ -15,12 +14,24 @@
     display: flex;
     justify-content: center;
     align-items: center;
+    min-height: calc(100vh - 80px);
 }
 
 .auth__title {
-    font-size: 28px;
+    font-size: 32px;
     font-weight: 700;
-    margin-bottom: 10px;
+}
+
+.auth--login .auth__title {
+    margin-bottom: 60px;
+}
+
+.auth--register .auth__title {
+    margin-bottom: 40px;
+}
+
+.auth__form {
+    width: 100%;
 }
 
 .auth__link {
@@ -45,11 +56,7 @@
     padding: 12px;
     border-radius: 4px;
     font-weight: 600;
-    margin: 14px 0;
-}
-
-.auth--login .auth__submit {
-    margin-top: 30px;
+    margin: 20px 0;
 }
 
 .auth__wrapper--verify {
@@ -102,3 +109,21 @@
 .auth__verify-actions form {
     order: 2;
 }
+
+.auth__flash {
+    position: fixed;
+    top: 120px;
+    left: 50%;
+    transform: translateX(-50%);
+    background: #000000;
+    color: #fff;
+    padding: 10px 18px;
+    border-radius: 6px;
+    z-index: 1000;
+}
+
+.auth--login .form__group {
+    margin-bottom: 80px;
+}
+
+

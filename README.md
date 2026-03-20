@@ -60,9 +60,15 @@ MAIL_FROM_NAME="coachtechフリマ"
 #### Stripe Webhook 設定
 
 1. Stripeダッシュボードにログイン
-2. 開発者 → Webhook → エンドポイントを追加
-3. Webhookシークレットを取得
-4. .env に以下を設定
+2. 開発者 → Webhook をクリック
+3. エンドポイント を追加をクリック
+4. 以下を設定
+    - URL： http://localhost:8000/stripe/webhook（※自分のルートに合わせる）
+    - イベント： checkout.session.completed を選択
+5.  作成後、「Signing secret（署名シークレット）」を表示
+6. 「Reveal」をクリックしてシークレットをコピー
+
+7. .env に以下を設定
 ```env
 STRIPE_KEY=pk_test_xxxxxxxxxxxxxxxxx
 STRIPE_SECRET=sk_test_xxxxxxxxxxxxxxxxx
@@ -72,6 +78,12 @@ STRIPE_WEBHOOK_SECRET=whsec_xxxxxxxxxxxxxxxxx
 ```
 - ※ Stripe Webhook はローカル環境では実際の受信確認までは行っていませんが、
 Checkout セッション作成および購入ステータス更新処理まで実装しています。
+- ※ Stripe Webhook はローカル環境では外部から直接アクセスできないため、
+Stripe CLI を使用して動作確認することができます。
+```bash
+stripe listen --forward-to http://localhost:8000/stripe/webhook
+```
+
 ## 7 データベース初期化（マイグレーション & シーディング）
 ```bash
 php artisan migrate:fresh --seed
@@ -320,22 +332,84 @@ FormRequest を使用してバリデーションを実装しています。
 テスト用設定（array / sync）に切り替えています。
 
 ## テスト実行手順
+本アプリケーションでは PHPUnit を使用しています。
+テスト実行時は `.env.testing` の設定が使用されます。
 
-1. `.env.testing` を作成
+1. テスト用データベースを作成
+上記で指定した DB_DATABASE（例：demo_test）を、
+MySQL 上に作成してください。
+```bash
+docker compose exec mysql bash
+mysql -u root -p
+```
+```sql
+CREATE DATABASE demo_test;
+SHOW DATABASES;
+```
+SHOW DATABASES;入力後、demo_testが作成されていれば成功です。
+2. configファイルの変更
+configディレクトリの中のdatabase.phpに以下の編集を行う。
+```env
+'mysql' => [
+// 中略
+],
++  'mysql_test' => [
++      'driver' => 'mysql',
++      'host' => env('DB_HOST', 'mysql'),
++      'port' => env('DB_PORT', '3306'),
++      'database' => 'demo_test',
++      'username' => 'root',
++      'password' => 'root',
++      'charset' => 'utf8mb4',
++      'collation' => 'utf8mb4_unicode_ci',
++      'prefix' => '',
++      'strict' => true,
++      ],
+```
+3. `.env.testing` を作成
 ```bash
 cp .env .env.testing
 ```
-2. .env.testing をテスト用に編集
+4. .env.testing をテスト用に編集
+### ① アプリケーション設定
 ```env
 APP_ENV=test
-DB_CONNECTION=mysql_test
-DB_DATABASE=demo_test
-※ DBユーザー名・パスワードは、ご自身の環境に合わせて設定してください。
+APP_KEY=
 ```
-3. テスト用データベースを作成
-上記で指定した DB_DATABASE（例：demo_test）を、
-MySQL 上に作成してください。
-4. マイグレーション & テスト実行
+
+### ② データベース設定（Docker）
+
+```env
+DB_CONNECTION=mysql_test
+DB_HOST=mysql
+DB_PORT=3306
+DB_DATABASE=demo_test
+DB_USERNAME=root
+DB_PASSWORD=root
+
+```
+APP_KEY は空に設定してください。
+編集後、以下のコマンドでテスト用キーを生成します。
+
+```bash
+php artisan key:generate --env=testing
+php artisan config:clear
+```
+
+5. PHPUnit 設定
+テスト実行時は .env.testing の設定に加えて、
+phpunit.xml にてテスト環境用の設定を定義しています。
+```xml
+<server name="APP_ENV" value="testing"/>
+<server name="DB_CONNECTION" value="mysql_test"/>
+<server name="DB_DATABASE" value="demo_test"/>
+```
+これにより
+・テスト実行時のみテスト用DBを使用
+・本番 / 開発DBへ影響しない安全な設計
+となっています。
+
+6. マイグレーション & テスト実行
 ```bash
 php artisan migrate:fresh --env=testing
 php artisan test
