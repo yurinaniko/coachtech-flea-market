@@ -29,7 +29,6 @@
     opacity: 0.9;
 }
 
-/* ========== PC 1400〜1540px対応 ========== */
 @media screen and (min-width: 1400px) {
     .address-edit {
         max-width: 800px;
