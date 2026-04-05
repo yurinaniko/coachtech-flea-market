@@ -37,7 +37,7 @@ class PurchaseController extends Controller
     {
         $item = Item::findOrFail($itemId);
         $alreadyPurchased = Purchase::where('item_id', $item->id)
-            ->where('status', 'completed')
+            ->where('status', ['pending','completed'])
             ->exists();
         if ($alreadyPurchased) {
         abort(403, 'This item has already been purchased.');
@@ -53,6 +53,7 @@ class PurchaseController extends Controller
             'status'           => $validated['payment_method'] === 'konbini'
                                     ? 'pending'
                                     : 'completed',
+                                    'is_completed' => false,
             'payment_method'   => $validated['payment_method'],
             'sending_postcode' => $validated['postal_code'],
             'sending_address'  => $validated['address'],

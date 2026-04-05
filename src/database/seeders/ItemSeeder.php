@@ -10,7 +10,8 @@ class ItemSeeder extends Seeder
 {
     public function run(): void
     {
-        $userIds = User::pluck('id')->toArray();
+        $seller1 = User::where('email', 'seller1@test.com')->first();
+        $seller2 = User::where('email', 'seller2@test.com')->first();
 
         $items = [
             [
@@ -104,17 +105,17 @@ class ItemSeeder extends Seeder
                 'category_id' => [6],
             ],
         ];
-            foreach ($items as $itemData) {
+        foreach ($items as $index => $itemData) {
 
-            $itemData['user_id'] = $userIds[array_rand($userIds)];
+            $itemData['user_id'] = $index < 5
+                ? $seller1->id
+                : $seller2->id;
 
             $categoryIds = $itemData['category_id'];
-            unset($itemData['category_id']);
+                unset($itemData['category_id']);
 
-            // itemsテーブルに商品作成
             $item = Item::create($itemData);
 
-           // 中間テーブルに登録
             $item->categories()->attach($categoryIds);
         }
     }

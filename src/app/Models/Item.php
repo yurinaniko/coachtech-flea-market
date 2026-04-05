@@ -4,7 +4,6 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
-use App\Models\User;
 
 class Item extends Model
 {
@@ -19,6 +18,11 @@ class Item extends Model
     'img_url',
     ];
 
+    public function user()
+    {
+        return $this->belongsTo(User::class);
+    }
+
     public function favorites()
     {
         return $this->belongsToMany(
@@ -32,11 +36,6 @@ class Item extends Model
     public function getFullImagePathAttribute()
     {
         return 'storage/' . $this->img_url;
-    }
-
-    public function comments()
-    {
-        return $this->hasMany(Comment::class);
     }
 
     public function purchase()
@@ -54,8 +53,8 @@ class Item extends Model
         return $this->belongsTo(Condition::class);
     }
 
-    public function buyers()
+    public function comments()
     {
-        return $this->belongsToMany(User::class, 'purchases')->withTimestamps();
+        return $this->hasMany(Comment::class);
     }
 }

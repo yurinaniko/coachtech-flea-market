@@ -5,6 +5,8 @@ namespace App\Http\Controllers;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use App\Models\Item;
+use App\Models\Comment;
+use App\Models\Purchase;
 
 class MypageController extends Controller
 {
@@ -27,15 +29,16 @@ class MypageController extends Controller
                     return mb_stripos($item->name, $keyword) !== false;
                 })->values();
             }
-        } else {
+        }
+        else {
             $query = Item::where('user_id', '!=', Auth::id());
-            if ($keyword) {
-            $items = $query
-                ->where('name', 'like', '%' . $keyword . '%')
-                ->get();
-            } else {
-            $items = $query->get();
-            }
+                if ($keyword) {
+                    $items = $query
+                        ->where('name', 'like', '%' . $keyword . '%')
+                        ->get();
+                } else {
+                    $items = $query->get();
+                }
         }
         return view('mypage.index', compact('items', 'page', 'keyword'));
     }
@@ -57,12 +60,87 @@ class MypageController extends Controller
         $profile = $user->profile;
         $page = $request->query('page', 'sell');
         if ($page === 'sell') {
-            $items = $user->items()->get();
+            $items = $user->items()->with('purchase')->get();
         } elseif ($page === 'buy') {
-            $items = $user->purchases()->get();
-        } else {
-            $items = collect();
+            $items = Item::whereHas('purchase', function ($q) {
+                $q->where('user_id', Auth::id());
+            })->get();
+        }elseif ($page === 'trading') {
+            $items = Item::whereHas('purchase', function ($q) {
+                $q->where('is_completed', false);
+                $q->where(function ($q2) {
+                    $q2->where('user_id', Auth::id())
+                    ->orWhereHas('item', function ($q3) {
+                        $q3->where('user_id', Auth::id());
+                    });
+                });
+            })
+            ->with(['purchase' => function ($q) {
+            $q->withCount([
+                'comments as unread_count' => function ($q2) {
+                    $q2->where('is_read', false)
+                    ->where('user_id', '!=', Auth::id());
+                }
+            ])
+                ->withMax('comments', 'created_at');
+            }])
+            ->get();
         }
-        return view('mypage.profile', compact('user', 'profile', 'items', 'page'));
+        $items = $items->sortByDesc(function ($item) {
+            $purchase = $item->purchase;
+            $isCompleted = $purchase?->is_completed ?? false;
+
+            return [
+                $purchase->unread_count ?? 0,
+                $purchase->comments_max_created_at ?? null,
+            ];
+        });
+        $unreadCount = Comment::where('is_read', false)
+            ->where('user_id', '!=', Auth::id())
+            ->whereHas('purchase', function ($q) {
+                $q->where('is_completed', false)
+                ->where(function ($q2) {
+                    $q2->where('user_id', Auth::id())
+                    ->orWhereHas('item', function ($q3) {
+                        $q3->where('user_id', Auth::id());
+                    });
+                });
+            })
+        ->count();
+
+        $receivedRatings = Purchase::where(function ($query) use ($user) {
+            $query->where('user_id', $user->id)
+                    ->whereNotNull('seller_reviewed');
+        })
+        ->orWhere(function ($query) use ($user) {
+            $query->where('user_id', $user->id)
+                    ->whereNotNull('buyer_reviewed');
+        })
+        ->get();
+
+        $ratings = [];
+
+        foreach ($receivedRatings as $purchase) {
+            if ($purchase->seller_id === $user->id && $purchase->seller_reviewed) {
+                $ratings[] = $purchase->seller_reviewed;
+            }
+
+            if ($purchase->user_id === $user->id && $purchase->buyer_reviewed) {
+                $ratings[] = $purchase->buyer_reviewed;
+            }
+        }
+
+        $avgRating = count($ratings) > 0
+        ? round(array_sum($ratings) / count($ratings))
+        : 0;
+
+        return view('mypage.profile', compact(
+            'user',
+            'profile',
+            'items',
+            'page',
+            'unreadCount',
+            'avgRating'
+        ));
     }
 }

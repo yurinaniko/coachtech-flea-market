@@ -50,7 +50,6 @@ class ProfileController extends Controller
     public function edit()
     {
         $user = auth()->user();
-        // プロフィールが無ければ作成して返す
         $profile = $user->profile()->firstOrCreate(
             ['user_id' => $user->id],
             [
