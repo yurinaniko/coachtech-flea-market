@@ -6,11 +6,6 @@ use Illuminate\Support\Facades\Schema;
 
 class CreateCommentsTable extends Migration
 {
-    /**
-     * Run the migrations.
-     *
-     * @return void
-     */
     public function up()
     {
         Schema::create('comments', function (Blueprint $table) {
@@ -19,17 +14,12 @@ class CreateCommentsTable extends Migration
             $table->foreignId('item_id')->constrained()->onDelete('cascade');
             $table->boolean('is_read')->default(false);
             $table->foreignId('purchase_id')->nullable()->constrained()->onDelete('cascade');
-            $table->text('comment');
+            $table->text('comment')->nullable();
             $table->string('image')->nullable();
             $table->timestamps();
         });
     }
 
-    /**
-     * Reverse the migrations.
-     *
-     * @return void
-     */
     public function down()
     {
         Schema::dropIfExists('comments');
