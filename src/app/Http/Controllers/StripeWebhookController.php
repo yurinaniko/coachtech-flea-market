@@ -33,8 +33,9 @@ class StripeWebhookController extends Controller
         $purchaseId = $session->metadata->purchase_id ?? null;
             if ($purchaseId) {
             Purchase::where('id', $purchaseId)
-                ->where('status', '!=', 'purchased')
-                ->update(['status' => 'purchased']);
+                ->update([
+                'status' => 'completed',
+                ]);
             }
         $itemId = $session->metadata->item_id ?? null;
             if ($itemId) {

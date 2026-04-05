@@ -220,7 +220,7 @@
 .item-detail__image-area .sold-badge {
     position: absolute;
     top: 20px;
-    left: 20px;
+    right: 20px;
     background-color: #ff4d4d;
     color: #fff;
     font-size: 18px;
@@ -279,10 +279,6 @@
     margin-left: 60px;
 }
 
-.item-detail__comment-wrapper {
-    margin-top: 20px;
-}
-
 .item-detail__notice {
     font-size: 14px;
     color: #666;
@@ -297,4 +293,8 @@
 .item-detail__favorite-btn:disabled {
     opacity: 0.4;
     cursor: not-allowed;
+}
+
+.item-detail__comment-wrapper {
+    margin-top: 20px;
 }

@@ -17,6 +17,9 @@ class Purchase extends Model
         'sending_postcode',
         'sending_address',
         'sending_building',
+        'is_completed',
+        'buyer_reviewed',
+        'seller_reviewed',
     ];
 
     public function user()
@@ -27,5 +30,10 @@ class Purchase extends Model
     public function item()
     {
         return $this->belongsTo(Item::class);
+    }
+
+    public function comments()
+    {
+        return $this->hasMany(Comment::class);
     }
 }

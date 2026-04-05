@@ -3,8 +3,8 @@
 }
 
 .user-info {
-    max-width: 860px;
-    margin: 40px auto 20px;
+    max-width: 850px;
+    margin: 40px auto;
     display: flex;
     align-items: center;
     justify-content: space-between;
@@ -17,27 +17,32 @@
 
 }
 
-.mypage__username {
-    font-size: 22px;
-    font-weight: bold;
-    margin-top: 24px;
-}
-
-.mypage__edit-btn {
-    display: inline-block;
-    padding: 6px 14px;
-    border: 2px solid #FF4F5E;
-    color: #FF4F5E;
-    border-radius: 6px;
-    font-size: 16px;
-    text-decoration: none;
-    white-space: nowrap;
-}
-
 .profile-view__icon {
     width: 120px;
     height: 120px;
     border-radius: 50%;
     object-fit: cover;
     background: #F4F4F4;
+}
+
+.little-star {
+    width: 30px;
+    height: 30px;
+}
+
+@media (max-width: 850px) {
+
+    .user-info {
+        margin: 20px 40px;
+    }
+
+    .little-star {
+        width: 20px;
+        height: 20px;
+    }
+
+    .user-info__center {
+        gap: 10px;
+    }
+
 }

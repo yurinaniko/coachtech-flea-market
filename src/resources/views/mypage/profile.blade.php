@@ -19,7 +19,17 @@
             @else
                 <div class="profile-form__placeholder"></div>
             @endif
-            <p class="mypage__username">{{ $user->name }}</p>
+            <div class="mypage__user-info">
+                <label class="mypage__username">{{ $user->name }}</label>
+                <div class="mypage__stars" data-rating="{{ $avgRating ?? 0 }}">
+                    @for ($i = 1; $i <= 5; $i++)
+                        <label>
+                            <input type="radio" name="rating" value="{{ $i }}" hidden>
+                            <img src="{{ asset('images/gray-star.png') }}" class="little-star">
+                        </label>
+                    @endfor
+                </div>
+            </div>
         </div>
         <a href="{{ route('profile.edit') }}" class="mypage__edit-btn">プロフィールを編集</a>
     </div>
@@ -32,22 +42,73 @@
         <li class="mypage__tab {{ $page === 'buy' ? 'is-active' : '' }}">
             <a href="{{ route('mypage.profile', ['page' => 'buy']) }}">購入した商品</a>
         </li>
+        <li class="mypage__tab {{ $page === 'trading' ? 'is-active' : '' }}">
+            <a href="{{ route('mypage.profile', ['page' => 'trading']) }}">
+                取引中の商品
+                @if ($unreadCount > 0)
+                    <span class="mypage__badge">{{ $unreadCount }}</span>
+                @endif
+            </a>
+        </li>
     </ul>
 </div>
 <div class="item-list">
     <div class="item-list__grid">
         @foreach ($items as $item)
-            <a href="{{ $item->purchase ? 'javascript:void(0);' : route('items.show', $item->id) }}"
-                class="item-card__link {{ $item->purchase ? 'disabled' : '' }}">
-                <div class="item-card__image">
-                    @if($item->purchase)
+            @php
+                $isCompleted = $item->purchase?->is_completed ?? false;
+                $purchase = $item->purchase;
+                $unread = $purchase
+                    ? $purchase->comments
+                    ->where('is_read', false)
+                    ->where('user_id', '!=', Auth::id())
+                    ->count()
+                    : 0;
+            @endphp
+            <a href="{{ $page === 'trading'
+            ? route('chat.show', $item->id)
+            : route('items.show', $item->id) }}"
+            class="item-list__link">
+                <div class="item-list__image">
+                    @if($item->purchase && in_array($item->purchase->status, ['pending', 'completed']))
                         <span class="sold-badge">sold</span>
                     @endif
+                    @if ($page === 'trading' && $unread > 0)
+                        <span class="item-list__badge">{{ $unread }}</span>
+                    @endif
                     <img src="{{ asset('storage/' . $item->img_url) }}" alt="">
+                    @if($isCompleted)
+                        <div class="item-list__overlay">取引終了</div>
+                    @endif
                 </div>
-                <p class="item-card__name">{{ $item->name }}</p>
+                <p class="item-list__name">{{ $item->name }}</p>
             </a>
         @endforeach
     </div>
 </div>
 @endsection
+@push('scripts')
+<script>
+window.addEventListener('pageshow', function (event) {
+    if (event.persisted || performance.getEntriesByType("navigation")[0].type === "back_forward") {
+        window.location.reload();
+    }
+});
+
+document.addEventListener('DOMContentLoaded', function () {
+    const starContainer = document.querySelector('.mypage__stars');
+    if (!starContainer) return;
+
+    const rating = Number(starContainer.dataset.rating) || 0;
+    const stars = starContainer.querySelectorAll('.little-star');
+
+    stars.forEach((star, index) => {
+        if (index < rating) {
+            star.src = "{{ asset('images/yellow-star.png') }}";
+        } else {
+            star.src = "{{ asset('images/gray-star.png') }}";
+        }
+    });
+});
+</script>
+@endpush

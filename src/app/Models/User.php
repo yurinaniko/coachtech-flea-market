@@ -45,8 +45,7 @@ class User extends Authenticatable implements MustVerifyEmail
 
     public function purchases()
     {
-        return $this->belongsToMany(Item::class, 'purchases')
-                ->withTimestamps();
+        return $this->hasMany(Purchase::class);
     }
 
     public function comments()

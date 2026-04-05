@@ -12,7 +12,6 @@
 <body>
     <div class="wrapper">
         @include('layouts.header')
-        {{-- ページごとの内容 --}}
         <main>
             @yield('content')
         </main>

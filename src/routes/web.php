@@ -13,6 +13,7 @@ use App\Http\Controllers\StripeWebhookController;
 use Illuminate\Foundation\Auth\EmailVerificationRequest;
 use Illuminate\Http\Request;
 use Laravel\Fortify\Http\Controllers\AuthenticatedSessionController;
+use App\Http\Controllers\ChatController;
 
 Route::get('/', function () {
     return auth()->check()
@@ -66,6 +67,14 @@ Route::middleware(['auth', 'verified'])->group(function () {
     Route::post('/purchase/{item}', [PurchaseController::class, 'store'])
         ->whereNumber('item')
         ->name('purchase.store');
+    Route::get('/chat/{item}', [ChatController::class, 'show'])
+        ->name('chat.show');
+    Route::post('/chat/{item}', [ChatController::class, 'store'])
+        ->name('chat.store');
+    Route::delete('/chat/{comment}', [ChatController::class, 'destroy'])
+        ->name('chat.destroy');
+    Route::post('/chat/review/{purchaseId}', [ChatController::class, 'review'])
+        ->name('chat.review');
 });
 
 Route::get('/items', [ItemController::class, 'index'])->name('items.index');

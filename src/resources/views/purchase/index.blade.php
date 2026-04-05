@@ -11,7 +11,7 @@
         <div class="purchase__left">
             <div class="purchase__product">
                 <div class="purchase__image-box">
-                    @if($item->is_sold)
+                    @if($item->purchase && in_array($item->purchase->status, ['pending', 'completed']))
                         <span class="item__card-sold">sold</span>
                     @endif
                     <img src="{{ asset($item->full_image_path) }}" alt="{{ $item->name }}">

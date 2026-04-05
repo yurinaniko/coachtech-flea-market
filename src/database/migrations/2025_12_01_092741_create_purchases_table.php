@@ -18,6 +18,9 @@ class CreatePurchasesTable extends Migration
             $table->string('sending_postcode', 8);
             $table->string('sending_address', 255);
             $table->string('sending_building', 255)->nullable();
+            $table->boolean('is_completed')->default(false);
+            $table->integer('buyer_reviewed')->nullable();
+            $table->integer('seller_reviewed')->nullable();
 
             $table->timestamps();
 

@@ -9,6 +9,7 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use App\Http\Requests\ItemRequest;
 use App\Http\Requests\ExhibitionRequest;
+use App\Models\Comment;
 
 class ItemController extends Controller
 {
@@ -75,16 +76,21 @@ class ItemController extends Controller
     {
         $item = Item::with([
             'categories',
-            'comments.user',
             'condition',
+            'comments.user.profile',
             'purchase',
         ])
-            ->withCount(['favorites', 'comments'])
+            ->withCount(['favorites'])
             ->findOrFail($id);
+
+        $comments = Comment::with('user.profile')
+            ->where('item_id', $id)
+            ->whereNull('purchase_id')
+            ->get();
 
         return view('items.item-detail', [
             'item' => $item,
-            'comments' => $item->comments,
+            'comments' => $comments,
         ]);
     }
 

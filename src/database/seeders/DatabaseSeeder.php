@@ -14,7 +14,9 @@ class DatabaseSeeder extends Seeder
             ConditionSeeder::class,
             ItemSeeder::class,
             ProfileSeeder::class,
-            CommentSeeder::class,
+            ItemCommentSeeder::class,
+            PurchaseSeeder::class,
+            ChatSeeder::class,
         ]);
     }
 }
