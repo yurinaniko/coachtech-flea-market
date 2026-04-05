@@ -23,7 +23,7 @@ class MypageController extends Controller
         }
 
         if ($page === 'mylist') {
-            $items = Auth::user()->favorites;
+            $items = Auth::user()->favorites()->with('purchase')->get();
             if ($keyword) {
                 $items = $items->filter(function($item) use ($keyword) {
                     return mb_stripos($item->name, $keyword) !== false;

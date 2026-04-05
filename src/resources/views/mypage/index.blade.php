@@ -26,7 +26,7 @@
             <a href="{{ $item->purchase ? 'javascript:void(0);' : route('items.show', $item->id) }}"
             class="item-list__link {{ $item->purchase ? 'disabled' : '' }}">
                 <div class="item-list__image">
-                    @if($item->purchase && in_array($item->purchase->status, ['pending', 'completed']))
+                    @if($item->purchase)
                         <span class="sold-badge">sold</span>
                     @endif
                     <img src="{{ asset('storage/' . $item->img_url) }}" alt="">
