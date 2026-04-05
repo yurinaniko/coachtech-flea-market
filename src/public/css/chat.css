@@ -23,12 +23,12 @@
 
 .chat__sidebar-item {
     width: 86%;
-    margin: 18px auto;
+    margin: 28px auto;
     display: flex;
     justify-content: center;
     align-items: center;
     background: #EEEFEB;
-    gap: 8px;
+    gap: 20px;
     padding: 8px;
     text-decoration: none;
     color: #333;
@@ -440,7 +440,7 @@
 
     .chat__sidebar-item {
         width: 86%;
-        margin: 6px auto;
+        margin: 20px auto;
         gap: 8px;
         padding: 4px;
     }

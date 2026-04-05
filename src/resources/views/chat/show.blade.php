@@ -16,14 +16,14 @@
         @endforeach
     </div>
     @php
-        $hasUserImage = optional($user->profile)->img_url;
+        $userImage = optional($user->profile)->img_url;
     @endphp
     <div class="chat__main">
         <div class="chat__info-wrapper">
             <div class="chat__info">
                 <div class="chat__info-title">
-                    @if ($hasUserImage)
-                        <img src="{{ asset('storage/' . $hasUserImage) }}" class="chat__info-icon" alt="ユーザーアイコン">
+                    @if ($userImage)
+                        <img src="{{ asset('storage/' . $userImage) }}" class="chat__info-icon" alt="ユーザーアイコン">
                     @else
                         <div class="chat__info-placeholder"></div>
                     @endif
@@ -66,7 +66,7 @@
                 @php
                     $hasMessageUserImage = optional($comment->user->profile)->img_url;
                 @endphp
-                <div class="chat__message {{ $comment->user_id === Auth::id() ? 'chat__message--sent' :'chat__message--received' }}">
+                <div class="chat__message {{ $comment->user_id === Auth::id() ? 'chat__message--sent':'chat__message--received' }}">
                     <div class="chat__message-inner">
                         <div class="chat__message-content">
                             @if ($hasMessageUserImage)
@@ -83,8 +83,7 @@
                                 <p class="chat__message-text">{{ $comment->comment }}</p>
                             @endif
                             @if ($comment->image)
-                                <img src="{{ asset('storage/' . $comment->image) }}"
-                                    class="chat__message-image">
+                                <img src="{{ asset('storage/' . $comment->image) }}" class="chat__message-image">
                             @endif
                             @if($comment->user_id === Auth::id())
                                 <div class="chat__message-actions">
