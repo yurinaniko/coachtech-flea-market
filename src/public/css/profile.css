@@ -1,8 +1,8 @@
-.user-info__wrapper {
+.user-info {
     width: 100%;
 }
 
-.user-info {
+.user-info__wrapper {
     max-width: 850px;
     margin: 40px auto;
     display: flex;
@@ -31,8 +31,7 @@
 }
 
 @media (max-width: 850px) {
-
-    .user-info {
+    .user-info__wrapper {
         margin: 20px 40px;
     }
 
@@ -44,5 +43,4 @@
     .user-info__center {
         gap: 10px;
     }
-
 }

@@ -8,8 +8,8 @@
 @endsection
 
 @section('content')
-<div class="user-info__wrapper">
-    <div class="user-info">
+<div class="user-info">
+    <div class="user-info__wrapper">
         <div class="user-info__center">
             @php
                 $hasImage = optional($profile)->img_url;
@@ -20,7 +20,7 @@
                 <div class="profile-form__placeholder"></div>
             @endif
             <div class="mypage__user-info">
-                <label class="mypage__username">{{ $user->name }}</label>
+                <label class="mypage__user-name">{{ $user->name }}</label>
                 <div class="mypage__stars" data-rating="{{ $avgRating ?? 0 }}">
                     @for ($i = 1; $i <= 5; $i++)
                         <label>
@@ -36,13 +36,13 @@
 </div>
 <div class="mypage__tabs-wrapper">
     <ul class="mypage__tabs">
-        <li class="mypage__tab {{ $page === 'sell' ? 'is-active' : '' }}">
+        <li class="mypage__tab {{ $page === 'sell' ? 'mypage__tab--active' : '' }}">
             <a href="{{ route('mypage.profile', ['page' => 'sell']) }}">出品した商品</a>
         </li>
-        <li class="mypage__tab {{ $page === 'buy' ? 'is-active' : '' }}">
+        <li class="mypage__tab {{ $page === 'buy' ? 'mypage__tab--active' : '' }}">
             <a href="{{ route('mypage.profile', ['page' => 'buy']) }}">購入した商品</a>
         </li>
-        <li class="mypage__tab {{ $page === 'trading' ? 'is-active' : '' }}">
+        <li class="mypage__tab {{ $page === 'trading' ? 'mypage__tab--active' : '' }}">
             <a href="{{ route('mypage.profile', ['page' => 'trading']) }}">
                 取引中の商品
                 @if ($unreadCount > 0)
