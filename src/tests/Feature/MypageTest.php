@@ -8,6 +8,7 @@ use App\Models\User;
 use App\Models\Item;
 use Illuminate\Http\UploadedFile;
 use Illuminate\Support\Facades\Storage;
+use App\Models\Purchase;
 
 
 class MypageTest extends TestCase
@@ -61,7 +62,9 @@ class MypageTest extends TestCase
         $user = User::factory()->create();
         $item = Item::factory()->create(['name' => '購入済み商品']);
         $user->favorites()->attach($item->id);
-        $user->purchases()->attach($item->id, [
+        Purchase::create([
+            'user_id' => $user->id,
+            'item_id' => $item->id,
             'price' => $item->price,
             'payment_method' => 'card',
             'sending_postcode' => '123-4567',
@@ -180,7 +183,9 @@ class MypageTest extends TestCase
             'name' => '購入していない商品',
             'price' => 20000,
         ]);
-        $user->purchases()->attach($item1->id, [
+        Purchase::create([
+            'user_id' => $user->id,
+            'item_id' => $item1->id,
             'price' => $item1->price,
             'payment_method' => 'card',
             'sending_postcode' => '123-4567',
@@ -301,7 +306,9 @@ class MypageTest extends TestCase
             'name' => '出品商品',
         ]);
         $buyItem = Item::factory()->create(['name' => '購入商品']);
-        $user->purchases()->attach($buyItem->id, [
+        Purchase::create([
+            'user_id' => $user->id,
+            'item_id' => $buyItem->id,
             'price' => $buyItem->price,
             'payment_method' => 'card',
             'sending_postcode' => '123-4567',
@@ -324,7 +331,9 @@ class MypageTest extends TestCase
         $buyItem = Item::factory()->create([
             'name' => '購入商品',
         ]);
-        $user->purchases()->attach($buyItem->id, [
+        Purchase::create([
+            'user_id' => $user->id,
+            'item_id' => $buyItem->id,
             'price' => $buyItem->price,
             'payment_method' => 'card',
             'sending_postcode' => '123-4567',
