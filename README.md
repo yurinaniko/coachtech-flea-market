@@ -72,11 +72,12 @@ Stripe Webhookは、決済完了などのイベントをサーバー側で受け
   必ず各自のStripeテストキーに置き換えてください。
 
   取得方法：
-- https://dashboard.stripe.com/test/apikeysにアクセスする。
+- https://dashboard.stripe.com/test/apikeys にアクセスする
+- 画面左下の開発者クリック→ APIキークリック　→公開可能キーとシークレットキーをコピーする。
 
-2. Webhook（ローカル環境）
+3. Webhook（ローカル環境）
 ローカル環境では Stripe CLI を使用してWebhookを受信します。
-
+コマンドをvscodeで入力する。
 ```bash
 stripe listen --forward-to http://localhost:8000/stripe/webhook
 ```
@@ -84,7 +85,7 @@ stripe listen --forward-to http://localhost:8000/stripe/webhook
 ```bash
 whsec_xxxxxxxxxxxxx
 ```
-.envのSTRIPE_WEBHOOK_SECRETに貼付する。
+これを.envのSTRIPE_WEBHOOK_SECRETに貼付する。
 
 3. .env に以下を設定
 ```env
@@ -98,7 +99,7 @@ STRIPE_WEBHOOK_SECRET=whsec_xxxxxxxxxxxxxxxxx
 - 公開可能キー → STRIPE_KEY（pk_test_...）
 - シークレットキー → STRIPE_SECRET（sk_test_...）
 - Webhook署名キー → STRIPE_WEBHOOK_SECRET
-→ Webhook署名シークレット（whsec_...）
+  → Webhook署名シークレット（whsec_...）
   ※ Stripe CLI（stripe listen）実行時に取得
 
 ※ Stripe のキーは各自の **テスト用 API キー** を設定してください。
