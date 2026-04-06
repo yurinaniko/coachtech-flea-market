@@ -36,9 +36,6 @@ class PurchaseController extends Controller
     public function store(PurchaseRequest $request, $itemId)
     {
         $item = Item::findOrFail($itemId);
-        if (Purchase::where('item_id', $item->id)->exists()) {
-            abort(403);
-        }
         $alreadyPurchased = Purchase::where('item_id', $item->id)
             ->whereIn('status', ['pending','completed'])
             ->exists();

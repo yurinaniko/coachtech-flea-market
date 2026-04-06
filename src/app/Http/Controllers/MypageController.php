@@ -67,21 +67,26 @@ class MypageController extends Controller
             })->get();
         }elseif ($page === 'trading') {
             $items = Item::whereHas('purchase', function ($q) {
-                $q->where('is_completed', false);
                 $q->where(function ($q2) {
-                    $q2->where('user_id', Auth::id())
-                    ->orWhereHas('item', function ($q3) {
-                        $q3->where('user_id', Auth::id());
+                    $q2->where(function ($q3) {
+                        $q3->where('user_id', Auth::id())
+                        ->whereNull('buyer_reviewed');
+                    })
+                    ->orWhere(function ($q3) {
+                        $q3->whereHas('item', function ($q4) {
+                            $q4->where('user_id', Auth::id());
+                        })
+                    ->whereNull('seller_reviewed');
                     });
                 });
             })
             ->with(['purchase' => function ($q) {
-            $q->withCount([
-                'comments as unread_count' => function ($q2) {
-                    $q2->where('is_read', false)
-                    ->where('user_id', '!=', Auth::id());
-                }
-            ])
+                $q->withCount([
+                    'comments as unread_count' => function ($q2) {
+                        $q2->where('is_read', false)
+                        ->where('user_id', '!=', Auth::id());
+                    }
+                ])
                 ->withMax('comments', 'created_at');
             }])
             ->get();
@@ -98,11 +103,16 @@ class MypageController extends Controller
         $unreadCount = Comment::where('is_read', false)
             ->where('user_id', '!=', Auth::id())
             ->whereHas('purchase', function ($q) {
-                $q->where('is_completed', false)
-                ->where(function ($q2) {
-                    $q2->where('user_id', Auth::id())
-                    ->orWhereHas('item', function ($q3) {
-                        $q3->where('user_id', Auth::id());
+                $q->where(function ($q2) {
+                    $q2->where(function ($q3) {
+                        $q3->where('user_id', Auth::id())
+                        ->whereNull('buyer_reviewed');
+                    })
+                    ->orWhere(function ($q3) {
+                        $q3->whereHas('item', function ($q4) {
+                            $q4->where('user_id', Auth::id());
+                        })
+                        ->whereNull('seller_reviewed');
                     });
                 });
             })
@@ -118,21 +128,27 @@ class MypageController extends Controller
         })
         ->get();
 
-        $ratings = [];
-
-        foreach ($receivedRatings as $purchase) {
-            if ($purchase->seller_id === $user->id && $purchase->seller_reviewed) {
-                $ratings[] = $purchase->seller_reviewed;
+        $ratings = Purchase::where(function ($q) use ($user) {
+            $q->where('user_id', $user->id)
+            ->whereNotNull('seller_reviewed');
+        })
+        ->orWhere(function ($q) use ($user) {
+            $q->whereHas('item', function ($q2) use ($user) {
+                $q2->where('user_id', $user->id);
+            })
+            ->whereNotNull('buyer_reviewed');
+        })
+        ->get()
+        ->map(function ($purchase) use ($user) {
+            if ($purchase->user_id === $user->id) {
+                return $purchase->seller_reviewed;
             }
+                return $purchase->buyer_reviewed;
+        })
+        ->filter()
+        ->values();
 
-            if ($purchase->user_id === $user->id && $purchase->buyer_reviewed) {
-                $ratings[] = $purchase->buyer_reviewed;
-            }
-        }
-
-        $avgRating = count($ratings) > 0
-        ? round(array_sum($ratings) / count($ratings))
-        : 0;
+        $avgRating = $ratings->count() ? round($ratings->avg()) : 0;
 
         return view('mypage.profile', compact(
             'user',

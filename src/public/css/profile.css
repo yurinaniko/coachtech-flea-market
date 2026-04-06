@@ -25,19 +25,9 @@
     background: #F4F4F4;
 }
 
-.little-star {
-    width: 30px;
-    height: 30px;
-}
-
 @media (max-width: 850px) {
     .user-info__wrapper {
         margin: 20px 40px;
-    }
-
-    .little-star {
-        width: 20px;
-        height: 20px;
     }
 
     .user-info__center {
