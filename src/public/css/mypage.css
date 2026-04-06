@@ -12,7 +12,7 @@
     padding: 4px;
 }
 
-.mypage__tab--active a {
+.mypage__tab.mypage__tab--active a {
     color: #FF4F5E;
     font-weight: 600;
 }
@@ -73,6 +73,11 @@
     margin-top: 10px;
 }
 
+.mypage__star-img {
+    width: 30px;
+    height: 30px;
+}
+
 @media (max-width: 850px) {
     .mypage__tabs {
         max-width: 600px;
@@ -103,5 +108,10 @@
     .mypage__stars {
         gap: 10px;
         margin-top: 10px;
+    }
+
+    .mypage__star-img {
+        width: 20px;
+        height: 20px;
     }
 }

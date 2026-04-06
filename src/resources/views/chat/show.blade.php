@@ -34,23 +34,13 @@
             </div>
             @php
                 $isBuyer = $purchase->user_id === auth()->id();
-                $isSeller = $purchase->item->user_id === auth()->id();
             @endphp
             <form action="{{ route('chat.review', $purchase->id) }}" method="POST">
                 @csrf
-                @if ($isBuyer)
-                    @if (!$purchase->buyer_reviewed)
-                        <button type="button" id="completeBtn" class="chat__complete-button">
-                            取引を完了する
-                        </button>
-                    @else
-                        <p class="chat__finish-text">評価済です</p>
-                    @endif
-                @endif
-                @if ($isSeller)
-                    @if ($purchase->seller_reviewed)
-                        <p class="chat__finish-text">評価済です</p>
-                    @endif
+                @if ($isBuyer && !$purchase->buyer_reviewed)
+                    <button type="button" id="completeBtn" class="chat__complete-button">
+                        取引を完了する
+                    </button>
                 @endif
             </form>
         </div>
@@ -66,7 +56,7 @@
                 @php
                     $hasMessageUserImage = optional($comment->user->profile)->img_url;
                 @endphp
-                <div class="chat__message {{ $comment->user_id === Auth::id() ? 'chat__message--sent':'chat__message--received' }}">
+                <div class="chat__message {{ $comment->user_id === Auth::id() ? 'chat__message--sent' : 'chat__message--received' }}">
                     <div class="chat__message-inner">
                         <div class="chat__message-content">
                             @if ($hasMessageUserImage)
@@ -156,15 +146,12 @@ document.addEventListener('DOMContentLoaded', function () {
     const modal = document.getElementById('reviewModal');
     const btn = document.getElementById('completeBtn');
     const stars = document.querySelectorAll('.star');
+
     if (btn) {
         btn.addEventListener('click', function () {
             modal.classList.add('active');
         });
     }
-
-    @if ($isSeller && !is_null($purchase->buyer_reviewed) && is_null($purchase->seller_reviewed))
-        modal.classList.add('active');
-    @endif
 
     stars.forEach((star, index) => {
         star.addEventListener('click', function () {

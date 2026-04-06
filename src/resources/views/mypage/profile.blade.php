@@ -11,21 +11,18 @@
 <div class="user-info">
     <div class="user-info__wrapper">
         <div class="user-info__center">
-            @php
-                $hasImage = optional($profile)->img_url;
-            @endphp
-            @if ($hasImage)
+            @if (optional($profile)->img_url)
                 <img src="{{ asset('storage/' . $hasImage) }}" class="profile-view__icon">
             @else
                 <div class="profile-form__placeholder"></div>
             @endif
             <div class="mypage__user-info">
-                <label class="mypage__user-name">{{ $user->name }}</label>
+                <p class="mypage__user-name">{{ $user->name }}</p>
                 <div class="mypage__stars" data-rating="{{ $avgRating ?? 0 }}">
                     @for ($i = 1; $i <= 5; $i++)
                         <label>
                             <input type="radio" name="rating" value="{{ $i }}" hidden>
-                            <img src="{{ asset('images/gray-star.png') }}" class="little-star">
+                            <img src="{{ asset('images/gray-star.png') }}" class="mypage__star-img">
                         </label>
                     @endfor
                 </div>
@@ -56,7 +53,6 @@
     <div class="item-list__grid">
         @foreach ($items as $item)
             @php
-                $isCompleted = $item->purchase?->is_completed ?? false;
                 $purchase = $item->purchase;
                 $unread = $purchase
                     ? $purchase->comments
@@ -65,10 +61,7 @@
                     ->count()
                     : 0;
             @endphp
-            <a href="{{ $page === 'trading'
-            ? route('chat.show', $item->id)
-            : route('items.show', $item->id) }}"
-            class="item-list__link">
+            <a href="{{ $page === 'trading' ? route('chat.show', $item->id) : route('items.show', $item->id) }}" class="item-list__link">
                 <div class="item-list__image">
                     @if($item->purchase && in_array($item->purchase->status, ['pending', 'completed']))
                         <span class="sold-badge">sold</span>
@@ -77,9 +70,6 @@
                         <span class="item-list__badge">{{ $unread }}</span>
                     @endif
                     <img src="{{ asset('storage/' . $item->img_url) }}" alt="">
-                    @if($isCompleted)
-                        <div class="item-list__overlay">取引終了</div>
-                    @endif
                 </div>
                 <p class="item-list__name">{{ $item->name }}</p>
             </a>
@@ -100,7 +90,7 @@ document.addEventListener('DOMContentLoaded', function () {
     if (!starContainer) return;
 
     const rating = Number(starContainer.dataset.rating) || 0;
-    const stars = starContainer.querySelectorAll('.little-star');
+    const stars = starContainer.querySelectorAll('.mypage__star-img');
 
     stars.forEach((star, index) => {
         if (index < rating) {

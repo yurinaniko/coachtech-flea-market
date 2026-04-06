@@ -25,13 +25,6 @@ class ChatSeeder extends Seeder
                     'is_read' => false,
                 ]);
 
-                Comment::create([
-                    'item_id' => $item->id,
-                    'purchase_id' => $purchase->id,
-                    'user_id' => $item->user_id,
-                    'comment' => 'ありがとうございます！',
-                    'is_read' => true,
-                ]);
             }
 
             if ($item->name === 'マイク') {
@@ -47,7 +40,7 @@ class ChatSeeder extends Seeder
                     'item_id' => $item->id,
                     'purchase_id' => $purchase->id,
                     'user_id' => $item->user_id,
-                    'comment' => '発送準備しています',
+                    'comment' => 'ありがとうございます！',
                     'is_read' => false,
                 ]);
             }

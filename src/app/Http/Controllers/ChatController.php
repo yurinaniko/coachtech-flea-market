@@ -21,34 +21,31 @@ class ChatController extends Controller
                 });
             })
             ->first();
-
         if (!$purchase) {
             abort(404);
         }
-
         Comment::where('purchase_id', $purchase->id)
             ->where('user_id', '!=', auth()->id())
             ->where('is_read', false)
             ->update(['is_read' => true]);
-
         $comments = Comment::with('user.profile')
             ->where('purchase_id', $purchase->id)
             ->orderBy('created_at')
             ->get();
-
         $item = $purchase->item;
-
         $user = $purchase->user_id === auth()->id()
             ? $purchase->item->user
             : $purchase->user;
-
         $transactions = Purchase::where(function ($q) {
             $q->where('user_id', auth()->id())
-            ->orWhereHas('item', function ($q2) {
-                $q2->where('user_id', auth()->id());
-            });
+            ->whereNull('buyer_reviewed');
         })
-        ->where('is_completed', false)
+        ->orWhere(function ($q) {
+            $q->whereHas('item', function ($q2) {
+                $q2->where('user_id', auth()->id());
+            })
+            ->whereNull('seller_reviewed');
+        })
         ->with('item')
         ->withCount([
             'comments as unread_count' => function ($q) {
@@ -85,17 +82,13 @@ class ChatController extends Controller
         }
         if ($request->comment_id) {
             $comment = Comment::findOrFail($request->comment_id);
-
             if ($comment->user_id !== auth()->id()) {
                 abort(403);
             }
-
             $imagePath = $comment->image;
-
             if ($request->hasFile('image')) {
                 $imagePath = $request->file('image')->store('images', 'public');
             }
-
             $comment->update([
                 'comment' => $request->comment,
                 'image' => $imagePath,
@@ -103,11 +96,9 @@ class ChatController extends Controller
             return back();
         }
         $imagePath = null;
-
         if ($request->hasFile('image')) {
             $imagePath = $request->file('image')->store('images', 'public');
         }
-
         Comment::create([
             'user_id' => auth()->id(),
             'item_id' => $itemId,
@@ -126,7 +117,6 @@ class ChatController extends Controller
             'rating' => 'required|integer|min:1|max:5',
         ]);
         $purchase = Purchase::with('item.user')->findOrFail($purchaseId);
-
         if ($purchase->user_id === auth()->id()) {
             $purchase->buyer_reviewed = $request->rating;
             $seller = $purchase->item->user;
@@ -140,10 +130,9 @@ class ChatController extends Controller
         if (!is_null($purchase->buyer_reviewed) && !is_null($purchase->seller_reviewed)) {
             $purchase->is_completed = true;
         }
-
         $purchase->save();
-
-        return redirect()->route('mypage.index', ['page' => 'trading']);
+        return redirect()
+            ->route('mypage.index', ['page' => 'trading']);
     }
 
     public function destroy($commentId)
