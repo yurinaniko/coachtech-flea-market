@@ -65,7 +65,7 @@ MAIL_FROM_NAME="coachtechフリマ"
 Stripe Webhookは、決済完了などのイベントをサーバー側で受け取り、
 購入状態を更新するために使用します。
 
-1. Stripeダッシュボードにログイン
+1. APIキーの取得
 
   ※ StripeのAPIキーは各自のテスト環境のものを使用してください。
   ※ クローン直後はダミーキーが設定されているため、そのままでは決済は動作しません。
@@ -74,37 +74,38 @@ Stripe Webhookは、決済完了などのイベントをサーバー側で受け
   取得方法：
 - https://dashboard.stripe.com/test/apikeysにアクセスする。
 
-2. 開発者 → Webhook をクリック
-3. エンドポイント を追加をクリック(どこに送るのか登録)
-4. 以下を設定
-    - URL： http://localhost:8000/stripe/webhook（※自分のルートに合わせる）
-    - イベント： checkout.session.completed を選択
-5.  作成後、「Signing secret（署名シークレット）」を表示
-6. 「Reveal」をクリックしてシークレットをコピー
+2. Webhook（ローカル環境）
+ローカル環境では Stripe CLI を使用してWebhookを受信します。
 
-7. .env に以下を設定
+```bash
+stripe listen --forward-to http://localhost:8000/stripe/webhook
+```
+実行後、以下のような署名シークレットが表示されます。
+```bash
+whsec_xxxxxxxxxxxxx
+```
+.envのSTRIPE_WEBHOOK_SECRETに貼付する。
+
+3. .env に以下を設定
 ```env
 STRIPE_KEY=pk_test_xxxxxxxxxxxxxxxxx
 STRIPE_SECRET=sk_test_xxxxxxxxxxxxxxxxx
 STRIPE_WEBHOOK_SECRET=whsec_xxxxxxxxxxxxxxxxx
-公開可能キーとシークレットキーのコピーをして.envの上記の場所に貼る。
+
 ※ STRIPE_WEBHOOK_SECRET はWebhookの署名検証に使用します。
 ローカル環境では必須ではありませんが、セキュリティ上は設定することを推奨します。
 
-- 公開可能キー → STRIPE_KEY
-- シークレットキー → STRIPE_SECRET
+- 公開可能キー → STRIPE_KEY（pk_test_...）
+- シークレットキー → STRIPE_SECRET（sk_test_...）
+- Webhook署名キー → STRIPE_WEBHOOK_SECRET
+→ Webhook署名シークレット（whsec_...）
+  ※ Stripe CLI（stripe listen）実行時に取得
 
 ※ Stripe のキーは各自の **テスト用 API キー** を設定してください。
 （本番キーは使用しません）
 ```
 - ※ Stripe Webhook はローカル環境では実際の受信確認までは行っていませんが、
 Checkout セッション作成および購入ステータス更新処理まで実装しています。
-- ※ Stripe Webhook はローカル環境では外部から直接アクセスできないため、
-Stripe CLI を使用して動作確認することができます。
-```bash
-stripe listen --forward-to http://localhost:8000/stripe/webhook
-```
-
 
 ## 7 Stripeキー設定反映（キャッシュクリア）
 
@@ -113,7 +114,6 @@ stripe listen --forward-to http://localhost:8000/stripe/webhook
 ※ .envの変更はキャッシュされるため、この操作を行わないと反映されません。
 
 ```bash
-php artisan config:clear
 php artisan cache:clear
 ```
 ## 8 データベース初期化（マイグレーション & シーディング）
