@@ -11,7 +11,10 @@
 <div class="user-info">
     <div class="user-info__wrapper">
         <div class="user-info__center">
-            @if (optional($profile)->img_url)
+            @php
+                $hasImage = optional($profile)->img_url;
+            @endphp
+            @if ($hasImage)
                 <img src="{{ asset('storage/' . $hasImage) }}" class="profile-view__icon">
             @else
                 <div class="profile-form__placeholder"></div>

@@ -126,8 +126,9 @@
 }
 
 .chat__info-icon {
-    width: 40px;
-    height: 40px;
+    margin: 8px 0;
+    width: 60px;
+    height: 60px;
     border-radius: 50%;
     object-fit: cover;
     background-color: #D9D9D9;
@@ -464,6 +465,12 @@
     }
 
     .chat__info-placeholder {
+        margin: 4px 0;
+        width: 40px;
+        height: 40px;
+    }
+
+    .chat__info-icon {
         margin: 4px 0;
         width: 40px;
         height: 40px;

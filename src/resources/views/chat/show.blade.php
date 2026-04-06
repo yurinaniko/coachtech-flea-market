@@ -34,6 +34,7 @@
             </div>
             @php
                 $isBuyer = $purchase->user_id === auth()->id();
+                $isSeller = $purchase->item->user_id === auth()->id();
             @endphp
             <form action="{{ route('chat.review', $purchase->id) }}" method="POST">
                 @csrf
@@ -146,6 +147,11 @@ document.addEventListener('DOMContentLoaded', function () {
     const modal = document.getElementById('reviewModal');
     const btn = document.getElementById('completeBtn');
     const stars = document.querySelectorAll('.star');
+
+    if ({{ $isSeller && $purchase->buyer_reviewed && !$purchase->seller_reviewed ? 'true' : 'false' }}) {
+        modal.classList.add('active');
+    }
+
 
     if (btn) {
         btn.addEventListener('click', function () {
