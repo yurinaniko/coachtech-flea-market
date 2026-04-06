@@ -147,6 +147,8 @@ document.addEventListener('DOMContentLoaded', function () {
     const modal = document.getElementById('reviewModal');
     const btn = document.getElementById('completeBtn');
     const stars = document.querySelectorAll('.star');
+    const textarea = document.querySelector('.chat__send-input');
+    const form = document.querySelector('.chat__send-form');
 
     if ({{ $isSeller && $purchase->buyer_reviewed && !$purchase->seller_reviewed ? 'true' : 'false' }}) {
         modal.classList.add('active');
@@ -198,17 +200,31 @@ document.addEventListener('DOMContentLoaded', function () {
             document.getElementById('comment_id').value = id;
         });
     });
-});
 
-const textarea = document.querySelector('.chat__send-input');
-textarea.addEventListener('input', function () {
-    this.style.height = 'auto';
-    this.style.height = this.scrollHeight + 'px';
+if (!textarea) return;
 
-    if (this.scrollHeight > 120) {
-        this.style.overflowY = 'auto';
-    } else {
-        this.style.overflowY = 'hidden';
+    const draft = localStorage.getItem('chat_draft');
+    if (draft && !textarea.value) {
+        textarea.value = draft;
+    }
+
+    textarea.addEventListener('input', function () {
+        localStorage.setItem('chat_draft', this.value);
+
+        this.style.height = 'auto';
+        this.style.height = this.scrollHeight + 'px';
+
+        if (this.scrollHeight > 120) {
+            this.style.overflowY = 'auto';
+        } else {
+            this.style.overflowY = 'hidden';
+        }
+    });
+
+    if (form) {
+        form.addEventListener('submit', function () {
+            localStorage.removeItem('chat_draft');
+        });
     }
 });
 </script>
