@@ -70,7 +70,7 @@
     display: flex;
     justify-content: center;
     gap: 20px;
-    margin-top: 10px;
+    margin-bottom: 10px;
 }
 
 .mypage__star-img {
@@ -107,7 +107,6 @@
 
     .mypage__stars {
         gap: 10px;
-        margin-top: 10px;
     }
 
     .mypage__star-img {

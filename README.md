@@ -66,6 +66,17 @@ Stripe Webhookは、決済完了などのイベントをサーバー側で受け
 購入状態を更新するために使用します。
 
 1. Stripeダッシュボードにログイン
+
+※ StripeのAPIキーは各自のテスト環境のものを使用してください。
+※ クローン直後はダミーキーが設定されているため、そのままでは決済は動作しません。
+必ず各自のStripeテストキーに置き換えてください。
+
+取得方法：
+https://dashboard.stripe.com/test/apikeys
+
+- 公開可能キー → STRIPE_KEY
+- シークレットキー → STRIPE_SECRET
+
 2. 開発者 → Webhook をクリック
 3. エンドポイント を追加をクリック
 4. 以下を設定
@@ -79,6 +90,11 @@ Stripe Webhookは、決済完了などのイベントをサーバー側で受け
 STRIPE_KEY=pk_test_xxxxxxxxxxxxxxxxx
 STRIPE_SECRET=sk_test_xxxxxxxxxxxxxxxxx
 STRIPE_WEBHOOK_SECRET=whsec_xxxxxxxxxxxxxxxxx
+公開可能キーとシークレットキーのコピーをして.envの上記の場所に貼る。
+
+- 公開可能キー → STRIPE_KEY
+- シークレットキー → STRIPE_SECRET
+
 ※ Stripe のキーは各自の **テスト用 API キー** を設定してください。
 （本番キーは使用しません）
 ```
@@ -90,36 +106,35 @@ Stripe CLI を使用して動作確認することができます。
 stripe listen --forward-to http://localhost:8000/stripe/webhook
 ```
 
-## 7 データベース初期化（マイグレーション & シーディング）
+
+## 7 Stripeキー設定反映（キャッシュクリア）
+
+.env にStripeキーを設定後、Laravelのキャッシュをクリアします。
+
+※ .envの変更はキャッシュされるため、この操作を行わないと反映されません。
+
+```bash
+php artisan config:clear
+php artisan cache:clear
+```
+## 8 データベース初期化（マイグレーション & シーディング）
 ```bash
 php artisan migrate:fresh --seed
 ```
-## 8 画像表示設定
-本アプリでは、商品画像を以下のルールで管理しています。
-※ Seeder による初期データ投入後、画像を正しく表示するために
-以下の設定を行っています。
+## 9 画像表示設定
+本アプリでは、storage/app/public 配下の画像をブラウザから表示するために、
+シンボリックリンク（公開用リンク）を作成する必要があります。
 
-- Seederで使用するダミー画像
-  → storage/app/public/dummy/ に配置
-  → Seederで使用するダミー画像は、clone 後に初期表示できるよう storage/app/public/dummy/ を Git 管理しています。
+※ この設定を行わないと、商品画像・プロフィール画像が表示されません。
 
-- 実際にユーザーがアップロードした画像（商品画像）
-  → storage/app/public/images/ に保存
-  → GitHub には含まれません
-  ※ プロフィール画像も商品画像と同様に storage/app/public 配下に保存されます。
-ユーザーがアップロードしたプロフィール画像は GitHub には含まれていません。
+以下のコマンドを実行してください。
 
-表示時は、実画像・ダミー画像ともに以下のように統一しています。
-
-```md
-<img src="{{ asset('storage/' . $item->img_url) }}">
-画像はすべて `storage/app/public` 配下に保存されるため、
-初回セットアップ時には以下のコマンドを必ず実行してください。
-```
 ```bash
 php artisan storage:link
 ```
-## 9 アプリケーション確認
+※ storage/app/public に保存された画像を
+public/storage から参照できるようにするための設定です。
+## 10 アプリケーション確認
 以下のURLにアクセスすると、アプリケーションが表示されます。
 ```
 http://localhost:8000
@@ -137,7 +152,7 @@ mysql:
 そのため、M1 / M2 Mac 環境でも
 追加設定なしで Docker を起動できます。
 
-## 動作確認用情報
+## 11 動作確認用情報
 
 ### ■ テストユーザー
 
@@ -519,39 +534,32 @@ LoginUser内で独自にバリデーション制御を実装しています。
 1. テスト用データベースを作成
 上記で指定した DB_DATABASE（例：demo_test）を、
 MySQL 上に作成してください。
+
+① MySQL コンテナに入ります、MySQL へ接続します
 ```bash
 docker compose exec mysql bash
 mysql -u root -p
 ```
+② パスワード入力
+※ MySQL の root パスワードは docker-compose.yml の MYSQL_ROOT_PASSWORD を参照してください。
+
+③ テスト用データベースを作成
 ```sql
 CREATE DATABASE demo_test;
 SHOW DATABASES;
 ```
 SHOW DATABASES;入力後、demo_testが作成されていれば成功です。
-2. configファイルの変更
-configディレクトリの中のdatabase.phpに以下の編集を行う。
-```env
-'mysql' => [
-// 中略
-],
-+  'mysql_test' => [
-+      'driver' => 'mysql',
-+      'host' => env('DB_HOST', 'mysql'),
-+      'port' => env('DB_PORT', '3306'),
-+      'database' => 'demo_test',
-+      'username' => 'root',
-+      'password' => 'root',
-+      'charset' => 'utf8mb4',
-+      'collation' => 'utf8mb4_unicode_ci',
-+      'prefix' => '',
-+      'strict' => true,
-+      ],
-```
-3. `.env.testing` を作成
+
+④ MySQLを終了する
 ```bash
-cp .env .env.testing
+exit
 ```
-4. .env.testing をテスト用に編集
+⑤ MySQLコンテナから出る
+```bash
+exit
+```
+2. .env.testing をテスト用に編集
+
 ### ① アプリケーション設定
 ```env
 APP_ENV=test
@@ -572,12 +580,18 @@ DB_PASSWORD=root
 APP_KEY は空に設定してください。
 編集後、以下のコマンドでテスト用キーを生成します。
 
+3. PHPコンテナに入る
+```bash
+docker compose exec php bash
+```
+
+4. テスト用キーを生成し、設定キャッシュをクリアする
 ```bash
 php artisan key:generate --env=testing
 php artisan config:clear
 ```
 
-5. PHPUnit 設定
+- PHPUnit 設定
 テスト実行時は .env.testing の設定に加えて、
 phpunit.xml にてテスト環境用の設定を定義しています。
 ```xml
@@ -590,7 +604,7 @@ phpunit.xml にてテスト環境用の設定を定義しています。
 ・本番 / 開発DBへ影響しない安全な設計
 となっています。
 
-6. マイグレーション & テスト実行
+5. マイグレーション & テスト実行
 ```bash
 php artisan migrate:fresh --env=testing
 php artisan test

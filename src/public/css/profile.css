@@ -4,7 +4,7 @@
 
 .user-info__wrapper {
     max-width: 850px;
-    margin: 40px auto;
+    margin: 20px auto;
     display: flex;
     align-items: center;
     justify-content: space-between;
@@ -27,7 +27,7 @@
 
 @media (max-width: 850px) {
     .user-info__wrapper {
-        margin: 20px 40px;
+        margin: 10px 40px;
     }
 
     .user-info__center {
