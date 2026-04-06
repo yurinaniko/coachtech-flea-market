@@ -67,18 +67,15 @@ Stripe Webhookは、決済完了などのイベントをサーバー側で受け
 
 1. Stripeダッシュボードにログイン
 
-※ StripeのAPIキーは各自のテスト環境のものを使用してください。
-※ クローン直後はダミーキーが設定されているため、そのままでは決済は動作しません。
-必ず各自のStripeテストキーに置き換えてください。
+  ※ StripeのAPIキーは各自のテスト環境のものを使用してください。
+  ※ クローン直後はダミーキーが設定されているため、そのままでは決済は動作しません。
+  必ず各自のStripeテストキーに置き換えてください。
 
-取得方法：
-https://dashboard.stripe.com/test/apikeys
-
-- 公開可能キー → STRIPE_KEY
-- シークレットキー → STRIPE_SECRET
+  取得方法：
+- https://dashboard.stripe.com/test/apikeysにアクセスする。
 
 2. 開発者 → Webhook をクリック
-3. エンドポイント を追加をクリック
+3. エンドポイント を追加をクリック(どこに送るのか登録)
 4. 以下を設定
     - URL： http://localhost:8000/stripe/webhook（※自分のルートに合わせる）
     - イベント： checkout.session.completed を選択
@@ -91,6 +88,8 @@ STRIPE_KEY=pk_test_xxxxxxxxxxxxxxxxx
 STRIPE_SECRET=sk_test_xxxxxxxxxxxxxxxxx
 STRIPE_WEBHOOK_SECRET=whsec_xxxxxxxxxxxxxxxxx
 公開可能キーとシークレットキーのコピーをして.envの上記の場所に貼る。
+※ STRIPE_WEBHOOK_SECRET はWebhookの署名検証に使用します。
+ローカル環境では必須ではありませんが、セキュリティ上は設定することを推奨します。
 
 - 公開可能キー → STRIPE_KEY
 - シークレットキー → STRIPE_SECRET
