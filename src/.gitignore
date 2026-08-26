@@ -3,6 +3,9 @@
 /storage/*.key
 /vendor
 .env
+.env.*
+!.env.example
+!.env.testing.example
 .env.backup
 .phpunit.result.cache
 docker-compose.override.yml
@@ -20,4 +23,3 @@ docker/mysql/conf/
 storage/app/public/*
 !storage/app/public/dummy
 !storage/app/public/dummy/*
-.env.testing

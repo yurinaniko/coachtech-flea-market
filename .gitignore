@@ -1,0 +1,14 @@
+# .gitignore は「そのファイルがある階層から下」にしか効かない。
+# src/.gitignore ではリポジトリ直下の docker/ を守れないため、ここに置く。
+
+.DS_Store
+
+# 環境ファイル（雛形だけ共有する）
+.env
+.env.*
+!.env.example
+!.env.testing.example
+
+# MySQLの実データ・ログ・自動生成されるTLS鍵
+/docker/mysql/data/
+/docker/mysql/logs/
