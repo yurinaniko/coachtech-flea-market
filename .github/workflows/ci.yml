@@ -51,6 +51,13 @@ jobs:
         working-directory: src
         run: composer install --no-interaction --no-progress --prefer-dist
 
+      # .env.testing は各自の環境で鍵を生成する方針のためリポジトリに無い
+      - name: テスト用の環境ファイルを用意
+        working-directory: src
+        run: |
+          cp .env.testing.example .env.testing
+          php artisan key:generate --env=testing
+
       - name: テスト実行
         working-directory: src
         env:
