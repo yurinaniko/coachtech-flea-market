@@ -127,3 +127,31 @@
 }
 
 
+
+/* =========================
+   レスポンシブ（タブレット・スマホ）
+========================= */
+@media (max-width: 768px) {
+    .auth__wrapper,
+    .auth__wrapper--verify {
+        padding: 20px 16px;
+        box-sizing: border-box;
+    }
+    /* 幅680px固定→画面幅に収める */
+    .auth {
+        width: 100%;
+        max-width: 680px;
+        padding: 24px 20px;
+        box-sizing: border-box;
+    }
+    .auth__title {
+        font-size: 26px;
+    }
+    .auth--login .auth__title {
+        margin-bottom: 32px;
+    }
+    /* ログインの余白80pxはスマホで空きすぎるので詰める */
+    .auth--login .form__group {
+        margin-bottom: 40px;
+    }
+}

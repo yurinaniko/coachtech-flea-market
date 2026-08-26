@@ -10,5 +10,7 @@
 !.env.testing.example
 
 # MySQLの実データ・ログ・自動生成されるTLS鍵
-/docker/mysql/data/
+# data だけでなく退避用の data_broken_backup 等も確実に除外する（data* で網羅）。
+# 完全一致 /docker/mysql/data/ だとブランチ操作で稼働中DBを壊す事故につながったため。
+/docker/mysql/data*
 /docker/mysql/logs/
