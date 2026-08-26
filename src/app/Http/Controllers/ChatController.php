@@ -116,7 +116,20 @@ class ChatController extends Controller
         $request->validate([
             'rating' => 'required|integer|min:1|max:5',
         ]);
-        $purchase = Purchase::with('item.user')->findOrFail($purchaseId);
+        // 評価を書けるのは取引の当事者（購入者・出品者）だけ。
+        // 所有者で絞らずに取ると、第三者が else 側＝出品者として書き込めてしまう。
+        $purchase = Purchase::with('item.user')
+            ->where('id', $purchaseId)
+            ->where(function ($q) {
+                $q->where('user_id', auth()->id())
+                ->orWhereHas('item', function ($q2) {
+                    $q2->where('user_id', auth()->id());
+                });
+            })
+            ->first();
+        if (!$purchase) {
+            abort(403);
+        }
         if ($purchase->user_id === auth()->id()) {
             $purchase->buyer_reviewed = $request->rating;
             $seller = $purchase->item->user;
