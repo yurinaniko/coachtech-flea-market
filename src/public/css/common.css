@@ -178,3 +178,48 @@ body {
         padding: 4px 10px;
     }
 }
+/* スマホではヘッダーの3等分グリッドが破綻する（ロゴが幅を占有）ため、
+   ロゴ＋メニューを上段・検索を下段フル幅に再構成する */
+@media (max-width: 600px) {
+    .header__inner {
+        grid-template-columns: auto 1fr;
+        grid-template-areas:
+            "logo menu"
+            "search search";
+        row-gap: 8px;
+        align-items: center;
+    }
+    .header__logo {
+        grid-area: logo;
+    }
+    .header__menu {
+        grid-area: menu;
+        gap: 10px;
+        justify-content: flex-end;
+    }
+    /* メニュー項目が縦に折り返さないよう小さめ＋nowrap */
+    .header__menu a,
+    .header__menu button,
+    .header__link,
+    .header__logout-button {
+        font-size: 12px;
+        white-space: nowrap;
+    }
+    .header__sell-button {
+        padding: 4px 8px;
+        white-space: nowrap;
+    }
+    /* ロゴを小さくしてメニューの幅を確保 */
+    .header__logo-img {
+        height: 16px;
+        margin-left: 8px;
+    }
+    .header__search {
+        grid-area: search;
+        justify-content: stretch;
+    }
+    .header__search-input {
+        max-width: 100%;
+        width: 100%;
+    }
+}

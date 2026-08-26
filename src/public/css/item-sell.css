@@ -142,3 +142,21 @@
 .sell__button:hover {
     opacity: 0.85;
 }
+
+/* =========================
+   レスポンシブ（タブレット・スマホ）
+========================= */
+@media (max-width: 768px) {
+    .sell {
+        padding: 20px 16px;
+    }
+    /* 幅680px固定→画面幅に収める */
+    .sell__image-upload,
+    .sell__section {
+        width: 100%;
+    }
+    /* カテゴリタグの左余白40pxはスマホで詰める */
+    .category-tags {
+        padding-left: 0;
+    }
+}
