@@ -298,3 +298,46 @@
 .item-detail__comment-wrapper {
     margin-top: 20px;
 }
+/* =========================
+   レスポンシブ（タブレット・スマホ）
+========================= */
+@media (max-width: 900px) {
+    .item-detail {
+        margin: 20px auto;
+        padding: 0 16px;
+    }
+    /* 画像(左40%)と情報(右40%)の横並び→縦積み */
+    .item-detail__container {
+        flex-direction: column;
+        gap: 30px;
+        margin: 20px auto;
+        align-items: stretch;
+    }
+    /* 画像は固定480px高さ→画面幅の正方形に */
+    .item-detail__image-area {
+        width: 100%;
+        max-width: 100%;
+        height: auto;
+        aspect-ratio: 1 / 1;
+    }
+    .item-detail__info {
+        width: 100%;
+    }
+}
+
+@media (max-width: 480px) {
+    .item-detail__name {
+        font-size: 24px;
+    }
+    /* PC用の大きめインデントをスマホで詰める */
+    .item-detail__actions {
+        margin-left: 0;
+        gap: 24px;
+    }
+    .item-detail__value {
+        margin-left: 20px;
+    }
+    .item-detail__category-tags {
+        margin-left: 0;
+    }
+}

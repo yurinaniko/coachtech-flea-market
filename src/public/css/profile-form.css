@@ -80,3 +80,25 @@
     font-weight: bold;
     cursor: pointer;
 }
+/* =========================
+   レスポンシブ（タブレット・スマホ）
+========================= */
+@media (max-width: 768px) {
+    /* 画面端に貼り付かないよう左右に余白 */
+    .profile-form {
+        margin: 0 16px;
+        padding: 20px 16px;
+    }
+}
+
+@media (max-width: 480px) {
+    .profile-form__title {
+        font-size: 22px;
+    }
+    /* アバターと選択ボタンを縦に */
+    .profile-form__image-area {
+        flex-direction: column;
+        align-items: flex-start;
+        gap: 12px;
+    }
+}
