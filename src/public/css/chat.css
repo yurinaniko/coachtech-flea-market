@@ -599,9 +599,10 @@
     .chat__send-input {
         font-size: 14px;
     }
+    /* スマホでは入力欄が狭く、プレースホルダーが折り返して窮屈なので非表示に
+       （送信アイコン・画像追加ボタンがあり用途は明らかなため）。入力は可能 */
     .chat__send-input::placeholder {
-        font-size: 13px;
-        padding: 4px;
+        color: transparent;
     }
     .chat__image-upload {
         flex: 0 0 auto;
