@@ -559,9 +559,30 @@
     .chat__main {
         width: 100%;
     }
-    /* タイトルと「取引を完了する」ボタンが窮屈にならないよう折り返し可 */
+    /* タイトルと「取引を完了する」ボタンが横並びだとボタンが縦に潰れるので、
+       タイトルを上・ボタンを下に縦積みにする */
     .chat__info-wrapper {
-        flex-wrap: wrap;
-        gap: 8px;
+        flex-direction: column;
+        align-items: flex-start;
+        gap: 10px;
+    }
+    .chat__complete-button {
+        white-space: nowrap;
+        margin-right: 0;
+    }
+
+    /* 評価モーダル: スマホでは画面に確実に収め、背景を薄暗くして
+       「モーダル」だと分かるようにする（既定は透明で内容が埋もれる） */
+    .modal {
+        background: rgba(0, 0, 0, 0.45);
+        padding: 16px;
+    }
+    .modal__content {
+        width: 100%;
+        max-width: 400px;
+        height: auto;
+    }
+    .modal__stars {
+        padding: 14px 10px;
     }
 }
