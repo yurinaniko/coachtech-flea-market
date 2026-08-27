@@ -234,3 +234,49 @@
     margin-top: 12px;
     margin-left: 100px;
 }
+/* =========================
+   レスポンシブ（タブレット・スマホ）
+========================= */
+@media (max-width: 900px) {
+    .purchase {
+        margin: 20px auto;
+        padding: 0 16px;
+    }
+    /* 明細(左)と合計(右300px)の横並び→縦積み */
+    .purchase__container {
+        flex-direction: column;
+        gap: 30px;
+        margin-top: 20px;
+    }
+    .purchase__left,
+    .purchase__right {
+        width: 100%;
+    }
+}
+
+@media (max-width: 600px) {
+    /* PC用の大きなmargin-left:100pxをスマホで詰める */
+    .purchase__select {
+        margin-left: 20px;
+        width: 100%;
+        max-width: 240px;
+        box-sizing: border-box;
+    }
+    .purchase__address-box {
+        margin-left: 20px;
+    }
+    .purchase .form__error {
+        margin-left: 20px;
+    }
+    .purchase__image-box img {
+        width: 140px;
+        height: 140px;
+    }
+    .purchase__name {
+        font-size: 20px;
+        padding: 0 10px;
+    }
+    .purchase__price {
+        font-size: 20px;
+    }
+}
