@@ -95,10 +95,10 @@
     .profile-form__title {
         font-size: 22px;
     }
-    /* アバターと選択ボタンを縦に */
+    /* アバターと選択ボタンを縦に・中央寄せ */
     .profile-form__image-area {
         flex-direction: column;
-        align-items: flex-start;
+        align-items: center;
         gap: 12px;
     }
 }
