@@ -558,6 +558,18 @@
     }
     .chat__main {
         width: 100%;
+        /* 下部固定の入力欄に最後のメッセージが隠れないよう余白を確保 */
+        padding-bottom: 84px;
+    }
+    /* 入力フォームを画面下部に固定（メッセージが少なくても常に一番下） */
+    .chat__input-area {
+        position: fixed;
+        bottom: 0;
+        left: 0;
+        width: 100%;
+        z-index: 20;
+        padding: 8px 0;
+        box-shadow: 0 -2px 8px rgba(0, 0, 0, 0.08);
     }
     /* タイトルと「取引を完了する」ボタンが横並びだとボタンが縦に潰れるので、
        タイトルを上・ボタンを下に縦積みにする */
