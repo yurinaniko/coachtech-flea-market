@@ -124,4 +124,8 @@
         height: auto;
         aspect-ratio: 1 / 1;
     }
+    /* タブ（おすすめ／マイリスト）が画面左端に貼り付くので少し右へ */
+    .item-list__tabs {
+        padding-left: 16px;
+    }
 }

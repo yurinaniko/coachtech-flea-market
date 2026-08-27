@@ -531,3 +531,37 @@
         margin: 4px 20px 10px 10px;
     }
 }
+/* スマホではサイドバー(250px)とメインの横並びだと両方潰れる。
+   縦積みにして、サイドバーは上部の帯（取引一覧を横並び）にする */
+@media (max-width: 700px) {
+    .chat__layout {
+        flex-direction: column;
+        min-height: 0;
+    }
+    .chat__sidebar {
+        width: 100%;
+        padding: 12px 16px;
+        display: flex;
+        flex-wrap: wrap;
+        align-items: center;
+        gap: 8px 12px;
+    }
+    /* 「その他の取引」は1行使い、取引リンクは横に並べる */
+    .chat__sidebar-title {
+        width: 100%;
+        margin: 0 0 4px;
+    }
+    .chat__sidebar-item {
+        width: auto;
+        margin: 0;
+        flex: 0 0 auto;
+    }
+    .chat__main {
+        width: 100%;
+    }
+    /* タイトルと「取引を完了する」ボタンが窮屈にならないよう折り返し可 */
+    .chat__info-wrapper {
+        flex-wrap: wrap;
+        gap: 8px;
+    }
+}
