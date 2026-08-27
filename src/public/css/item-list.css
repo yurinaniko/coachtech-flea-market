@@ -114,3 +114,18 @@
         height: 180px;
     }
 }
+/* スマホは4列だとカードが小さすぎるので2列に */
+@media (max-width: 600px) {
+    .item-list__grid {
+        grid-template-columns: repeat(2, minmax(0, 1fr));
+    }
+    /* 2列で横幅が広がるぶん画像枠を正方形にして間延びを防ぐ */
+    .item-list__image {
+        height: auto;
+        aspect-ratio: 1 / 1;
+    }
+    /* タブ（おすすめ／マイリスト）が画面左端に貼り付くので少し右へ */
+    .item-list__tabs {
+        padding-left: 16px;
+    }
+}

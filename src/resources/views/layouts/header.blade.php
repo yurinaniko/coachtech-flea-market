@@ -16,6 +16,11 @@
                 || Request::is('email/verify');
         @endphp
         @if (! $hideHeaderMenu)
+            {{-- スマホ用ハンバーガー（CSSのみ・チェックボックス方式）。PCでは非表示 --}}
+            <input type="checkbox" id="header-menu-toggle" class="header__menu-toggle" aria-hidden="true">
+            <label for="header-menu-toggle" class="header__hamburger" aria-label="メニューを開閉">
+                <span></span><span></span><span></span>
+            </label>
             <div class="header__menu">
                 @auth
                     <form action="{{ route('logout') }}" method="POST" style="display:inline;">

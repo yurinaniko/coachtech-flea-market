@@ -178,13 +178,36 @@ body {
         padding: 4px 10px;
     }
 }
+/* ハンバーガー（トグル本体とアイコン）はPCでは非表示。スマホのみ表示する */
+.header__menu-toggle {
+    display: none;
+}
+
+.header__hamburger {
+    display: none;
+    flex-direction: column;
+    justify-content: center;
+    gap: 5px;
+    width: 30px;
+    height: 30px;
+    cursor: pointer;
+}
+
+.header__hamburger span {
+    display: block;
+    width: 24px;
+    height: 2px;
+    background: #fff;
+    border-radius: 2px;
+}
+
 /* スマホではヘッダーの3等分グリッドが破綻する（ロゴが幅を占有）ため、
-   ロゴ＋メニューを上段・検索を下段フル幅に再構成する */
+   ロゴ＋ハンバーガーを上段・検索を下段に置き、メニューはハンバーガーで開閉する */
 @media (max-width: 600px) {
     .header__inner {
         grid-template-columns: auto 1fr;
         grid-template-areas:
-            "logo menu"
+            "logo hamburger"
             "search search";
         row-gap: 8px;
         align-items: center;
@@ -192,27 +215,16 @@ body {
     .header__logo {
         grid-area: logo;
     }
-    .header__menu {
-        grid-area: menu;
-        gap: 10px;
-        justify-content: flex-end;
-    }
-    /* メニュー項目が縦に折り返さないよう小さめ＋nowrap */
-    .header__menu a,
-    .header__menu button,
-    .header__link,
-    .header__logout-button {
-        font-size: 12px;
-        white-space: nowrap;
-    }
-    .header__sell-button {
-        padding: 4px 8px;
-        white-space: nowrap;
-    }
-    /* ロゴを小さくしてメニューの幅を確保 */
     .header__logo-img {
-        height: 16px;
+        height: 20px;
         margin-left: 8px;
+    }
+    /* ハンバーガーを右上に表示 */
+    .header__hamburger {
+        display: flex;
+        grid-area: hamburger;
+        justify-self: end;
+        margin-right: 4px;
     }
     .header__search {
         grid-area: search;
@@ -221,5 +233,30 @@ body {
     .header__search-input {
         max-width: 100%;
         width: 100%;
+    }
+    /* メニューは既定で隠し、チェックで開くドロップダウンに */
+    .header__menu {
+        display: none;
+        grid-column: 1 / -1;
+        flex-direction: column;
+        align-items: flex-start;
+        gap: 16px;
+        padding: 8px 4px 4px;
+    }
+    .header__menu-toggle:checked ~ .header__menu {
+        display: flex;
+    }
+    /* 開いたとき×印になるアニメーション */
+    .header__menu-toggle:checked ~ .header__hamburger span:nth-child(1) {
+        transform: translateY(7px) rotate(45deg);
+    }
+    .header__menu-toggle:checked ~ .header__hamburger span:nth-child(2) {
+        opacity: 0;
+    }
+    .header__menu-toggle:checked ~ .header__hamburger span:nth-child(3) {
+        transform: translateY(-7px) rotate(-45deg);
+    }
+    .header__hamburger span {
+        transition: transform 0.2s ease, opacity 0.2s ease;
     }
 }

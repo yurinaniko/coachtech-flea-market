@@ -34,3 +34,31 @@
         gap: 10px;
     }
 }
+/* スマホでは名前・星と編集ボタンが横並びで収まらず、ボタンが画面外に
+   はみ出す。縦積み＆中央寄せにして全部見えるようにする */
+@media (max-width: 600px) {
+    .user-info__wrapper {
+        margin: 10px 16px;
+        flex-direction: column;
+        align-items: center;
+        gap: 14px;
+    }
+    .user-info__center {
+        flex-direction: column;
+        align-items: center;
+        gap: 10px;
+        text-align: center;
+    }
+    .profile-view__icon {
+        width: 90px;
+        height: 90px;
+    }
+    .mypage__user-name {
+        padding-left: 0;
+        margin-top: 6px;
+        text-align: center;
+    }
+    .mypage__stars {
+        justify-content: center;
+    }
+}

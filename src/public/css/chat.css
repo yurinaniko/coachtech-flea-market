@@ -531,3 +531,98 @@
         margin: 4px 20px 10px 10px;
     }
 }
+/* スマホではサイドバー(250px)とメインの横並びだと両方潰れる。
+   縦積みにして、サイドバーは上部の帯（取引一覧を横並び）にする */
+@media (max-width: 700px) {
+    .chat__layout {
+        flex-direction: column;
+        min-height: 0;
+    }
+    .chat__sidebar {
+        width: 100%;
+        padding: 12px 16px;
+        display: flex;
+        flex-wrap: wrap;
+        align-items: center;
+        gap: 8px 12px;
+    }
+    /* 「その他の取引」は1行使い、取引リンクは横に並べる */
+    .chat__sidebar-title {
+        width: 100%;
+        margin: 0 0 4px;
+    }
+    .chat__sidebar-item {
+        width: auto;
+        margin: 0;
+        flex: 0 0 auto;
+    }
+    .chat__main {
+        width: 100%;
+        /* 下部固定の入力欄に最後のメッセージが隠れないよう余白を確保 */
+        padding-bottom: 84px;
+    }
+    /* 入力フォームを画面下部に固定（メッセージが少なくても常に一番下） */
+    .chat__input-area {
+        position: fixed;
+        bottom: 0;
+        left: 0;
+        width: 100%;
+        z-index: 20;
+        padding: 8px 0;
+        box-shadow: 0 -2px 8px rgba(0, 0, 0, 0.08);
+    }
+    /* タイトルと「取引を完了する」ボタンが横並びだとボタンが縦に潰れるので、
+       タイトルを上・ボタンを下に縦積みにする */
+    .chat__info-wrapper {
+        flex-direction: column;
+        align-items: flex-start;
+        gap: 10px;
+    }
+    .chat__complete-button {
+        white-space: nowrap;
+        margin-right: 0;
+    }
+
+    /* 評価モーダル: スマホでは画面に確実に収め、背景を薄暗くして
+       「モーダル」だと分かるようにする（既定は透明で内容が埋もれる） */
+    .modal {
+        background: rgba(0, 0, 0, 0.45);
+        padding: 16px;
+    }
+    .modal__content {
+        width: 100%;
+        max-width: 400px;
+        height: auto;
+    }
+    .modal__stars {
+        padding: 14px 10px;
+    }
+
+    /* 入力欄: 画像ボタン(120px)に圧迫されてtextareaが狭く、
+       プレースホルダー(18px)が切れていた。幅の食い違いを直し、
+       文字とボタンを小さくして全文が見えるようにする */
+    .chat__send-form {
+        width: 100%;
+        margin-left: 0;
+        padding: 8px 12px;
+        box-sizing: border-box;
+        gap: 8px;
+    }
+    .chat__send-input {
+        font-size: 14px;
+    }
+    /* スマホでは入力欄が狭く、プレースホルダーが折り返して窮屈なので非表示に
+       （送信アイコン・画像追加ボタンがあり用途は明らかなため）。入力は可能 */
+    .chat__send-input::placeholder {
+        color: transparent;
+    }
+    .chat__image-upload {
+        flex: 0 0 auto;
+        margin-left: 0;
+        padding: 8px 10px;
+        font-size: 12px;
+    }
+    .chat__send-button img {
+        margin-right: 0;
+    }
+}
