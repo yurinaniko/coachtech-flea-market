@@ -585,4 +585,31 @@
     .modal__stars {
         padding: 14px 10px;
     }
+
+    /* 入力欄: 画像ボタン(120px)に圧迫されてtextareaが狭く、
+       プレースホルダー(18px)が切れていた。幅の食い違いを直し、
+       文字とボタンを小さくして全文が見えるようにする */
+    .chat__send-form {
+        width: 100%;
+        margin-left: 0;
+        padding: 8px 12px;
+        box-sizing: border-box;
+        gap: 8px;
+    }
+    .chat__send-input {
+        font-size: 14px;
+    }
+    .chat__send-input::placeholder {
+        font-size: 13px;
+        padding: 4px;
+    }
+    .chat__image-upload {
+        flex: 0 0 auto;
+        margin-left: 0;
+        padding: 8px 10px;
+        font-size: 12px;
+    }
+    .chat__send-button img {
+        margin-right: 0;
+    }
 }
