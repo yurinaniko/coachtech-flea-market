@@ -13,7 +13,7 @@
 }
 
 .mypage__tab.mypage__tab--active a {
-    color: #FF4F5E;
+    color: #DC2F3B;
     font-weight: 600;
 }
 
@@ -39,8 +39,8 @@
 .mypage__edit-btn {
     display: inline-block;
     padding: 6px 14px;
-    border: 2px solid #FF4F5E;
-    color: #FF4F5E;
+    border: 2px solid #DC2F3B;
+    color: #DC2F3B;
     border-radius: 6px;
     font-size: 16px;
     text-decoration: none;
@@ -54,7 +54,7 @@
     width: 20px;
     height: 20px;
     margin-left: 6px;
-    background: #FF4F5E;
+    background: #DC2F3B;
     color: white;
     border-radius: 50%;
     font-size: 12px;

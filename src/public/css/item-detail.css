@@ -48,7 +48,7 @@
 
 .item-detail__tax {
     font-size: 14px;
-    color: #777;
+    color: #6b6b6b;
 }
 
 .item-detail__actions {
@@ -63,7 +63,7 @@
     width: 100%;
     display: inline-block;
     text-align: center;
-    background-color: #FF4F5E;
+    background-color: #DC2F3B;
     color: #fff;
     padding: 10px 20px;
     border-radius: 4px;
@@ -90,7 +90,7 @@
 .item-detail__comment-submit {
     width: 100%;
     display: inline-block;
-    background: #FF4F5E;
+    background: #DC2F3B;
     color: #fff;
     padding: 10px 18px;
     border: none;
@@ -221,7 +221,7 @@
     position: absolute;
     top: 20px;
     right: 20px;
-    background-color: #ff4d4d;
+    background-color: #DC2F3B;
     color: #fff;
     font-size: 18px;
     padding: 8px 18px;
@@ -287,7 +287,7 @@
 }
 
 .item-detail__notice--own {
-    color: #999;
+    color: #6b6b6b;
 }
 
 .item-detail__favorite-btn:disabled {

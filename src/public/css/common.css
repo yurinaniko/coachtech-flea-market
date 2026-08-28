@@ -96,7 +96,7 @@ body {
     position: absolute;
     top: 12px;
     right: 12px;
-    background-color: #ff4d4d;
+    background-color: #DC2F3B;
     color: #fff;
     font-size: 14px;
     padding: 6px 14px;
@@ -242,6 +242,25 @@ body {
         align-items: flex-start;
         gap: 16px;
         padding: 8px 4px 4px;
+    }
+    /* チェックボックスはdisplay:noneだとキーボードで開閉できないため、
+       スマホでは「視覚的に隠すがフォーカス可能」にする（Tab→スペースで開閉） */
+    .header__menu-toggle {
+        display: block;
+        position: absolute;
+        width: 1px;
+        height: 1px;
+        margin: -1px;
+        padding: 0;
+        border: 0;
+        clip-path: inset(50%);
+        overflow: hidden;
+        white-space: nowrap;
+    }
+    /* ヘッダーは黒背景なのでフォーカスリングは白にする */
+    .header__menu-toggle:focus-visible ~ .header__hamburger {
+        outline: 2px solid #fff;
+        outline-offset: 2px;
     }
     .header__menu-toggle:checked ~ .header__menu {
         display: flex;

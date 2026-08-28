@@ -6,7 +6,7 @@
         @if (!Request::is('login') && !Request::is('register'))
             <form action="{{ Auth()->check() ? route('mypage.index') : route('items.index') }}" method="GET" class="header__search">
                 <input type="hidden" name="page" value="{{ request('page', 'recommend') }}">
-                <input type="text" name="keyword" placeholder="なにをお探しですか？" class="header__search-input" value="{{ request('keyword') }}">
+                <input type="text" name="keyword" placeholder="なにをお探しですか？" aria-label="商品を検索" class="header__search-input" value="{{ request('keyword') }}">
             </form>
         @endif
         @php
@@ -17,7 +17,8 @@
         @endphp
         @if (! $hideHeaderMenu)
             {{-- スマホ用ハンバーガー（CSSのみ・チェックボックス方式）。PCでは非表示 --}}
-            <input type="checkbox" id="header-menu-toggle" class="header__menu-toggle" aria-hidden="true">
+            {{-- チェックボックスはdisplay:noneではなく視覚的隠しにしてキーボードで開閉できるようにする --}}
+            <input type="checkbox" id="header-menu-toggle" class="header__menu-toggle">
             <label for="header-menu-toggle" class="header__hamburger" aria-label="メニューを開閉">
                 <span></span><span></span><span></span>
             </label>
