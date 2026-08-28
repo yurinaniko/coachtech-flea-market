@@ -23,9 +23,10 @@ class ProfileController extends Controller
             ]);
         }
         if ($request->hasFile('image')) {
-            $imageName = time() . '.' . $request->image->extension();
-            $request->image->storeAs('public/profile', $imageName);
-            $validated['img_url'] = 'profile/' . $imageName;
+            // time()名だと同秒アップロードで別ユーザーの画像を上書きしうるため、
+            // Laravelのハッシュ名（衝突しない）で保存する。
+            $path = $request->image->store('public/profile');
+            $validated['img_url'] = str_replace('public/', '', $path);
         }
         $profile = $user->profile;
 
@@ -75,9 +76,10 @@ class ProfileController extends Controller
         }
 
         if ($request->hasFile('image')) {
-            $imageName = time() . '.' . $request->image->extension();
-            $request->image->storeAs('public/profile', $imageName);
-            $validated['img_url'] = 'profile/' . $imageName;
+            // time()名だと同秒アップロードで別ユーザーの画像を上書きしうるため、
+            // Laravelのハッシュ名（衝突しない）で保存する。
+            $path = $request->image->store('public/profile');
+            $validated['img_url'] = str_replace('public/', '', $path);
         }
         $user->profile()->updateOrCreate(
             ['user_id' => $user->id],

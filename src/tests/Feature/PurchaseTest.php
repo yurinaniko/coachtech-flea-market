@@ -252,4 +252,43 @@ class PurchaseTest extends TestCase
             'sending_building' => '配送ビル',
         ]);
     }
+
+    /** @test */
+    public function 出品者本人は自分の商品を購入できない()
+    {
+        $seller = User::factory()->create();
+        $item = Item::factory()->create(['user_id' => $seller->id]);
+
+        // 購入画面も購入実行もサーバー側で403
+        $this->actingAs($seller)
+            ->get(route('purchase.index', $item))
+            ->assertStatus(403);
+
+        $this->actingAs($seller)
+            ->post(route('purchase.store', $item), $this->validPurchaseData())
+            ->assertStatus(403);
+
+        $this->assertDatabaseMissing('purchases', ['item_id' => $item->id]);
+    }
+
+    /** @test */
+    public function 同一商品を別ユーザーが二重購入できない()
+    {
+        $seller = User::factory()->create();
+        $item = Item::factory()->create(['user_id' => $seller->id]);
+
+        $buyerA = User::factory()->create();
+        $buyerB = User::factory()->create();
+
+        $this->actingAs($buyerA)
+            ->post(route('purchase.store', $item), $this->validPurchaseData())
+            ->assertRedirect(route('purchase.checkout'));
+
+        // 2人目は売切れとして弾かれ、purchase行は1つだけ
+        $this->actingAs($buyerB)
+            ->post(route('purchase.store', $item), $this->validPurchaseData())
+            ->assertStatus(403);
+
+        $this->assertSame(1, Purchase::where('item_id', $item->id)->count());
+    }
 }
