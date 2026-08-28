@@ -1,7 +1,7 @@
 @extends('layouts.app')
 
 @section('css')
-<link rel="stylesheet" href="{{ asset('css/purchase.css') }}">
+<link rel="stylesheet" href="{{ versioned_asset('css/purchase.css') }}">
 @endsection
 @php
     $status = $status ?? 'success';
