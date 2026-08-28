@@ -1,10 +1,10 @@
 @extends('layouts.app')
 
 @section('css')
-<link rel="stylesheet" href="{{ asset('css/item-list.css') }}">
-<link rel="stylesheet" href="{{ asset('css/mypage.css') }}">
-<link rel="stylesheet" href="{{ asset('css/profile-form.css') }}">
-<link rel="stylesheet" href="{{ asset('css/profile.css') }}">
+<link rel="stylesheet" href="{{ versioned_asset('css/item-list.css') }}">
+<link rel="stylesheet" href="{{ versioned_asset('css/mypage.css') }}">
+<link rel="stylesheet" href="{{ versioned_asset('css/profile-form.css') }}">
+<link rel="stylesheet" href="{{ versioned_asset('css/profile.css') }}">
 @endsection
 
 @section('content')
