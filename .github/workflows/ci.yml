@@ -79,6 +79,9 @@ jobs:
           php-version: '8.3'
           tools: composer:v2
 
+      # --locked: インストール不要でlockファイルを直接監査する。
+      # 旧設定は install をしていないのに audit していたため常に失敗し、
+      # それを || true が握りつぶして「実質no-op」になっていた（厳格化で発覚）。
       - name: composer audit
         working-directory: src
-        run: composer audit --no-interaction
+        run: composer audit --locked --no-interaction
