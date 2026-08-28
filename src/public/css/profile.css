@@ -53,6 +53,11 @@
         width: 90px;
         height: 90px;
     }
+    /* 名前と星の入れ物が左寄せ(flex-start)のままだと、星より幅の狭い名前が
+       星の左端に揃って中央からズレて見える。スマホだけ中央揃えにする（PCは左のまま） */
+    .mypage__user-info {
+        align-items: center;
+    }
     .mypage__user-name {
         padding-left: 0;
         margin-top: 6px;
