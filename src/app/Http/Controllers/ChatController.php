@@ -56,7 +56,9 @@ class ChatController extends Controller
         ->withMax('comments', 'created_at')
         ->orderByDesc('unread_count')
         ->orderByDesc('comments_max_created_at')
-        ->get();
+        ->get()
+        ->reject(fn ($transaction) => $transaction->id === $purchase->id)
+        ->values();
 
         return view('chat.show', compact(
             'comments',

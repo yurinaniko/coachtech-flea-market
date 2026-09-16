@@ -214,4 +214,21 @@ class ChatAuthorizationTest extends TestCase
 
         $this->assertDatabaseMissing('comments', ['id' => $message->id]);
     }
+
+    /** @test */
+    public function サイドバーの「その他の取引」に表示中の取引は含まれない()
+    {
+        $ctx = $this->取引を用意();
+        $ctx['item']->update(['name' => 'いま開いている取引の商品']);
+        $別商品 = Item::factory()->create(['name' => 'ほかの取引の商品']);
+        Purchase::factory()->create([
+            'user_id' => $ctx['buyer']->id,
+            'item_id' => $別商品->id,
+        ]);
+
+        $this->actingAs($ctx['buyer'])
+            ->get("/chat/{$ctx['item']->id}")
+            ->assertSee('<span class="chat__sidebar-name">ほかの取引の商品</span>', false)
+            ->assertDontSee('<span class="chat__sidebar-name">いま開いている取引の商品</span>', false);
+    }
 }
