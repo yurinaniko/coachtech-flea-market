@@ -81,7 +81,10 @@ class ChatController extends Controller
             abort(403);
         }
         if ($request->comment_id) {
-            $comment = Comment::findOrFail($request->comment_id);
+            // 編集対象は「この取引の」コメントに限定する。purchase_id で絞らないと、
+            // 別の取引や商品コメントの id を送って、この経路から書き換えられる。
+            $comment = Comment::where('purchase_id', $purchase->id)
+                ->findOrFail($request->comment_id);
             if ($comment->user_id !== auth()->id()) {
                 abort(403);
             }
@@ -130,7 +133,20 @@ class ChatController extends Controller
         if (!$purchase) {
             abort(403);
         }
-        if ($purchase->user_id === auth()->id()) {
+
+        $isBuyer = $purchase->user_id === auth()->id();
+
+        // 同じ人が何度も評価を送れると、点数を後から書き換えられるうえ、
+        // 購入者側は送信のたびに出品者へメールが飛ぶ（メール連投に使える）。
+        // 一度書いた側の再送は、何もせず取引画面へ戻す。
+        $alreadyReviewed = $isBuyer
+            ? !is_null($purchase->buyer_reviewed)
+            : !is_null($purchase->seller_reviewed);
+        if ($alreadyReviewed) {
+            return redirect()->route('mypage.index', ['page' => 'trading']);
+        }
+
+        if ($isBuyer) {
             $purchase->buyer_reviewed = $request->rating;
             $seller = $purchase->item->user;
             $buyer = $purchase->user;

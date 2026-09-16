@@ -116,6 +116,39 @@ class ChatAuthorizationTest extends TestCase
         ]);
     }
 
+    /**
+     * @test
+     * comment_id は本人のものでも「この取引の」ものとは限らない。
+     * purchase_id で絞らないと、別取引のメッセージをこの経路から書き換えられる。
+     */
+    public function 別の取引のメッセージはこの取引のチャットからは編集できない()
+    {
+        $ctx = $this->取引を用意();
+
+        // 同じ購入者が当事者になっている、別の取引
+        $別商品 = Item::factory()->create();
+        $別取引 = Purchase::factory()->create([
+            'user_id' => $ctx['buyer']->id,
+            'item_id' => $別商品->id,
+        ]);
+        $別取引のメッセージ = Comment::create([
+            'user_id' => $ctx['buyer']->id,
+            'item_id' => $別商品->id,
+            'purchase_id' => $別取引->id,
+            'comment' => '別取引のメッセージ',
+            'is_read' => false,
+        ]);
+
+        $this->actingAs($ctx['buyer'])
+            ->post("/chat/{$ctx['item']->id}", [
+                'comment' => '書き換え',
+                'comment_id' => $別取引のメッセージ->id,
+            ])
+            ->assertNotFound();
+
+        $this->assertSame('別取引のメッセージ', $別取引のメッセージ->fresh()->comment);
+    }
+
     /** @test */
     public function 完了した取引には投稿できない()
     {
