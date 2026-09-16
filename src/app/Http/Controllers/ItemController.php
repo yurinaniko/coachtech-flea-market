@@ -17,15 +17,15 @@ class ItemController extends Controller
         $keyword = $request->input('keyword');
         $tab = $request->query('tab', 'recommend');
         if ($tab === 'mylist') {
-            if (Auth::check()) {
-                $items = Auth::user()
-                ->favorites()
-                ->with('condition', 'purchase')
-                ->get();
-            } else {
             $items = collect();
+            if (Auth::check()) {
+                $query = Auth::user()->favorites()->with('condition', 'purchase');
+                if (!empty($keyword)) {
+                    $query->where('items.name', 'LIKE', '%' . $keyword . '%');
+                }
+                $items = $query->get();
             }
-        return view('items.index', compact('items', 'keyword'));
+            return view('items.index', compact('items', 'keyword'));
         }
         $query = Item::with('condition', 'purchase');
         if (Auth::check()) {

@@ -294,4 +294,44 @@ class ItemTest extends TestCase
 
         $response->assertSessionHasErrors(['categories']);
     }
+
+    /** @test */
+    public function 商品詳細のコメント数は実際のコメント件数を表示する()
+    {
+        $item = Item::factory()->create();
+        $user = User::factory()->create();
+        Comment::create([
+            'user_id' => $user->id,
+            'item_id' => $item->id,
+            'purchase_id' => null,
+            'comment' => 'コメント本文',
+        ]);
+
+        $this->get(route('items.show', $item->id))
+            ->assertSee('<span class="item-detail__comment-count">1</span>', false);
+    }
+
+    /** @test */
+    public function 商品一覧のマイリストでもキーワードで絞り込める()
+    {
+        $user = User::factory()->create();
+        $hit = Item::factory()->create(['name' => 'テスト商品']);
+        $miss = Item::factory()->create(['name' => '別の商品']);
+        $user->favorites()->attach([$hit->id, $miss->id]);
+
+        $this->actingAs($user)
+            ->get('/items?tab=mylist&keyword=' . urlencode('テスト'))
+            ->assertSee('テスト商品')
+            ->assertDontSee('別の商品');
+    }
+
+    /** @test */
+    public function ヘッダー検索は表示中のタブを保持する()
+    {
+        $user = User::factory()->create();
+
+        $this->actingAs($user)
+            ->get(route('mypage.index', ['tab' => 'mylist']))
+            ->assertSee('<input type="hidden" name="tab" value="mylist">', false);
+    }
 }
