@@ -79,6 +79,6 @@ Route::middleware(['auth', 'verified'])->group(function () {
 
 Route::get('/items', [ItemController::class, 'index'])->name('items.index');
 Route::get('/items/{id}', [ItemController::class, 'show'])
-    ->whereNumber('item')
+    ->whereNumber('id')
     ->name('items.show');
 Route::post('/stripe/webhook', [StripeWebhookController::class, 'handle']);

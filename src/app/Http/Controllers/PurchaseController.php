@@ -86,6 +86,10 @@ class PurchaseController extends Controller
         \Stripe\Stripe::setApiKey(config('services.stripe.secret'));
         $purchaseId = session('purchase_id');
         $purchase = Purchase::findOrFail($purchaseId);
+
+        // purchase_id はセッション経由でしか入らないが、決済セッションを作る直前に
+        // 本人の購入かを必ず確かめる（session の取り違えに備えた多層防御）。
+        abort_if($purchase->user_id !== Auth::id(), 403);
         $item = $purchase->item;
         $paymentMethod = $purchase->payment_method;
         if ($paymentMethod === 'card') {
