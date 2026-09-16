@@ -7,7 +7,6 @@ use App\Models\Purchase;
 use Stripe\Webhook;
 use Stripe\Exception\SignatureVerificationException;
 use UnexpectedValueException;
-use App\Models\Item;
 
 class StripeWebhookController extends Controller
 {
@@ -28,6 +27,8 @@ class StripeWebhookController extends Controller
             return response()->json(['error' => 'Invalid signature'], 400);
         }
 
+        // 売り切れかどうかは purchases に購入レコードがあるかで判定する（ItemController@index が
+        // with('purchase') で読んでいる）。items に is_sold のような列は持たない。
         if ($event->type === 'checkout.session.completed') {
         $session = $event->data->object;
         $purchaseId = $session->metadata->purchase_id ?? null;
@@ -36,12 +37,6 @@ class StripeWebhookController extends Controller
                 ->update([
                 'status' => 'completed',
                 ]);
-            }
-        $itemId = $session->metadata->item_id ?? null;
-            if ($itemId) {
-            Item::where('id', $itemId)
-                ->where('is_sold', false)
-                ->update(['is_sold' => true]);
             }
         }
         return response()->json(['status' => 'success']);
