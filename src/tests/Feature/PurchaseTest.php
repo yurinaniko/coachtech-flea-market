@@ -291,4 +291,30 @@ class PurchaseTest extends TestCase
 
         $this->assertSame(1, Purchase::where('item_id', $item->id)->count());
     }
+
+    /** @test */
+    public function プロフィール未登録でも購入画面でエラーにならない()
+    {
+        $buyer = User::factory()->create();
+        $item = Item::factory()->create();
+
+        $this->actingAs($buyer)
+            ->get(route('purchase.index', $item))
+            ->assertRedirect(route('profile.create'));
+    }
+
+    /** @test */
+    public function 購入導線を通らずに住所を更新してもエラーにならない()
+    {
+        $user = User::factory()->create();
+
+        $this->actingAs($user)
+            ->put(route('mypage.address.update'), [
+                'postal_code' => '123-4567',
+                'address' => '東京都渋谷区1-1-1',
+            ])
+            ->assertRedirect(route('mypage.profile'));
+
+        $this->assertSame('東京都渋谷区1-1-1', $user->fresh()->profile->address);
+    }
 }

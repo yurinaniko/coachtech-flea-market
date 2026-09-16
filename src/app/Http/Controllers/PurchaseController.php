@@ -19,6 +19,12 @@ class PurchaseController extends Controller
         abort_if($item->user_id === Auth::id(), 403, 'You cannot purchase your own item.');
 
         $user = Auth::user()->fresh();
+
+        // 配送先はプロフィールの住所を使うため、未登録なら先に登録画面へ送る
+        if (!$user->profile) {
+            return redirect()->route('profile.create');
+        }
+
         if (session('current_item_id') !== $item->id) {
         session()->forget('payment_method');
         }
