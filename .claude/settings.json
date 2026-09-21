@@ -1,0 +1,29 @@
+{
+  "permissions": {
+    "deny": [
+      "Read(src/.env)",
+      "Read(src/.env.testing)",
+      "Edit(src/.env)",
+      "Edit(src/.env.testing)"
+    ],
+    "ask": [
+      "Bash(git push:*)"
+    ],
+    "allow": [
+      "Bash(docker compose exec php php artisan test:*)"
+    ]
+  },
+  "hooks": {
+    "PreToolUse": [
+      {
+        "matcher": "Bash",
+        "hooks": [
+          {
+            "type": "command",
+            "command": "python3 \"$CLAUDE_PROJECT_DIR\"/.claude/hooks/guard-bash.py"
+          }
+        ]
+      }
+    ]
+  }
+}

@@ -14,3 +14,6 @@
 # 完全一致 /docker/mysql/data/ だとブランチ操作で稼働中DBを壊す事故につながったため。
 /docker/mysql/data*
 /docker/mysql/logs/
+
+# Claude Code: 個人の「今後は聞かない」が溜まるファイル。共有しない
+.claude/settings.local.json
