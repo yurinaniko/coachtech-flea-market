@@ -80,6 +80,20 @@ docker compose exec php php artisan test
   この形を崩さない
 - 秘密の値を依頼文やコミットメッセージに貼らない
 
+## 機械で止めているもの（`.claude/settings.json`）
+
+この CLAUDE.md は「指示」で、読んだ AI が守る。**守られなくても困るものは、設定で機械が止める。**
+
+| 何を | どこで | どう効くか |
+|---|---|---|
+| `src/.env`・`src/.env.testing` の読み書き | `permissions.deny` | Read/Edit ツールが手を伸ばした時点で止まる。`cat`・`grep` 等の Bash 経由は下の Hook が止める |
+| `git push` | `permissions.ask` | 自動承認モードでも毎回聞く（手元の外へ出る操作） |
+| `php artisan test` | `permissions.allow` | 聞かずに通す |
+| 強制 push・`reset --hard`・`branch -D`・`clean -f`・`rm -r`・`migrate:fresh` 等・`down -v`・`.env` の読み出し | `PreToolUse` Hook（`.claude/hooks/guard-bash.py`） | **実行前に止める。** 止まったら、人が自分の端末で判断して実行する |
+
+- Hook を直したら、**わざと1回止めて**（例: `echo 'migrate:fresh'`）効いていることを確かめる。通ったときは何も出ない
+- `.claude/settings.local.json`（「今後は聞かない」の蓄積）はコミットしない。身に覚えのない許可は `/permissions` で消す
+
 ## 設計資料の在りか
 
 | ファイル | 中身 |
