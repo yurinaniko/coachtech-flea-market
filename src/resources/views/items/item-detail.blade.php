@@ -50,7 +50,7 @@
                 </div>
                 <div class="item-detail__comment-action">
                     <img src="{{ asset('images/comment.png') }}" alt="コメント" class="item-detail__comment-icon">
-                    <span class="item-detail__comment-count">{{ $item->comments_count ?? 0 }}</span>
+                    <span class="item-detail__comment-count">{{ $comments->count() }}</span>
                 </div>
             </div>
             @if ($item->user_id === Auth::id())
@@ -63,7 +63,6 @@
                 <p>※この商品は購入済みです</p>
             @else
                 <form action="{{ route('purchase.index', $item->id) }}" method="GET">
-                    @csrf
                     <button type="submit" class="item-detail__buy-button">
                         購入手続きへ
                     </button>

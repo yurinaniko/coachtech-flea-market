@@ -19,6 +19,12 @@ class PurchaseController extends Controller
         abort_if($item->user_id === Auth::id(), 403, 'You cannot purchase your own item.');
 
         $user = Auth::user()->fresh();
+
+        // 配送先はプロフィールの住所を使うため、未登録なら先に登録画面へ送る
+        if (!$user->profile) {
+            return redirect()->route('profile.create');
+        }
+
         if (session('current_item_id') !== $item->id) {
         session()->forget('payment_method');
         }
@@ -86,6 +92,10 @@ class PurchaseController extends Controller
         \Stripe\Stripe::setApiKey(config('services.stripe.secret'));
         $purchaseId = session('purchase_id');
         $purchase = Purchase::findOrFail($purchaseId);
+
+        // purchase_id はセッション経由でしか入らないが、決済セッションを作る直前に
+        // 本人の購入かを必ず確かめる（session の取り違えに備えた多層防御）。
+        abort_if($purchase->user_id !== Auth::id(), 403);
         $item = $purchase->item;
         $paymentMethod = $purchase->payment_method;
         if ($paymentMethod === 'card') {

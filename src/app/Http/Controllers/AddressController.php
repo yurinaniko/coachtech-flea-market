@@ -27,7 +27,10 @@ class AddressController extends Controller
                 ]
         );
 
-        Auth::user()->fresh();
-        return redirect()->route('purchase.index', ['item' => session('current_item_id')]);
+        $itemId = session('current_item_id');
+
+        return $itemId
+            ? redirect()->route('purchase.index', ['item' => $itemId])
+            : redirect()->route('mypage.profile');
     }
 }

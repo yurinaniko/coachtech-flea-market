@@ -7,7 +7,6 @@ use App\Models\Category;
 use App\Models\Condition;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
-use App\Http\Requests\ItemRequest;
 use App\Http\Requests\ExhibitionRequest;
 use App\Models\Comment;
 
@@ -18,15 +17,15 @@ class ItemController extends Controller
         $keyword = $request->input('keyword');
         $tab = $request->query('tab', 'recommend');
         if ($tab === 'mylist') {
-            if (Auth::check()) {
-                $items = Auth::user()
-                ->favorites()
-                ->with('condition', 'purchase')
-                ->get();
-            } else {
             $items = collect();
+            if (Auth::check()) {
+                $query = Auth::user()->favorites()->with('condition', 'purchase');
+                if (!empty($keyword)) {
+                    $query->where('items.name', 'LIKE', '%' . $keyword . '%');
+                }
+                $items = $query->get();
             }
-        return view('items.index', compact('items', 'keyword'));
+            return view('items.index', compact('items', 'keyword'));
         }
         $query = Item::with('condition', 'purchase');
         if (Auth::check()) {
@@ -92,24 +91,5 @@ class ItemController extends Controller
             'item' => $item,
             'comments' => $comments,
         ]);
-    }
-
-    public function update(ItemRequest $request, Item $item)
-    {
-        $validated = $request->validated();
-        $imagePath = $item->img_url;
-        if ($request->hasFile('img_url')) {
-            $imagePath = $request->file('img_url')->store('images', 'public');
-        }
-        $item->update([
-            'name' => $validated['name'],
-            'brand' => $validated['brand'] ?? null,
-            'condition_id' => $validated['condition_id'],
-            'description' => $validated['description'],
-            'price' => $validated['price'],
-            'img_url' => $imagePath,
-        ]);
-        $item->categories()->sync($validated['categories']);
-        return redirect()->route('items.index');
     }
 }
