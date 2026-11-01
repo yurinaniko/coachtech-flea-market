@@ -203,13 +203,14 @@ document.addEventListener('DOMContentLoaded', function () {
 
 if (!textarea) return;
 
-    const draft = localStorage.getItem('chat_draft');
+    const draftKey = 'chat_draft_{{ $purchase->id }}';
+    const draft = localStorage.getItem(draftKey);
     if (draft && !textarea.value) {
         textarea.value = draft;
     }
 
     textarea.addEventListener('input', function () {
-        localStorage.setItem('chat_draft', this.value);
+        localStorage.setItem(draftKey, this.value);
 
         this.style.height = 'auto';
         this.style.height = this.scrollHeight + 'px';
@@ -223,7 +224,7 @@ if (!textarea) return;
 
     if (form) {
         form.addEventListener('submit', function () {
-            localStorage.removeItem('chat_draft');
+            localStorage.removeItem(draftKey);
         });
     }
 });

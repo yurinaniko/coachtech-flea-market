@@ -5,7 +5,9 @@ namespace Tests\Feature;
 use App\Models\Item;
 use App\Models\Purchase;
 use App\Models\User;
+use App\Mail\TransactionCompletedMail;
 use Illuminate\Foundation\Testing\RefreshDatabase;
+use Illuminate\Support\Facades\Mail;
 use Tests\TestCase;
 
 /**
@@ -100,6 +102,34 @@ class ChatReviewTest extends TestCase
 
         $purchase->refresh();
         $this->assertTrue((bool) $purchase->is_completed);
+    }
+
+    /** @test */
+    public function 一度書いた評価は後から書き換えられない()
+    {
+        [, $buyer, , $purchase] = $this->取引を用意();
+
+        $this->actingAs($buyer)->post("/chat/review/{$purchase->id}", ['rating' => 5]);
+        $this->actingAs($buyer)->post("/chat/review/{$purchase->id}", ['rating' => 1]);
+
+        $purchase->refresh();
+        $this->assertSame(5, $purchase->buyer_reviewed);
+    }
+
+    /**
+     * @test
+     * 購入者の評価は出品者へメールを送る。連投できると相手の受信箱を埋められる。
+     */
+    public function 購入者が評価を連投しても出品者へのメールは1通だけ()
+    {
+        Mail::fake();
+        [, $buyer, , $purchase] = $this->取引を用意();
+
+        $this->actingAs($buyer)->post("/chat/review/{$purchase->id}", ['rating' => 5]);
+        $this->actingAs($buyer)->post("/chat/review/{$purchase->id}", ['rating' => 5]);
+        $this->actingAs($buyer)->post("/chat/review/{$purchase->id}", ['rating' => 5]);
+
+        Mail::assertSent(TransactionCompletedMail::class, 1);
     }
 
     /** @test */

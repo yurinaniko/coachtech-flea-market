@@ -344,4 +344,17 @@ class MypageTest extends TestCase
         $response->assertSee('購入商品');
         $response->assertDontSee('出品商品');
     }
+
+    /**
+     * page は URL から自由に指定できる。想定外の値で $items が未定義のまま使われると
+     * 500 になり、APP_DEBUG が有効ならスタックトレースまで表示される。
+     */
+    public function test_profile_page_with_unknown_tab_does_not_error()
+    {
+        $user = User::factory()->create();
+
+        $this->actingAs($user)
+            ->get('/mypage/profile?page=unknown')
+            ->assertStatus(200);
+    }
 }

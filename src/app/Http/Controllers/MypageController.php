@@ -31,7 +31,7 @@ class MypageController extends Controller
             }
         }
         else {
-            $query = Item::where('user_id', '!=', Auth::id());
+            $query = Item::with('purchase')->where('user_id', '!=', Auth::id());
                 if ($keyword) {
                     $items = $query
                         ->where('name', 'like', '%' . $keyword . '%')
@@ -59,12 +59,18 @@ class MypageController extends Controller
         $user = Auth::user();
         $profile = $user->profile;
         $page = $request->query('page', 'sell');
+        // 想定外の page が来ると $items が未定義のまま下で使われ 500 になる
+        // （APP_DEBUG が有効ならスタックトレースまで出る）。既知の3つ以外は sell に寄せる。
+        if (!in_array($page, ['sell', 'buy', 'trading'], true)) {
+            $page = 'sell';
+        }
         if ($page === 'sell') {
             $items = $user->items()->with('purchase')->get();
         } elseif ($page === 'buy') {
-            $items = Item::whereHas('purchase', function ($q) {
-                $q->where('user_id', Auth::id());
-            })->get();
+            $items = Item::with('purchase')
+                ->whereHas('purchase', function ($q) {
+                    $q->where('user_id', Auth::id());
+                })->get();
         }elseif ($page === 'trading') {
             $items = Item::whereHas('purchase', function ($q) {
                 $q->where(function ($q2) {
@@ -117,16 +123,6 @@ class MypageController extends Controller
                 });
             })
         ->count();
-
-        $receivedRatings = Purchase::where(function ($query) use ($user) {
-            $query->where('user_id', $user->id)
-                    ->whereNotNull('seller_reviewed');
-        })
-        ->orWhere(function ($query) use ($user) {
-            $query->where('user_id', $user->id)
-                    ->whereNotNull('buyer_reviewed');
-        })
-        ->get();
 
         $ratings = Purchase::where(function ($q) use ($user) {
             $q->where('user_id', $user->id)
